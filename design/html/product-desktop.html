@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>REVOLT - Detalles del Producto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;700&amp;family=Montserrat:wght@700;800;900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary-fixed": "#30004b",
+                "surface-bright": "#f9f9f9",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#3d4a44",
+                "on-primary-fixed-variant": "#00513d",
+                "error": "#ba1a1a",
+                "error-container": "#ffdad6",
+                "secondary": "#ab3600",
+                "outline": "#6d7a73",
+                "primary-fixed-dim": "#5adcb3",
+                "surface-tint": "#006c52",
+                "primary-fixed": "#79f9ce",
+                "inverse-surface": "#303030",
+                "outline-variant": "#bccac2",
+                "on-error": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-background": "#1b1b1b",
+                "background": "#f9f9f9",
+                "tertiary-fixed-dim": "#e5b5ff",
+                "surface-container-high": "#e8e8e8",
+                "inverse-primary": "#5adcb3",
+                "on-tertiary-fixed-variant": "#7000a8",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#f7e1ff",
+                "on-error-container": "#93000a",
+                "on-surface": "#1b1b1b",
+                "on-secondary-fixed-variant": "#832700",
+                "surface-container": "#eeeeee",
+                "inverse-on-surface": "#f1f1f1",
+                "tertiary-fixed": "#f4d9ff",
+                "secondary-fixed-dim": "#ffb59c",
+                "primary-container": "#7fffd4",
+                "on-primary-fixed": "#002117",
+                "primary": "#006c52",
+                "on-tertiary-container": "#a100ef",
+                "on-secondary-container": "#551600",
+                "surface-container-highest": "#e2e2e2",
+                "surface-dim": "#dadada",
+                "surface": "#f9f9f9",
+                "secondary-container": "#fe5e1e",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f3f3f3",
+                "on-primary-container": "#00765b",
+                "on-secondary-fixed": "#390c00",
+                "surface-variant": "#e2e2e2",
+                "tertiary": "#9200db",
+                "secondary-fixed": "#ffdbcf"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "border-width-thick": "6px",
+                "gutter": "24px",
+                "unit": "4px",
+                "margin-edge": "32px",
+                "border-width-thin": "2px",
+                "shadow-offset": "8px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Archivo Narrow"
+                ],
+                "label-mono": [
+                        "Space Mono"
+                ],
+                "display-xl": [
+                        "Montserrat"
+                ],
+                "body-md": [
+                        "Archivo Narrow"
+                ],
+                "headline-lg": [
+                        "Montserrat"
+                ],
+                "display-lg": [
+                        "Montserrat"
+                ],
+                "headline-lg-mobile": [
+                        "Montserrat"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-mono": [
+                        "14px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-xl": [
+                        "120px",
+                        {
+                                "lineHeight": "110px",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "52px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "display-lg": [
+                        "80px",
+                        {
+                                "lineHeight": "80px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "800"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            background-image: radial-gradient(theme('colors.on-surface-variant') 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+      </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopNavBar Component -->
+<nav class="flex justify-between items-center px-margin-edge py-4 sticky top-0 z-50 bg-primary-container w-full border-b-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)]">
+<!-- Logo -->
+<a class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tighter text-on-background uppercase" href="#">
+            REVOLT.
+        </a>
+<!-- Desktop Navigation -->
+<ul class="hidden md:flex items-center gap-gutter font-body-lg text-body-lg uppercase font-bold text-on-background">
+<li class=""><a class="hover:bg-secondary-container px-2 border-border-width-thin border-transparent hover:border-on-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none inline-block" href="#">Inventory</a></li>
+<li class=""><a class="hover:bg-tertiary-container px-2 border-border-width-thin border-transparent hover:border-on-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none inline-block" href="#">Specs</a></li>
+<li class=""><a class="hover:bg-primary px-2 border-border-width-thin border-transparent hover:border-on-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none inline-block hover:text-white" href="#">Deals</a></li>
+<li class=""><a class="hover:bg-secondary-fixed px-2 border-border-width-thin border-transparent hover:border-on-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none inline-block" href="#">About</a></li>
+</ul>
+<!-- Action / Mobile Menu -->
+<div class="flex items-center gap-4">
+<button class="hidden md:flex bg-secondary-container text-on-background border-[6px] border-on-background px-6 py-2 shadow-[6px_6px_0px_0px_rgba(27,27,27,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none font-bold uppercase transition-all font-body-lg text-body-lg">
+                WHATSAPP US
+            </button>
+<button class="md:hidden p-2 border-[6px] border-on-background shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none bg-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-margin-edge py-12 md:py-24 bg-surface/90 border-x-[6px] border-on-background my-8 shadow-[12px_12px_0px_0px_rgba(27,27,27,1)]">
+<!-- Breadcrumb (Neobrutalist style) -->
+<div class="mb-8 flex gap-2 font-label-mono text-label-mono uppercase font-bold text-on-surface bg-white p-2 border-[4px] border-on-background inline-flex shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">
+<a class="hover:bg-primary-container px-2 border-border-width-thin border-transparent hover:border-on-background transition-colors" href="#">INVENTORY</a>
+<span class="">/</span>
+<a class="hover:bg-primary-container px-2 border-border-width-thin border-transparent hover:border-on-background transition-colors" href="#">APPLE</a>
+<span class="">/</span>
+<span class="bg-primary-container px-2 border-border-width-thin border-on-background">MACBOOK PRO M1</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Image Gallery (Asymmetrical) -->
+<div class="lg:col-span-7 grid grid-cols-2 gap-4">
+<!-- Main Image -->
+<div class="col-span-2 w-full bg-white border-[6px] border-on-background shadow-[12px_12px_0px_0px_rgba(27,27,27,1)] relative aspect-[4/3] p-4 flex items-center justify-center overflow-hidden group">
+<img class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300" data-alt="A highly detailed, professional studio photograph of a refurbished MacBook Pro M1 laptop. The laptop is positioned slightly angled, showcasing its sleek aluminum body and vibrant screen. The background is a stark, high-contrast neobrutalist setting with solid primary colors and sharp geometric shadows. Lighting is bright, harsh, and directional, emphasizing the laptop's clean edges and premium build quality. The overall aesthetic is raw, modern, and uncompromisingly bold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD51VHNHszqmtYTo7ZMHex-2yonyUVMxHitwqBDUpY2HjUAIXzieBN87grioIJBgOIPgAscLn8syxlpEz-LsRSp0dfsinHg8SlYIotr7kQ9TV1yheG94swyjm5ddhCJxDgfJ7XK-CsjyNzBhm5ujtUkNlaB1B-9IDiXlcPZeDUAB3BjQhMHXk_gilKsJxFVn7szZSJdAqQDy2ASrjrOCXBqgwBSvdgeumPYYX1zOcfyTxhzwt7TT66kuzJZoo0xJKlWG2fQ7KSoNGo">
+<!-- Condition Badge -->
+<div class="absolute top-2 left-2 bg-secondary-container text-on-background border-[4px] border-on-background px-2 py-1 font-display-lg uppercase font-black shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] transform -rotate-3 text-lg leading-none z-10">
+                        GRADE A MINT
+                    </div>
+</div>
+<!-- Thumbnails (Asymmetrical) -->
+<div class="col-span-1 bg-white border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] aspect-[3/4] p-2 cursor-pointer hover:bg-tertiary-container transition-colors group">
+<img class="w-full h-full object-contain group-hover:scale-110 transition-transform" data-alt="A close-up photograph focusing on the pristine keyboard and trackpad of a refurbished MacBook Pro M1. The image highlights the mechanical keys and smooth glass surface. The lighting is strong, casting hard shadows that emphasize the texture and build quality. The setting is minimal and industrial, fitting a neobrutalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvD913EoXFawU6Nhyf6ccJfgpa5rO7nrMj9fcEJHeRyjbtmiQ6nKDcKFQcZp8eWR8Bc7idd4QxA7eI9teZQMSFDjoe0tGrsWe9Gq2uY8lDlNmKzR1arP0d8y4i_ILjo2VD6iidbyMWOtDhfE6HCi8zAOgW4GA_96iA_w_sDX2n4YgekfU9M9kGlUTjF9UvqBVms93b8aNP0h_mtpGIV0iORZj4S8GcVC9Pf4CZRexaavpMX8WshTgD-HPRv0chPiryXuyBcapLOcE">
+</div>
+<div class="col-span-1 flex flex-col gap-4">
+<div class="bg-white border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] flex-grow p-2 cursor-pointer hover:bg-primary-container transition-colors group overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="A detailed shot showing the side profile and ports of a refurbished MacBook Pro M1. The slim profile and clean connectivity options are clearly visible. The background is a solid, bold color block, and the lighting creates sharp, distinct shadows, reinforcing a high-contrast, modern visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEK4unce7ZMmA3-NjU93bmWvUt_GrMr-LNVuRI4Zpj_d-eP-EAV4JQ-XE5b8LMcrQ0uUk-Z-lfkT0rPlNnfaKnPLIyM3s6fObmnPE3c3FjJOSGXSG3ohm9l21UGCL1qUPduvg1l6tjko2Wh31EAPW6XYZm64Hq1TiN0RLvyqHVotJsTqRBDORl1BerBSDuI9ufX7arRp6QsCqBs-CVF2d5cOlLoy0Td0B7iMrKThdITmhdVjWdYMSJkCxlYwjdcyuE89sztlSxEZ8">
+</div>
+<div class="bg-primary-fixed border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] h-1/3 p-2 flex items-center justify-center cursor-pointer hover:bg-secondary-container transition-colors font-display-xl text-4xl font-black text-center uppercase leading-none transform rotate-2">
+                        +3<br>MORE
+                    </div>
+</div>
+</div>
+<!-- Right Column: Specs & Actions -->
+<div class="lg:col-span-5 flex flex-col gap-8">
+<!-- Title & Price Block -->
+<div class="bg-white border-[6px] border-on-background shadow-[12px_12px_0px_0px_rgba(27,27,27,1)] p-6 md:p-8 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute -top-10 -right-10 text-[200px] font-black text-surface-container-high opacity-20 pointer-events-none transform rotate-12">M1</div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase text-on-background relative z-10 leading-none">
+                        APPLE MACBOOK PRO 14" (M1 PRO)
+                    </h1>
+<div class="bg-on-background text-primary-fixed p-6 inline-block transform -rotate-3 self-start shadow-[8px_8px_0px_0px_rgba(254,94,30,1)] border-[6px] border-secondary-container mt-4 z-10">
+<span class="font-display-lg text-display-lg tracking-tighter block leading-none">$1,299</span>
+<span class="font-label-mono text-label-mono uppercase block mt-2 bg-secondary-container text-on-background px-2 py-1 transform rotate-2">NO CORPORATE MARKUP</span>
+</div>
+<p class="font-body-lg text-body-lg mt-6 text-on-surface font-medium relative z-10 bg-white/80 p-2">
+                        Uncompromising performance for professionals. Refurbished to pristine condition, thoroughly tested, and ready for heavy workloads.
+                    </p>
+</div>
+<!-- Specs Bento Box -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Processor -->
+<div class="bg-primary-container border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] p-6 flex items-center justify-between transform rotate-1 hover:-rotate-1 transition-transform">
+<span class="font-label-mono text-label-mono uppercase bg-on-background text-primary-container px-3 py-1">PROCESSOR</span>
+<span class="font-headline-lg-mobile text-2xl font-black text-on-background uppercase text-right">
+                            M1 PRO (8-CORE)
+                        </span>
+</div>
+<!-- RAM -->
+<div class="bg-tertiary-container border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] p-6 flex items-center justify-between transform -rotate-1 hover:rotate-1 transition-transform">
+<span class="font-label-mono text-label-mono uppercase bg-on-background text-tertiary-container px-3 py-1">MEMORY</span>
+<span class="font-headline-lg-mobile text-2xl font-black text-on-background uppercase text-right">
+                            16GB UNIFIED
+                        </span>
+</div>
+<!-- Storage -->
+<div class="bg-secondary-container border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] p-6 flex items-center justify-between transform rotate-1 hover:-rotate-1 transition-transform">
+<span class="font-label-mono text-label-mono uppercase bg-on-background text-secondary-container px-3 py-1">STORAGE</span>
+<span class="font-headline-lg-mobile text-2xl font-black text-on-background uppercase text-right">
+                            512GB SSD
+                        </span>
+</div>
+<!-- Battery -->
+<div class="bg-white border-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] p-6 flex items-center justify-between transform -rotate-1 hover:rotate-1 transition-transform">
+<span class="font-label-mono text-label-mono uppercase bg-on-background text-white px-3 py-1">BATTERY HEALTH</span>
+<span class="font-headline-lg-mobile text-2xl font-black text-on-background uppercase text-right">
+                            &gt; 90% CAPACITY
+                        </span>
+</div>
+</div>
+<!-- Giant Call to Action -->
+<button class="w-full bg-secondary-container text-on-background border-[8px] border-on-background py-8 px-8 shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[24px_24px_0px_0px_rgba(27,27,27,1)] active:translate-x-[12px] active:translate-y-[12px] active:shadow-none transition-all flex items-center justify-center gap-4 group mt-6 transform -rotate-2">
+<span class="font-headline-lg text-4xl font-black uppercase tracking-tight group-hover:scale-105 transition-transform">
+                        PEDIR POR WHATSAPP
+                    </span>
+<span class="material-symbols-outlined text-6xl group-hover:rotate-12 transition-transform" style="font-variation-settings: &quot;FILL&quot; 1;">forum</span>
+</button>
+<!-- Trust Badges -->
+<div class="flex flex-wrap gap-4 mt-6 justify-center">
+<div class="bg-primary-container border-[4px] border-on-background px-4 py-2 font-label-mono text-label-mono uppercase shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] flex items-center gap-2 transform rotate-2">
+<span class="material-symbols-outlined text-lg">verified</span> 6 MONTH WARRANTY
+                    </div>
+<div class="bg-tertiary-container border-[4px] border-on-background px-4 py-2 font-label-mono text-label-mono uppercase shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] flex items-center gap-2 transform -rotate-2">
+<span class="material-symbols-outlined text-lg">local_shipping</span> FREE SHIPPING
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component -->
+<footer class="w-full border-t-[8px] border-on-background bg-on-background flex flex-col md:flex-row justify-between items-start px-margin-edge py-12 gap-gutter mt-auto bg-[radial-gradient(theme('colors.on-surface-variant')_1px,transparent_1px)] bg-[size:20px_20px]">
+<div class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary-fixed uppercase mb-6 md:mb-0 bg-on-background p-2 inline-block transform -rotate-2">
+            REVOLT.
+        </div>
+<div class="flex flex-col gap-6 bg-on-background p-6 border-[4px] border-surface shadow-[-8px_8px_0px_0px_rgba(121,249,206,1)]">
+<ul class="flex flex-wrap gap-6 font-label-mono text-label-mono text-surface uppercase">
+<li class=""><a class="hover:text-secondary-container hover:underline decoration-[4px] transition-colors" href="#">Facebook</a></li>
+<li class=""><a class="hover:text-secondary-container hover:underline decoration-[4px] transition-colors" href="#">Instagram</a></li>
+<li class=""><a class="hover:text-secondary-container hover:underline decoration-[4px] transition-colors" href="#">Twitter</a></li>
+<li class=""><a class="hover:text-secondary-container hover:underline decoration-[4px] transition-colors" href="#">Contact</a></li>
+</ul>
+<div class="font-body-md text-body-md text-surface opacity-70 border-t-[2px] border-surface pt-4">
+                © 2024 REVOLT. - UNCOMPROMISING PERFORMANCE
+            </div>
+</div>
+</footer>
+
+
+</body></html>

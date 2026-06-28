@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* REVOLT design tokens — "Neobrutalist Pop" palette                   */
+/* Peach paper · Periwinkle · Hot Pink · Teal · Acid Yellow.           */
+/* Every value is a space-separated RGB triplet so Tailwind can wrap   */
+/* it in rgb(... / <alpha-value>). `:root` = light theme, `.dark`      */
+/* overrides only the tokens that change for the dark theme.           */
+/* ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  /* Core surfaces — warm peach paper neutrals */
+  --c-background: 252 238 225;
+  --c-surface: 252 238 225;
+  --c-surface-bright: 255 255 255;
+  --c-surface-dim: 242 224 207;
+  --c-surface-container-lowest: 255 255 255;
+  --c-surface-container-low: 250 231 214;
+  --c-surface-container: 247 226 206;
+  --c-surface-container-high: 242 219 196;
+  --c-surface-container-highest: 237 212 186;
+  --c-surface-variant: 237 212 186;
+  --c-on-surface: 26 22 20;
+  --c-on-surface-variant: 92 81 71;
+  --c-on-background: 26 22 20;
+  --c-on-container: 26 22 20;
+  --c-inverse-surface: 44 38 34;
+  --c-inverse-on-surface: 251 234 217;
+  --c-outline: 111 98 88;
+  --c-outline-variant: 216 195 174;
+
+  /* Primary — Periwinkle / Violet */
+  --c-primary: 91 63 224;
+  --c-on-primary: 255 255 255;
+  --c-primary-container: 169 155 255;
+  --c-on-primary-container: 37 17 107;
+  --c-primary-fixed: 194 182 255;
+  --c-primary-fixed-dim: 147 132 255;
+  --c-on-primary-fixed: 26 10 82;
+  --c-on-primary-fixed-variant: 61 42 158;
+  --c-inverse-primary: 194 182 255;
+  --c-surface-tint: 91 63 224;
+
+  /* Secondary — Hot Pink */
+  --c-secondary: 225 29 116;
+  --c-on-secondary: 255 255 255;
+  --c-secondary-container: 255 77 160;
+  --c-on-secondary-container: 77 2 39;
+  --c-secondary-fixed: 255 196 224;
+  --c-secondary-fixed-dim: 255 119 184;
+  --c-on-secondary-fixed: 61 0 30;
+  --c-on-secondary-fixed-variant: 165 0 79;
+
+  /* Tertiary — Teal */
+  --c-tertiary: 14 140 127;
+  --c-on-tertiary: 255 255 255;
+  --c-tertiary-container: 43 196 180;
+  --c-on-tertiary-container: 0 50 44;
+  --c-tertiary-fixed: 141 239 227;
+  --c-tertiary-fixed-dim: 24 176 160;
+  --c-on-tertiary-fixed: 0 39 31;
+  --c-on-tertiary-fixed-variant: 0 102 88;
+
+  /* Accent — Acid Yellow (CTAs, highlights) */
+  --c-accent: 255 210 63;
+  --c-on-accent: 26 22 20;
+  --c-accent-dim: 242 190 18;
+
+  /* Error */
+  --c-error: 229 53 43;
+  --c-on-error: 255 255 255;
+  --c-error-container: 255 201 194;
+  --c-on-error-container: 122 0 16;
+
+  /* Hard-shadow ink + decorative backdrops */
+  --c-shadow: 26 22 20;
+  --dots: rgb(252 238 225 / 0.12);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Core surfaces — near-black warm neutrals + light ink */
+  --c-background: 22 19 16;
+  --c-surface: 22 19 16;
+  --c-surface-bright: 52 48 42;
+  --c-surface-dim: 22 19 16;
+  --c-surface-container-lowest: 17 15 12;
+  --c-surface-container-low: 31 27 22;
+  --c-surface-container: 35 32 25;
+  --c-surface-container-high: 46 42 34;
+  --c-surface-container-highest: 57 52 43;
+  --c-surface-variant: 76 69 56;
+  --c-on-surface: 243 233 220;
+  --c-on-surface-variant: 205 191 173;
+  --c-on-background: 243 233 220;
+  --c-inverse-surface: 243 233 220;
+  --c-inverse-on-surface: 52 48 42;
+  --c-outline: 153 140 121;
+  --c-outline-variant: 76 69 56;
+
+  /* The bright color blocks (primary/secondary/tertiary/accent containers) stay
+     vivid in dark mode and keep their constant dark ink (--c-on-container). Hard
+     shadows + decorative backdrops flip to light. */
+  --c-shadow: 243 233 220;
+  --dots: rgb(22 19 16 / 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-on-background antialiased;
+    font-family: var(--font-body), sans-serif;
+    /* Smooth, scoped cross-fade when toggling light/dark. */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Native form controls inherit the brutalist look */
+  ::selection {
+    @apply bg-secondary-container text-on-container;
+  }
+}
+
+@layer components {
+  /* Faint engineering grid backdrop (home) */
+  .bg-grid {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgb(var(--c-on-background)) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--c-on-background)) 1px, transparent 1px);
+  }
+
+  /* Dotted backdrop (product detail / footer) */
+  .bg-dots {
+    background-image: radial-gradient(var(--dots) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+/* GSAP entrance helper: elements flagged for reveal start hidden so there is no
+   flash of un-animated content before the tween runs, then GSAP animates them
+   in. Gated on `html.js` (added by the inline boot script) so that with
+   JavaScript disabled the content is never hidden, and scoped to
+   no-preference so reduced-motion users always see it immediately. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    opacity: 0;
+  }
+}
+
+/* Material Symbols (loaded via <link> in the root layout) */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 700,
+    "GRAD" 0,
+    "opsz" 24;
+  line-height: 1;
+  user-select: none;
+}

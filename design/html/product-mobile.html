@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REVOLT - Product Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Archivo+Narrow:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary-fixed": "#30004b",
+                "surface-bright": "#f9f9f9",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#3d4a44",
+                "on-primary-fixed-variant": "#00513d",
+                "error": "#ba1a1a",
+                "error-container": "#ffdad6",
+                "secondary": "#ab3600",
+                "outline": "#6d7a73",
+                "primary-fixed-dim": "#5adcb3",
+                "surface-tint": "#006c52",
+                "primary-fixed": "#79f9ce",
+                "inverse-surface": "#303030",
+                "outline-variant": "#bccac2",
+                "on-error": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-background": "#1b1b1b",
+                "background": "#f9f9f9",
+                "tertiary-fixed-dim": "#e5b5ff",
+                "surface-container-high": "#e8e8e8",
+                "inverse-primary": "#5adcb3",
+                "on-tertiary-fixed-variant": "#7000a8",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#f7e1ff",
+                "on-error-container": "#93000a",
+                "on-surface": "#1b1b1b",
+                "on-secondary-fixed-variant": "#832700",
+                "surface-container": "#eeeeee",
+                "inverse-on-surface": "#f1f1f1",
+                "tertiary-fixed": "#f4d9ff",
+                "secondary-fixed-dim": "#ffb59c",
+                "primary-container": "#7fffd4",
+                "on-primary-fixed": "#002117",
+                "primary": "#006c52",
+                "on-tertiary-container": "#a100ef",
+                "on-secondary-container": "#551600",
+                "surface-container-highest": "#e2e2e2",
+                "surface-dim": "#dadada",
+                "surface": "#f9f9f9",
+                "secondary-container": "#fe5e1e",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f3f3f3",
+                "on-primary-container": "#00765b",
+                "on-secondary-fixed": "#390c00",
+                "surface-variant": "#e2e2e2",
+                "tertiary": "#9200db",
+                "secondary-fixed": "#ffdbcf"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "border-width-thick": "6px",
+                "gutter": "24px",
+                "unit": "4px",
+                "margin-edge": "32px",
+                "border-width-thin": "2px",
+                "shadow-offset": "8px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Archivo Narrow"
+                ],
+                "label-mono": [
+                        "Space Mono"
+                ],
+                "display-xl": [
+                        "Montserrat"
+                ],
+                "body-md": [
+                        "Archivo Narrow"
+                ],
+                "headline-lg": [
+                        "Montserrat"
+                ],
+                "display-lg": [
+                        "Montserrat"
+                ],
+                "headline-lg-mobile": [
+                        "Montserrat"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-mono": [
+                        "14px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-xl": [
+                        "120px",
+                        {
+                                "lineHeight": "110px",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "52px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "display-lg": [
+                        "80px",
+                        {
+                                "lineHeight": "80px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "800"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-lg {
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-border {
+            border: 6px solid #1b1b1b;
+        }
+        .neo-border-thin {
+            border: 2px solid #1b1b1b;
+        }
+        .neo-border-heavy {
+            border: 8px solid #1b1b1b;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- Top Navigation (Shell suppressed for this specific transactional view, but adding a simplified back-nav) -->
+<header class="w-full bg-surface border-b-[6px] border-on-background shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex justify-between items-center px-8 py-4 sticky top-0 z-50">
+<a class="flex items-center text-on-surface hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all border-2 border-on-background p-1 bg-surface-container" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_back</span>
+</a>
+<div class="font-headline-lg-mobile text-[24px] font-black tracking-tighter text-on-surface uppercase">
+            REVOLT
+        </div>
+<div class="w-8"></div> <!-- Spacer for center alignment -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col w-full px-8 py-6 gap-6 mb-32">
+<!-- Product Image Area -->
+<div class="w-full bg-surface-container neo-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative mb-4">
+<div class="absolute top-2 left-2 bg-primary-container text-on-primary-container neo-border-thin px-2 py-1 font-label-mono text-label-mono uppercase z-10">
+                Grade A
+            </div>
+<div class="aspect-square w-full relative overflow-hidden bg-white">
+<img class="object-cover w-full h-full" data-alt="A high-contrast, perfectly lit top-down photograph of an open, sleek professional grade refurbished laptop. The laptop sits on a stark, bright solid background. The lighting emphasizes the sharp mechanical lines, clean industrial design, and flawless pristine condition of the screen and keyboard. The image must have a raw, unapologetic neobrutalist energy with deep black shadows and bright highlights, communicating uncompromising performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtU0ukSPV9ksCoZburgA8Uk8t6-0RHllzSX8boGJeyOWuFIYnOCSCZS_sPIPtC5GMaIgezdQ1pkaQb21FNbU0h0Z3aWDC96myWSwpUXoHBCLgFfmBbLk5ePc9NmXYOGDGMhtVir1vu3SdQwtnmkZn4zZkU-0vrUqhOyWigAv9a5Naj3MHgLoay8MgqUYtoiA-rOtJtqabMb3RYpAc4kl3GszC0dAMV4OllXFv1ssHavDmeFv7uRBNIuKL4mtAESdoh4qcpHMCmNVs"/>
+</div>
+<div class="flex border-t-[6px] border-on-background overflow-x-auto snap-x hide-scrollbar">
+<div class="w-1/3 flex-shrink-0 snap-start border-r-[6px] border-on-background aspect-square bg-white">
+<img class="object-cover w-full h-full" data-alt="A close-up macro shot of a laptop keyboard and trackpad, emphasizing the tactile keys and industrial build quality. High contrast, sharp focus, stark bright lighting, conveying premium refurbished condition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfF97LLmDcUnb4nzwh0TTBIQKb4MOkJMFoEX8HuyKykzbOMiV19iVgBF83OYXUFWoRz4V_Q1zSyBRsDu_MQ8deM3fSSlwsWqPcGicY6S3o7VABGLp0P49_omXxx_ex3TVcPqNPxHtAa95zYGapwfdbZ5RQipVpdVrbm1S2xTTghX53-f6AFMxinX2TCcB2D_zNXJU5DVhAVZv08hCN4KD41ZkQNDQF5CIyHPCVRf8MKFOnY-J0SlbfHK_25WSXmZCZWksOklPwqtk"/>
+</div>
+<div class="w-1/3 flex-shrink-0 snap-start border-r-[6px] border-on-background aspect-square bg-white">
+<img class="object-cover w-full h-full" data-alt="A close-up shot of the side ports of a modern laptop (USB-C, HDMI), highlighting the slim profile and connectivity options. Sharp, detailed, industrial aesthetic with stark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATjXky4BCZEz5wpDJSERzVfvm-UIIgU7BFQve80ERGiW5Zqvz-tSoFVymGLiRBWdJoRi3iAPFlQCEEN8aD8ZAnHUMwFP-3Q8K8hAIgNJjhoNiUJSHFZGno-MBoPyhwDMddUNllN8C7pqKezgQWsrq00ZmSQBjMdMyMVkO8fjFCM_gaf6UuNZNqoC51BLlXYFZIRVaRGj_qe2w1oaD3n-duWeNEm1eg93oQf4KlFki0HgQy8KnZ-z34KpZ3jndlzh2jvL0cu9IIkeI"/>
+</div>
+<div class="w-1/3 flex-shrink-0 snap-start aspect-square bg-white">
+<img class="object-cover w-full h-full" data-alt="A dramatic angled shot of the closed laptop lid, showcasing the brand logo and metallic finish. High contrast lighting creating deep shadows and bright metallic reflections, neobrutalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrdn9pSWBVMT_Fxh4kyt1Vwk2Gniul6equddhS_1Rre0zJQAEmvEUGudWu-yIN6_eOVfBn2XbVL8vAZycLkO8nyXkfmygARct54efH4EqjYlJkKvn_RufOZ1E_S99MgdYXhaVkTZZ_kXSVFCedegXqRaSTK0axJgjhB0KCeEXcuvOamcXHE68l1MbAv0GBNa2IgJnpJ-K9WHCo6jm81Doc3jMLNn7RwGiE7fTJ-oC0iuaOieJ85uXjSOqBdhplA8_Mc5nwOQK1Qls"/>
+</div>
+</div>
+</div>
+<!-- Product Header & Price -->
+<div class="flex flex-col gap-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background uppercase">ThinkPad X1 Carbon Gen 9</h1>
+<div class="flex justify-between items-end mt-2">
+<div class="bg-on-background text-primary-container px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-2">
+<span class="font-headline-lg-mobile text-[32px] font-black block leading-none">$899.00</span>
+<span class="font-label-mono text-label-mono text-surface line-through mt-1 block opacity-70">MSRP $2,100</span>
+</div>
+<div class="text-right">
+<span class="font-label-mono text-label-mono text-on-surface-variant block uppercase">In Stock</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold uppercase">Ready to ship</span>
+</div>
+</div>
+</div>
+<!-- Specs Bento -->
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div class="bg-surface-container-lowest neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col gap-2">
+<span class="material-symbols-outlined text-secondary-container bg-on-background p-1 w-fit" style="font-variation-settings: 'FILL' 1;">memory</span>
+<span class="font-label-mono text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Processor</span>
+<span class="font-body-lg text-body-lg font-bold text-on-background">Intel i7-1185G7</span>
+</div>
+<div class="bg-surface-container-lowest neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col gap-2">
+<span class="material-symbols-outlined text-secondary-container bg-on-background p-1 w-fit" style="font-variation-settings: 'FILL' 1;">memory_alt</span>
+<span class="font-label-mono text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">RAM</span>
+<span class="font-body-lg text-body-lg font-bold text-on-background">16GB LPDDR4x</span>
+</div>
+<div class="bg-surface-container-lowest neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col gap-2">
+<span class="material-symbols-outlined text-secondary-container bg-on-background p-1 w-fit" style="font-variation-settings: 'FILL' 1;">hard_drive</span>
+<span class="font-label-mono text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Storage</span>
+<span class="font-body-lg text-body-lg font-bold text-on-background">512GB NVMe SSD</span>
+</div>
+<div class="bg-surface-container-lowest neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col gap-2">
+<span class="material-symbols-outlined text-secondary-container bg-on-background p-1 w-fit" style="font-variation-settings: 'FILL' 1;">desktop_windows</span>
+<span class="font-label-mono text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Display</span>
+<span class="font-body-lg text-body-lg font-bold text-on-background">14" WUXGA IPS</span>
+</div>
+</div>
+<!-- Description -->
+<div class="bg-surface-container-highest neo-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 mt-6 transform rotate-1">
+<h2 class="font-headline-lg-mobile text-[28px] font-black text-on-background mb-4 uppercase border-b-[6px] border-on-background pb-2 inline-block">The Verdict</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Uncompromising performance in a ridiculous form factor. This machine was built for the executive suite but priced for the trenches. Professionally refurbished to Grade A standards. Zero bloatware, pure speed.
+            </p>
+</div>
+</main>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-background border-t-[6px] border-on-background z-50">
+<button class="w-full bg-secondary-container text-on-background neo-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] py-5 flex items-center justify-center gap-3 font-headline-lg-mobile text-[24px] font-black uppercase transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">chat</span>
+            WhatsApp Us To Buy
+        </button>
+</div>
+</body></html>

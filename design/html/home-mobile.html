@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REVOLT - Mobile Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&amp;family=Montserrat:ital,wght@0,100..900;1,100..900&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "on-tertiary-fixed": "#30004b",
+                            "surface-bright": "#f9f9f9",
+                            "surface-container-lowest": "#ffffff",
+                            "on-surface-variant": "#3d4a44",
+                            "on-primary-fixed-variant": "#00513d",
+                            "error": "#ba1a1a",
+                            "error-container": "#ffdad6",
+                            "secondary": "#ab3600",
+                            "outline": "#6d7a73",
+                            "primary-fixed-dim": "#5adcb3",
+                            "surface-tint": "#006c52",
+                            "primary-fixed": "#79f9ce",
+                            "inverse-surface": "#303030",
+                            "outline-variant": "#bccac2",
+                            "on-error": "#ffffff",
+                            "on-secondary": "#ffffff",
+                            "on-background": "#1b1b1b",
+                            "background": "#f9f9f9",
+                            "tertiary-fixed-dim": "#e5b5ff",
+                            "surface-container-high": "#e8e8e8",
+                            "inverse-primary": "#5adcb3",
+                            "on-tertiary-fixed-variant": "#7000a8",
+                            "on-primary": "#ffffff",
+                            "tertiary-container": "#f7e1ff",
+                            "on-error-container": "#93000a",
+                            "on-surface": "#1b1b1b",
+                            "on-secondary-fixed-variant": "#832700",
+                            "surface-container": "#eeeeee",
+                            "inverse-on-surface": "#f1f1f1",
+                            "tertiary-fixed": "#f4d9ff",
+                            "secondary-fixed-dim": "#ffb59c",
+                            "primary-container": "#7fffd4",
+                            "on-primary-fixed": "#002117",
+                            "primary": "#006c52",
+                            "on-tertiary-container": "#a100ef",
+                            "on-secondary-container": "#551600",
+                            "surface-container-highest": "#e2e2e2",
+                            "surface-dim": "#dadada",
+                            "surface": "#f9f9f9",
+                            "secondary-container": "#fe5e1e",
+                            "on-tertiary": "#ffffff",
+                            "surface-container-low": "#f3f3f3",
+                            "on-primary-container": "#00765b",
+                            "on-secondary-fixed": "#390c00",
+                            "surface-variant": "#e2e2e2",
+                            "tertiary": "#9200db",
+                            "secondary-fixed": "#ffdbcf"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "border-width-thick": "6px",
+                            "gutter": "24px",
+                            "unit": "4px",
+                            "margin-edge": "32px",
+                            "border-width-thin": "2px",
+                            "shadow-offset": "8px"
+                    },
+                    "fontFamily": {
+                            "body-lg": [
+                                    "Archivo Narrow"
+                            ],
+                            "label-mono": [
+                                    "Space Mono"
+                            ],
+                            "display-xl": [
+                                    "Montserrat"
+                            ],
+                            "body-md": [
+                                    "Archivo Narrow"
+                            ],
+                            "headline-lg": [
+                                    "Montserrat"
+                            ],
+                            "display-lg": [
+                                    "Montserrat"
+                            ],
+                            "headline-lg-mobile": [
+                                    "Montserrat"
+                            ]
+                    },
+                    "fontSize": {
+                            "body-lg": [
+                                    "20px",
+                                    {
+                                            "lineHeight": "28px",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "label-mono": [
+                                    "14px",
+                                    {
+                                            "lineHeight": "16px",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "display-xl": [
+                                    "120px",
+                                    {
+                                            "lineHeight": "110px",
+                                            "letterSpacing": "-0.04em",
+                                            "fontWeight": "900"
+                                    }
+                            ],
+                            "body-md": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "24px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "headline-lg": [
+                                    "48px",
+                                    {
+                                            "lineHeight": "52px",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "800"
+                                    }
+                            ],
+                            "display-lg": [
+                                    "80px",
+                                    {
+                                            "lineHeight": "80px",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "900"
+                                    }
+                            ],
+                            "headline-lg-mobile": [
+                                    "40px",
+                                    {
+                                            "lineHeight": "44px",
+                                            "fontWeight": "900",
+                                            "letterSpacing": "-0.02em"
+                                    }
+                            ]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom Neobrutalist utilities */
+        .brutal-shadow {
+            box-shadow: 8px 8px 0px 0px rgba(27,27,27,1);
+        }
+        .brutal-shadow-lg {
+            box-shadow: 12px 12px 0px 0px rgba(27,27,27,1);
+        }
+        .brutal-shadow-hover:hover {
+            box-shadow: 12px 12px 0px 0px rgba(27,27,27,1);
+            transform: translate(-4px, -4px);
+        }
+        .brutal-shadow-active:active {
+            box-shadow: 0px 0px 0px 0px rgba(27,27,27,1);
+            transform: translate(0px, 0px);
+        }
+        .sticker-card {
+            background-color: var(--color-surface-container-lowest);
+            border: 6px solid var(--color-on-background);
+            box-shadow: 12px 12px 0px 0px var(--color-on-background);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            padding-bottom: 96px; /* space for sticky bottom CTA */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col selection:bg-primary-container selection:text-on-background">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-edge py-4 sticky top-0 z-50 bg-primary-container w-full border-b-[6px] border-on-background brutal-shadow">
+<a class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tighter text-on-background" href="#">REVOLT</a>
+<button class="bg-secondary-container text-on-background font-label-mono text-label-mono uppercase font-bold border-[4px] border-on-background w-12 h-12 flex items-center justify-center brutal-shadow hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</nav>
+<main class="flex-grow flex flex-col gap-16 py-12">
+<!-- Hero Section -->
+<header class="px-margin-edge flex flex-col gap-8 relative overflow-hidden">
+<div class="absolute -right-12 top-0 opacity-10 pointer-events-none rotate-12">
+<span class="material-symbols-outlined text-[200px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="inline-block bg-tertiary-container border-[4px] border-on-background px-4 py-2 w-max brutal-shadow -rotate-2 origin-left z-10">
+<span class="font-label-mono text-label-mono uppercase text-on-background">UNCOMPROMISING PERFORMANCE</span>
+</div>
+<div class="transform -rotate-3 origin-left z-10">
+<h1 class="font-display-lg text-[64px] leading-[60px] font-black uppercase break-words bg-secondary-container text-on-background inline-block px-2 border-[6px] border-on-background brutal-shadow-lg mb-2">
+                    RAW POWER.
+                </h1>
+<br/>
+<h1 class="font-display-lg text-[56px] leading-[52px] font-black uppercase break-words bg-primary-container text-on-background inline-block px-2 border-[6px] border-on-background brutal-shadow-lg">
+                    NO CORPORATE BS.
+                </h1>
+</div>
+<p class="font-body-lg text-body-lg text-on-background border-l-[6px] border-secondary-container pl-4 z-10 font-bold bg-surface p-4 border-t-[4px] border-r-[4px] border-b-[4px] border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)]">
+                High-performance refurbished laptops for developers, designers, and power users. Honest specs, unbeatable prices, zero compromises.
+            </p>
+</header>
+<!-- Product Grid (Single Column Mobile) -->
+<section class="px-margin-edge flex flex-col gap-10" id="inventory">
+<div class="flex items-end justify-between border-b-[6px] border-on-background pb-2 mb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile uppercase bg-tertiary-container px-2 border-[4px] border-on-background brutal-shadow rotate-1">LATEST DROPS</h2>
+</div>
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest border-[6px] border-on-background p-5 brutal-shadow-lg flex flex-col gap-4 relative group transform transition-transform hover:-translate-y-1 hover:rotate-1">
+<div class="w-full h-56 bg-surface-container border-[4px] border-on-background relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A stark, high-contrast neobrutalist product shot of a sleek, dark metallic refurbished high-performance laptop resting on a raw, textured concrete surface. The lighting is harsh and directional, casting a solid black shadow to the bottom right, emphasizing the sharp geometric lines of the device. The scene conveys industrial power, reliability, and no-nonsense utility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOSB265VbYOKYqDshTx2ibsBHKR52S6l6uc0XD7XYvL32aHWqLrJd7jbj0tPs_4Vgck43s_buZjMH_e8bN4FAmXR5msyOhWs46mP0b_DwqzW8BDjLmY2la4iryJ_LkW5XJ7e_ZoYYB3sgjLgIgcyICpQPYIzwwnHTzATV5zaI3N1qSEOuTMxxOlp0a3PotMRLEZ2Ocd_gsWU0ZTgco3fv8_RXOaKU0AZr7Oog6cNvc9yeeVj7PbgSZLLxRID-rPkpV85mi9NFs0ZQ"/>
+<div class="absolute top-2 right-2 bg-secondary-container text-on-background font-label-mono text-label-mono px-3 py-1 border-[4px] border-on-background shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] rotate-3">
+                        M2 PRO
+                    </div>
+</div>
+<div class="flex flex-col gap-3">
+<h3 class="font-headline-lg text-headline-lg leading-none uppercase">THINKPAD T14</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary-container border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">32GB RAM</span>
+<span class="bg-tertiary-container border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">1TB NVME</span>
+<span class="bg-surface-variant border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">GRADE A</span>
+</div>
+</div>
+<div class="flex justify-between items-end mt-4">
+<div class="bg-on-background text-primary-fixed px-4 py-2 font-headline-lg-mobile text-headline-lg-mobile border-[4px] border-on-background -rotate-2">
+                        $899
+                    </div>
+<button class="bg-secondary-container border-[4px] border-on-background w-14 h-14 flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all">
+<span class="material-symbols-outlined text-[32px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest border-[6px] border-on-background p-5 brutal-shadow-lg flex flex-col gap-4 relative group transform transition-transform hover:-translate-y-1 hover:-rotate-1">
+<div class="w-full h-56 bg-surface-container border-[4px] border-on-background relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A stark, raw neobrutalist close-up of a silver refurbished laptop open on a stark white desk. Thick black cables are visible in the background. The lighting is unsoftened, creating a hard, flat visual style synonymous with brutalist web design. The image feels technical, precise, and unpolished in a highly intentional way." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChhN8qwEP6U38005wMLq1TRG-PXtun5pETeBv5I5jL4weAUG1_zk3ghGlLoWzHGtT-RxYFEyCh6v28U0FYlhv-eyLyV4RW4uwqYe3U6PucSexw0E8aKouYNJaErBQtbpD0OJomavZwrFwrLTnq9Ii0KxzW2LBuTRs3nNgWQz6N50nz5HmG7NQF3rGqKyyHUYeCFicUqQLfRUqDrth6XJ2jefPK5czC9_OjyyYt3gZ5x024iemvSK9LKlbVH51ItpMzY9YMQ7P1XbI"/>
+</div>
+<div class="flex flex-col gap-3">
+<h3 class="font-headline-lg text-headline-lg leading-none uppercase">MACBOOK PRO 14"</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary-container border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">16GB UNIFIED</span>
+<span class="bg-tertiary-container border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">512GB SSD</span>
+<span class="bg-surface-variant border-[3px] border-on-background px-3 py-1 font-label-mono text-label-mono uppercase text-on-background shadow-[2px_2px_0px_0px_rgba(27,27,27,1)]">GRADE A-</span>
+</div>
+</div>
+<div class="flex justify-between items-end mt-4">
+<div class="bg-on-background text-primary-fixed px-4 py-2 font-headline-lg-mobile text-headline-lg-mobile border-[4px] border-on-background rotate-2">
+                        $1150
+                    </div>
+<button class="bg-secondary-container border-[4px] border-on-background w-14 h-14 flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(27,27,27,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all">
+<span class="material-symbols-outlined text-[32px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+</section>
+<!-- CTA Banner -->
+<section class="px-margin-edge">
+<div class="bg-tertiary-container border-[6px] border-on-background p-8 flex flex-col gap-6 brutal-shadow-lg text-center relative overflow-hidden -rotate-1">
+<div class="absolute -left-8 -bottom-8 opacity-20 pointer-events-none rotate-45">
+<span class="material-symbols-outlined text-[150px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile uppercase z-10 bg-on-background text-tertiary-container inline-block px-2 transform rotate-1">NEED A CUSTOM SPEC?</h2>
+<p class="font-body-lg text-body-lg z-10 font-bold bg-surface p-2 border-[4px] border-on-background">We source directly from corporate liquidators. Tell us what you need, and we'll find it.</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background text-primary-fixed w-full border-t-[8px] border-secondary-container flex flex-col justify-between items-start px-margin-edge py-16 gap-10">
+<div class="font-display-lg text-[48px] leading-none text-secondary-container uppercase">REVOLT</div>
+<div class="flex flex-col gap-6 mt-4 w-full">
+<a class="text-surface hover:text-primary-fixed font-label-mono text-label-mono text-xl uppercase transition-colors border-b-2 border-surface w-max pb-1" href="#">Facebook</a>
+<a class="text-surface hover:text-primary-fixed font-label-mono text-label-mono text-xl uppercase transition-colors border-b-2 border-surface w-max pb-1" href="#">Instagram</a>
+<a class="text-surface hover:text-primary-fixed font-label-mono text-label-mono text-xl uppercase transition-colors border-b-2 border-surface w-max pb-1" href="#">Twitter</a>
+<a class="text-surface hover:text-primary-fixed font-label-mono text-label-mono text-xl uppercase transition-colors border-b-2 border-surface w-max pb-1" href="#">Contact</a>
+</div>
+<div class="mt-8 pt-8 border-t-[4px] border-surface-variant w-full font-label-mono text-label-mono text-surface">
+            © 2024 REVOLT - UNCOMPROMISING PERFORMANCE
+        </div>
+</footer>
+<!-- Giant Sticky WhatsApp Button -->
+<div class="fixed bottom-0 left-0 w-full p-4 z-50 bg-background/90 backdrop-blur-sm border-t-[6px] border-on-background">
+<button class="bg-primary-container text-on-background border-[6px] border-on-background py-5 font-headline-lg-mobile text-[28px] uppercase font-black w-full shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[12px_12px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[36px]" data-icon="forum">forum</span>
+            WHATSAPP US
+        </button>
+</div>
+</body></html>

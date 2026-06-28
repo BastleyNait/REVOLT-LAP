@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>REVOLT - Inicio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;700&amp;family=Montserrat:wght@700;800;900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary-fixed": "#30004b",
+                "surface-bright": "#f9f9f9",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#3d4a44",
+                "on-primary-fixed-variant": "#00513d",
+                "error": "#ba1a1a",
+                "error-container": "#ffdad6",
+                "secondary": "#ab3600",
+                "outline": "#6d7a73",
+                "primary-fixed-dim": "#5adcb3",
+                "surface-tint": "#006c52",
+                "primary-fixed": "#79f9ce",
+                "inverse-surface": "#303030",
+                "outline-variant": "#bccac2",
+                "on-error": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-background": "#1b1b1b",
+                "background": "#f9f9f9",
+                "tertiary-fixed-dim": "#e5b5ff",
+                "surface-container-high": "#e8e8e8",
+                "inverse-primary": "#5adcb3",
+                "on-tertiary-fixed-variant": "#7000a8",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#f7e1ff",
+                "on-error-container": "#93000a",
+                "on-surface": "#1b1b1b",
+                "on-secondary-fixed-variant": "#832700",
+                "surface-container": "#eeeeee",
+                "inverse-on-surface": "#f1f1f1",
+                "tertiary-fixed": "#f4d9ff",
+                "secondary-fixed-dim": "#ffb59c",
+                "primary-container": "#7fffd4",
+                "on-primary-fixed": "#002117",
+                "primary": "#006c52",
+                "on-tertiary-container": "#a100ef",
+                "on-secondary-container": "#551600",
+                "surface-container-highest": "#e2e2e2",
+                "surface-dim": "#dadada",
+                "surface": "#f9f9f9",
+                "secondary-container": "#fe5e1e",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f3f3f3",
+                "on-primary-container": "#00765b",
+                "on-secondary-fixed": "#390c00",
+                "surface-variant": "#e2e2e2",
+                "tertiary": "#9200db",
+                "secondary-fixed": "#ffdbcf"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "border-width-thick": "6px",
+                "gutter": "24px",
+                "unit": "4px",
+                "margin-edge": "32px",
+                "border-width-thin": "2px",
+                "shadow-offset": "8px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Archivo Narrow"
+                ],
+                "label-mono": [
+                        "Space Mono"
+                ],
+                "display-xl": [
+                        "Montserrat"
+                ],
+                "body-md": [
+                        "Archivo Narrow"
+                ],
+                "headline-lg": [
+                        "Montserrat"
+                ],
+                "display-lg": [
+                        "Montserrat"
+                ],
+                "headline-lg-mobile": [
+                        "Montserrat"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-mono": [
+                        "14px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-xl": [
+                        "120px",
+                        {
+                                "lineHeight": "110px",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "52px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "display-lg": [
+                        "80px",
+                        {
+                                "lineHeight": "80px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "800"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 900, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, #1b1b1b 1px, transparent 1px),
+                linear-gradient(to bottom, #1b1b1b 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-background antialiased selection:bg-secondary-container selection:text-on-background relative">
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] bg-grid z-[-1]"></div>
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-margin-edge py-6 sticky top-0 z-50 bg-primary-container w-full border-b-border-width-thick border-on-background shadow-[12px_12px_0px_0px_rgba(27,27,27,1)]">
+<a class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-black tracking-tighter text-on-background hover:-rotate-2 hover:scale-105 transition-transform" href="#">REVOLT</a>
+<nav class="hidden md:flex gap-gutter items-center font-label-mono text-body-lg uppercase font-bold">
+<a class="text-on-background hover:bg-on-background hover:text-surface px-2 py-1 border-border-width-thin border-transparent hover:border-on-background transition-all" href="#">Inventory</a>
+<a class="text-on-background hover:bg-on-background hover:text-surface px-2 py-1 border-border-width-thin border-transparent hover:border-on-background transition-all" href="#">Specs</a>
+<a class="text-on-background bg-secondary-container px-4 py-1 border-border-width-thick border-on-background shadow-[6px_6px_0px_0px_rgba(27,27,27,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none" href="#">Deals</a>
+<a class="text-on-background hover:bg-on-background hover:text-surface px-2 py-1 border-border-width-thin border-transparent hover:border-on-background transition-all" href="#">About</a>
+</nav>
+<a class="font-label-mono text-label-mono md:text-body-lg uppercase font-bold bg-tertiary-container text-on-background border-border-width-thick border-on-background px-6 py-3 shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] hover:-rotate-3 hover:scale-110 transition-transform active:rotate-0 active:scale-95 flex items-center gap-2 rounded-full" href="#">
+<span class="material-symbols-outlined text-2xl">chat</span> WHATSAPP
+</a>
+</header>
+<main class="max-w-[1440px] mx-auto px-4 md:px-margin-edge py-16 md:py-32 space-y-32">
+<!-- Hero Section -->
+<section class="relative min-h-[70vh] flex flex-col justify-center items-center text-center">
+<!-- Massive overlapping headline -->
+<div class="relative z-10 space-y-4 max-w-5xl mx-auto">
+<h1 class="font-display-xl text-[50px] leading-[50px] md:text-[100px] md:leading-[90px] uppercase font-black tracking-tighter flex flex-col items-center gap-4">
+  <span class="bg-primary-container text-on-background px-6 py-2 border-border-width-thick border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] -rotate-2 self-start md:ml-12">LAPTOPS</span>
+  <span class="bg-secondary-container text-on-background px-8 py-4 border-border-width-thick border-on-background shadow-[12px_12px_0px_0px_rgba(27,27,27,1)] rotate-2 z-10 scale-110">REACONDICIONADAS</span>
+  <span class="bg-tertiary-container text-on-background px-6 py-2 border-border-width-thick border-on-background shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] -rotate-1 self-end md:mr-12">PRECIOS BRUTALES</span>
+</h1>
+</div>
+<div class="absolute inset-0 z-0 flex justify-center items-center opacity-80 overflow-hidden pointer-events-none">
+<img class="w-full h-full object-cover filter grayscale contrast-150 mix-blend-overlay" data-alt="A massive, abstract close-up of a laptop's cooling vents and sharp metallic edges, heavily stylized with high contrast and noise, creating a gritty industrial backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIeqKXi8Z7gRlpGvg2HzRU9cow20t917mTNSlemZpIrwkYokZ3D6wGSKk_6iHENioLQeTttQwIzxuHOY5vAfh-nIEZutS8htvPbUS6I0-N7mj4BqerdrCHn74czKFxE3JwBGLCd-3AdDPSFeDunGshNuHjPvt2SWE4P-1bEbwwira78VL2MKw_NxLl8PY9Jqew0-LVa9-_-vQZu5MyidUudq3tbYRPPSc_tctOrluknflF6MHqV8tZvURgzuj1rlqclgMKVnl8hJo">
+</div>
+<!-- Decorative geometric elements -->
+<div class="absolute top-1/4 left-10 w-32 h-32 bg-secondary-container border-border-width-thick border-on-background shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] z-20 animate-[spin_10s_linear_infinite] hidden md:block"></div>
+<div class="absolute bottom-1/4 right-10 w-48 h-12 bg-tertiary-container border-border-width-thick border-on-background shadow-[12px_12px_0px_0px_rgba(27,27,27,1)] z-20 -rotate-12 hidden md:block"></div>
+<div class="relative z-30 mt-16 max-w-2xl bg-surface border-border-width-thick border-on-background p-6 md:p-8 shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] transform rotate-1 hover:rotate-0 transition-transform">
+<p class="font-body-lg text-body-lg md:text-[24px] md:line-height-[32px] text-on-background font-bold uppercase">
+            Rendimiento sin compromisos. Equipos de gama alta listos para trabajar, jugar y crear. Stock limitado.
+        </p>
+
+</div>
+</section>
+<!-- Product Grid -->
+<section class="space-y-16">
+<div class="flex items-center gap-6">
+<h2 class="font-display-lg text-headline-lg md:text-display-lg uppercase font-black bg-on-background text-surface inline-block px-6 py-2 -rotate-2">INVENTARIO</h2>
+<div class="h-border-width-thick bg-on-background flex-grow mt-4"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-gutter pt-8">
+<!-- Product Card 1 -->
+<article class="bg-primary-container border-border-width-thick border-on-background shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] hover:shadow-[24px_24px_0px_0px_rgba(27,27,27,1)] hover:-translate-y-2 hover:-translate-x-2 transition-all flex flex-col p-6 space-y-6 group relative">
+<div class="absolute -top-4 -left-4 bg-tertiary-container border-border-width-thick border-on-background px-4 py-1 font-label-mono font-bold shadow-[6px_6px_0px_0px_rgba(27,27,27,1)] -rotate-6 z-10">BEST SELLER</div>
+<div class="border-border-width-thick border-on-background aspect-[4/3] bg-on-background overflow-hidden relative">
+<div class="absolute inset-0 bg-secondary-container mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-500" data-alt="A rugged, refurbished business laptop, styled in a stark neobrutalist aesthetic. High contrast black and white image with strong, harsh lighting highlighting the keyboard and trackpad. The background is a solid, untextured flat white. The image exudes durability and raw performance, focusing on the mechanical aspects of the hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFejqBTHyDYdAVe6IEpTfL8i4WGgfSTrD5QDKLMcc_HA5VubNvDxg9_1iBFpYY_alOVs9R8qJMhIQ_-PDqNei9Yh6NtS0eFrpiJ_oCoQapz9MLPHVevmE_CuzMNKa482CGYT5w1pqtQvBcel_dKS9Exrnajc_rkL0UwAXSwYOGGT_ZbF0B8QDEdhd1_jL78oHMY3Q4qErlkpugWKXvk8BifBDNVbq2quvzLkH8i-l4SkO9yg1qBXbU285BlXHaA_eCnnnWoHQXanc">
+</div>
+<div class="flex-grow space-y-4 bg-surface p-4 border-border-width-thick border-on-background">
+<div class="flex flex-wrap gap-2 mb-2">
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-secondary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">16GB RAM</span>
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-tertiary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">512GB SSD</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg leading-none uppercase font-black break-words mt-4">THINKPAD<br>T480</h3>
+<p class="font-body-lg text-body-lg font-bold bg-on-background text-surface inline-block px-2">Intel Core i5 8th Gen</p>
+</div>
+<div class="flex justify-between items-center mt-auto bg-surface p-4 border-border-width-thick border-on-background -mt-2 relative z-10">
+<div class="font-display-lg text-[40px] leading-none font-black text-on-background">$299</div>
+<button class="font-label-mono text-body-lg uppercase font-bold bg-secondary-container text-on-background border-border-width-thick border-on-background px-6 py-3 shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] hover:bg-tertiary-container hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center gap-1">
+    GO <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Product Card 2 -->
+<article class="bg-surface border-border-width-thick border-on-background shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] hover:shadow-[24px_24px_0px_0px_rgba(27,27,27,1)] hover:-translate-y-2 hover:-translate-x-2 transition-all flex flex-col p-6 space-y-6 group transform md:translate-y-12">
+<div class="border-border-width-thick border-on-background aspect-[4/3] bg-on-background overflow-hidden relative">
+<div class="absolute inset-0 bg-tertiary-container mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-500" data-alt="A sleek silver ultrabook laptop photographed from a dynamic top-down angle, neobrutalist style. Strong geometric shadows cast by harsh lighting against a solid flat gray background. The metallic texture is highly emphasized, contrasting with thick black border outlines digitally added to the edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlRzYH8L-udqDBH261pTgfKqCbC0YcfMzWcW7uSpq3hq96w2USyimYF2JuMwH6kynF8mkw8gUZVkIt1u6FgRkDVphCUyNzewmhB-XboO0eQgyMj9y_GOXufZ_HkZiiEmjU8mX6FeoQ6tzk4-5ZOX4CJd54r4Cj1EvmVqjcFfvYvDtgoePe9TX4yQT6bEV-3SxC228PmQwGAJY7nYkepaItQuRl4CrjetJghkn8Lgp_BDDSYt_07Tc2Ktzq5ALMbMNTOhCwc_5LRjg">
+</div>
+<div class="flex-grow space-y-4 bg-primary-container p-4 border-border-width-thick border-on-background">
+<div class="flex flex-wrap gap-2 mb-2">
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-secondary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">8GB RAM</span>
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-tertiary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">256GB SSD</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg leading-none uppercase font-black break-words mt-4">MACBOOK<br>AIR M1</h3>
+<p class="font-body-lg text-body-lg font-bold bg-on-background text-surface inline-block px-2">Apple Silicon (2020)</p>
+</div>
+<div class="flex justify-between items-center mt-auto bg-surface p-4 border-border-width-thick border-on-background -mt-2 relative z-10">
+<div class="font-display-lg text-[40px] leading-none font-black text-on-background">$650</div>
+<button class="font-label-mono text-body-lg uppercase font-bold bg-tertiary-container text-on-background border-border-width-thick border-on-background px-6 py-3 shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] hover:bg-secondary-container hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center gap-1">
+    GO <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Product Card 3 -->
+<article class="bg-tertiary-container border-border-width-thick border-on-background shadow-[16px_16px_0px_0px_rgba(27,27,27,1)] hover:shadow-[24px_24px_0px_0px_rgba(27,27,27,1)] hover:-translate-y-2 hover:-translate-x-2 transition-all flex flex-col p-6 space-y-6 group">
+<div class="border-border-width-thick border-on-background aspect-[4/3] bg-on-background overflow-hidden relative">
+<div class="absolute inset-0 bg-primary-container mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-500" data-alt="A bulky, high-performance gaming laptop with aggressive cooling vents, captured in a raw, neobrutalist aesthetic. Monochrome lighting with sharp, stark shadows. The laptop is placed on a minimalist platform against a pure white background, emphasizing its utilitarian, machine-like qualities." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx6_dgrrf40sr1S2UXUf9Zg1iO9IAbyQXpGcA_ULrM7DFn9S23GV09KQDHls1GR8SI4Dg9y4UNx5cadAKNz80UnfhLElqyp6O1dbf2217KgVZ1m5Gr3nMo76xHbSZEAcg0QqMWCU6jLHWRMU3fKBMljr4HYucAn-IKHluT4M_Ig9Yehy90eBOpnTTdTfv0UCIfIsJw6RNhHX_9pGuEiTq9xHpkdhVgT9u7JinuyqGVXhHmFagzYVsezoQVIj_wSJBA72BMS-KZ8uc">
+</div>
+<div class="flex-grow space-y-4 bg-surface p-4 border-border-width-thick border-on-background">
+<div class="flex flex-wrap gap-2 mb-2">
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-secondary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">32GB RAM</span>
+<span class="font-label-mono text-label-mono border-border-width-thick border-on-background bg-primary-container text-on-background px-3 py-1 uppercase font-bold shadow-[4px_4px_0px_0px_rgba(27,27,27,1)]">1TB NVMe</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg leading-none uppercase font-black break-words mt-4">DELL XPS<br>15</h3>
+<p class="font-body-lg text-body-lg font-bold bg-on-background text-surface inline-block px-2">Intel Core i7 11th Gen</p>
+</div>
+<div class="flex justify-between items-center mt-auto bg-surface p-4 border-border-width-thick border-on-background -mt-2 relative z-10">
+<div class="font-display-lg text-[40px] leading-none font-black text-on-background">$899</div>
+<button class="font-label-mono text-body-lg uppercase font-bold bg-primary-container text-on-background border-border-width-thick border-on-background px-6 py-3 shadow-[8px_8px_0px_0px_rgba(27,27,27,1)] hover:bg-secondary-container hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(27,27,27,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center gap-1">
+    GO <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t-border-width-thick border-on-background flex flex-col md:flex-row justify-between items-center px-margin-edge py-16 gap-gutter bg-on-background text-surface">
+<div class="space-y-2 text-center md:text-left">
+<span class="font-display-lg text-headline-lg uppercase block font-black">REVOLT</span>
+<p class="font-label-mono text-label-mono font-bold">© 2024 REVOLT - UNCOMPROMISING PERFORMANCE</p>
+</div>
+<nav class="flex flex-wrap justify-center md:justify-end gap-6 font-label-mono text-body-lg uppercase font-bold">
+<a class="hover:text-secondary-container hover:underline decoration-border-width-thick underline-offset-4 transition-colors" href="#">Facebook</a>
+<a class="hover:text-tertiary-container hover:underline decoration-border-width-thick underline-offset-4 transition-colors" href="#">Instagram</a>
+<a class="hover:text-primary-container hover:underline decoration-border-width-thick underline-offset-4 transition-colors" href="#">Twitter</a>
+<a class="bg-surface text-on-background px-4 py-2 border-border-width-thick border-transparent hover:border-surface hover:bg-on-background hover:text-surface transition-all" href="#">Contact</a>
+</nav>
+</footer>
+
+
+</body></html>
