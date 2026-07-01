@@ -6,9 +6,7 @@ export const metadata = { title: "Nuevo producto" };
 export default function NewProductPage() {
   return (
     <div className="space-y-8">
-      <h1 className="inline-block -rotate-1 bg-on-background px-4 py-2 font-display-lg text-headline-lg-mobile font-black uppercase text-surface">
-        Nuevo producto
-      </h1>
+      <h1 className="font-display-lg text-3xl font-black tracking-tight">Nuevo producto</h1>
       <ProductForm action={createProductAction} submitLabel="Crear producto" />
     </div>
   );

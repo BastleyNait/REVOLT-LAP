@@ -16,9 +16,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-8">
-      <h1 className="inline-block -rotate-1 bg-on-background px-4 py-2 font-display-lg text-headline-lg-mobile font-black uppercase text-surface">
-        Editar: {product.name}
-      </h1>
+      <h1 className="font-display-lg text-3xl font-black tracking-tight">Editar: {product.name}</h1>
       <ProductForm action={action} product={product} submitLabel="Guardar cambios" />
     </div>
   );

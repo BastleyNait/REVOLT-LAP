@@ -6,7 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Product } from "@/lib/types/product";
 import { ProductCard } from "./ProductCard";
 import { siteConfig } from "@/lib/config/site";
-import { cn } from "@/lib/utils/cn";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,21 +48,17 @@ export function ProductGrid({ products }: { products: Product[] }) {
 
   if (products.length === 0) {
     return (
-      <div className="border-thick border-on-background bg-surface-container-lowest p-12 text-center shadow-neo-md">
-        <p className="font-label-mono text-body-lg font-bold uppercase">{siteConfig.home.inventoryEmpty}</p>
+      <div className="glass rounded-3xl p-12 text-center shadow-neo">
+        <p className="text-lg font-semibold text-on-surface-variant">{siteConfig.home.inventoryEmpty}</p>
       </div>
     );
   }
 
   return (
-    <div ref={root} className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-gutter lg:grid-cols-3">
+    <div ref={root} className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {products.map((product, index) => (
-        // Outer wrapper holds the scattered layout offset (untouched by GSAP);
-        // the inner wrapper is what GSAP transforms during the reveal.
-        <div key={product.id} className={cn(index % 3 === 1 && "md:translate-y-12")}>
-          <div data-anim="card" data-reveal className="h-full">
-            <ProductCard product={product} index={index} />
-          </div>
+        <div key={product.id} data-anim="card" data-reveal className="h-full">
+          <ProductCard product={product} index={index} />
         </div>
       ))}
     </div>

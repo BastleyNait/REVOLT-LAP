@@ -2,7 +2,7 @@ import { forwardRef, type ComponentProps, type ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
 const controlBase =
-  "w-full border-thin border-on-background bg-surface-container-lowest px-4 py-3 font-label-mono text-body-md text-on-background placeholder:text-on-surface-variant/50 focus:outline-none focus:border-thick focus:bg-primary-container/20 transition-colors";
+  "w-full rounded-xl border border-outline-variant bg-surface-container-lowest/70 backdrop-blur px-4 py-3 text-body-md text-on-background placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/40 transition";
 
 export const Input = forwardRef<HTMLInputElement, ComponentProps<"input">>(function Input(
   { className, ...props },
@@ -43,7 +43,7 @@ export function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className={cn("mb-2 block font-label-mono text-label-mono font-bold uppercase", className)}
+      className={cn("mb-2 block text-sm font-semibold tracking-wide", className)}
     >
       {children}
       {required ? <span className="text-error"> *</span> : null}
@@ -65,7 +65,7 @@ export function Checkbox({ className, ...props }: ComponentProps<"input">) {
     <input
       type="checkbox"
       className={cn(
-        "h-6 w-6 border-thick border-on-background accent-secondary-container cursor-pointer",
+        "h-5 w-5 rounded-md border border-outline-variant accent-primary cursor-pointer",
         className,
       )}
       {...props}

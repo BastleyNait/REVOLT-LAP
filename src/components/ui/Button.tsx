@@ -8,27 +8,29 @@ export type ButtonVariant =
   | "accent"
   | "dark"
   | "danger"
-  | "outline";
+  | "outline"
+  | "glass";
 export type ButtonSize = "sm" | "md" | "lg" | "xl";
 
 const base =
-  "inline-flex items-center justify-center gap-2 border-thick border-on-background font-label-mono font-bold uppercase tracking-wide leading-none transition-all duration-150 select-none cursor-pointer disabled:opacity-50 disabled:pointer-events-none";
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-none select-none cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-primary-container text-on-container hover:bg-primary-fixed-dim",
-  secondary: "bg-secondary-container text-on-container hover:bg-secondary-fixed-dim",
-  tertiary: "bg-tertiary-container text-on-container hover:bg-tertiary-fixed-dim",
-  accent: "bg-accent text-on-accent hover:bg-accent-dim",
-  dark: "bg-on-background text-surface hover:bg-inverse-surface",
-  danger: "bg-error text-on-error hover:bg-on-error-container",
-  outline: "bg-surface-container-lowest text-on-background hover:bg-surface-container",
+  primary: "bg-primary text-on-primary shadow-neo hover:shadow-neo-md hover:brightness-110",
+  secondary: "bg-secondary text-on-secondary shadow-neo hover:shadow-neo-md hover:brightness-110",
+  tertiary: "bg-tertiary text-on-tertiary shadow-neo hover:shadow-neo-md hover:brightness-110",
+  accent: "bg-accent text-on-accent shadow-neo hover:shadow-neo-md hover:brightness-105",
+  dark: "bg-on-background text-background shadow-neo hover:shadow-neo-md hover:opacity-90",
+  danger: "bg-error text-on-error shadow-neo hover:shadow-neo-md hover:brightness-110",
+  outline: "border border-outline-variant text-on-background hover:bg-surface-container/60 hover:border-primary/40",
+  glass: "glass text-on-background hover:brightness-105",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "px-4 py-1.5 text-label-mono shadow-neo-xs hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm active:translate-x-1 active:translate-y-1 active:shadow-none",
-  md: "px-6 py-3 text-body-md shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-md active:translate-x-1 active:translate-y-1 active:shadow-none",
-  lg: "px-8 py-4 text-body-lg shadow-neo-md hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg active:translate-x-1.5 active:translate-y-1.5 active:shadow-none",
-  xl: "px-8 py-7 text-2xl md:text-3xl shadow-neo-lg hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl active:translate-x-2 active:translate-y-2 active:shadow-none",
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-base",
+  lg: "px-8 py-4 text-lg",
+  xl: "px-10 py-5 text-xl md:text-2xl",
 };
 
 interface StyleOptions {

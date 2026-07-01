@@ -19,12 +19,12 @@ export default async function LoginPage({
 
   return (
     <div className="flex justify-center py-10">
-      <div className="w-full max-w-md -rotate-1 border-thick border-on-background bg-surface-container-lowest p-8 shadow-neo-lg">
-        <div className="mb-6 flex items-center gap-2">
-          <span className="border-thick border-on-background bg-primary-container p-2 shadow-neo-xs">
+      <div className="glass w-full max-w-md rounded-3xl p-8 shadow-neo-lg">
+        <div className="mb-6 flex items-center gap-3">
+          <span className="rounded-2xl bg-primary/15 p-2.5 text-primary">
             <Icon name="lock" className="text-2xl" />
           </span>
-          <h1 className="font-display-lg text-headline-lg-mobile font-black uppercase">Acceso admin</h1>
+          <h1 className="font-display-lg text-2xl font-black tracking-tight">Acceso admin</h1>
         </div>
 
         <form action={loginAction} className="space-y-6">
@@ -34,7 +34,7 @@ export default async function LoginPage({
           </Field>
 
           {error ? (
-            <p className="border-thin border-error bg-error-container p-2 font-label-mono text-label-mono font-bold text-on-error-container">
+            <p className="rounded-xl border border-error/40 bg-error/15 p-3 text-sm font-semibold text-error">
               Contraseña incorrecta.
             </p>
           ) : null}

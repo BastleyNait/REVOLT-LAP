@@ -29,8 +29,8 @@ export default async function AdminDashboardPage({
 
       {message ? (
         <div
-          className={`border-thick border-on-background p-4 font-label-mono text-label-mono font-bold uppercase shadow-neo ${
-            isError ? "bg-error text-on-error" : "bg-primary-container text-on-container"
+          className={`rounded-2xl border p-4 text-sm font-semibold shadow-neo-sm ${
+            isError ? "border-error/40 bg-error/15 text-error" : "border-primary/40 bg-primary/15 text-primary"
           }`}
         >
           {message}
@@ -38,10 +38,10 @@ export default async function AdminDashboardPage({
       ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="font-display-lg text-headline-lg-mobile font-black uppercase">
+        <h1 className="font-display-lg text-3xl font-black tracking-tight">
           Inventario ({products.length})
         </h1>
-        <Link href="/admin/new" className={buttonClasses({ variant: "secondary", size: "md" })}>
+        <Link href="/admin/new" className={buttonClasses({ variant: "primary", size: "md" })}>
           <Icon name="add" /> Nuevo producto
         </Link>
       </div>

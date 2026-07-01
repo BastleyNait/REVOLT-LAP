@@ -3,111 +3,159 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/* REVOLT design tokens — "Neobrutalist Pop" palette                   */
-/* Peach paper · Periwinkle · Hot Pink · Teal · Acid Yellow.           */
-/* Every value is a space-separated RGB triplet so Tailwind can wrap   */
-/* it in rgb(... / <alpha-value>). `:root` = light theme, `.dark`      */
-/* overrides only the tokens that change for the dark theme.           */
+/* REVOLT design tokens — "Botella Noir" palette                       */
+/* AMOLED black · Bottle Green · Emerald · Lime · Obsidian.            */
+/* Space-separated RGB triplets wrapped by Tailwind in rgb(... / a).   */
+/* `:root` = light theme, `.dark` overrides the dark theme.            */
 /* ------------------------------------------------------------------ */
 
 :root {
   color-scheme: light;
 
-  /* Core surfaces — warm peach paper neutrals */
-  --c-background: 252 238 225;
-  --c-surface: 252 238 225;
+  /* Core surfaces — cold green-tinted off-white */
+  --c-background: 234 240 234;
+  --c-surface: 248 252 248;
   --c-surface-bright: 255 255 255;
-  --c-surface-dim: 242 224 207;
+  --c-surface-dim: 218 228 218;
   --c-surface-container-lowest: 255 255 255;
-  --c-surface-container-low: 250 231 214;
-  --c-surface-container: 247 226 206;
-  --c-surface-container-high: 242 219 196;
-  --c-surface-container-highest: 237 212 186;
-  --c-surface-variant: 237 212 186;
-  --c-on-surface: 26 22 20;
-  --c-on-surface-variant: 92 81 71;
-  --c-on-background: 26 22 20;
-  --c-on-container: 26 22 20;
-  --c-inverse-surface: 44 38 34;
-  --c-inverse-on-surface: 251 234 217;
-  --c-outline: 111 98 88;
-  --c-outline-variant: 216 195 174;
+  --c-surface-container-low: 242 248 242;
+  --c-surface-container: 235 243 235;
+  --c-surface-container-high: 224 235 224;
+  --c-surface-container-highest: 210 224 210;
+  --c-surface-variant: 210 224 210;
+  --c-on-surface: 10 20 10;
+  --c-on-surface-variant: 38 70 38;
+  --c-on-background: 10 20 10;
+  --c-on-container: 10 20 10;
+  --c-inverse-surface: 16 32 16;
+  --c-inverse-on-surface: 234 248 234;
+  --c-outline: 72 110 72;
+  --c-outline-variant: 178 210 178;
 
-  /* Primary — Periwinkle / Violet */
-  --c-primary: 91 63 224;
+  /* Primary — Deep Forest rgb(0 106 78) */
+  --c-primary: 0 106 78;
   --c-on-primary: 255 255 255;
-  --c-primary-container: 169 155 255;
-  --c-on-primary-container: 37 17 107;
-  --c-primary-fixed: 194 182 255;
-  --c-primary-fixed-dim: 147 132 255;
-  --c-on-primary-fixed: 26 10 82;
-  --c-on-primary-fixed-variant: 61 42 158;
-  --c-inverse-primary: 194 182 255;
-  --c-surface-tint: 91 63 224;
+  --c-primary-container: 0 160 118;
+  --c-on-primary-container: 0 32 22;
+  --c-primary-fixed: 160 220 196;
+  --c-primary-fixed-dim: 0 140 104;
+  --c-on-primary-fixed: 0 28 20;
+  --c-on-primary-fixed-variant: 0 80 58;
+  --c-inverse-primary: 0 180 134;
+  --c-surface-tint: 0 106 78;
 
-  /* Secondary — Hot Pink */
-  --c-secondary: 225 29 116;
+  /* Secondary — Dark Teal */
+  --c-secondary: 0 80 58;
   --c-on-secondary: 255 255 255;
-  --c-secondary-container: 255 77 160;
-  --c-on-secondary-container: 77 2 39;
-  --c-secondary-fixed: 255 196 224;
-  --c-secondary-fixed-dim: 255 119 184;
-  --c-on-secondary-fixed: 61 0 30;
-  --c-on-secondary-fixed-variant: 165 0 79;
+  --c-secondary-container: 0 120 88;
+  --c-on-secondary-container: 200 240 224;
+  --c-secondary-fixed: 140 210 184;
+  --c-secondary-fixed-dim: 0 106 78;
+  --c-on-secondary-fixed: 0 24 16;
+  --c-on-secondary-fixed-variant: 0 70 50;
 
-  /* Tertiary — Teal */
-  --c-tertiary: 14 140 127;
+  /* Tertiary — Lime Electric */
+  --c-tertiary: 101 163 13;
   --c-on-tertiary: 255 255 255;
-  --c-tertiary-container: 43 196 180;
-  --c-on-tertiary-container: 0 50 44;
-  --c-tertiary-fixed: 141 239 227;
-  --c-tertiary-fixed-dim: 24 176 160;
-  --c-on-tertiary-fixed: 0 39 31;
-  --c-on-tertiary-fixed-variant: 0 102 88;
+  --c-tertiary-container: 190 235 100;
+  --c-on-tertiary-container: 26 42 0;
+  --c-tertiary-fixed: 217 249 157;
+  --c-tertiary-fixed-dim: 132 204 22;
+  --c-on-tertiary-fixed: 20 36 0;
+  --c-on-tertiary-fixed-variant: 70 120 8;
 
-  /* Accent — Acid Yellow (CTAs, highlights) */
-  --c-accent: 255 210 63;
-  --c-on-accent: 26 22 20;
-  --c-accent-dim: 242 190 18;
+  /* Accent — Vibrant Forest CTA */
+  --c-accent: 0 200 148;
+  --c-on-accent: 0 20 14;
+  --c-accent-dim: 0 160 118;
 
   /* Error */
-  --c-error: 229 53 43;
+  --c-error: 220 38 38;
   --c-on-error: 255 255 255;
-  --c-error-container: 255 201 194;
-  --c-on-error-container: 122 0 16;
+  --c-error-container: 254 202 202;
+  --c-on-error-container: 127 29 29;
 
-  /* Hard-shadow ink + decorative backdrops */
-  --c-shadow: 26 22 20;
-  --dots: rgb(252 238 225 / 0.12);
+  /* Soft-shadow ink */
+  --c-shadow: 10 30 10;
+
+  /* Frosted glass — light mode: white-tinted panels */
+  --glass-bg: 255 255 255;
+  --glass-a: 0.52;
+  --glass-brd: 255 255 255;
+  --glass-brd-a: 0.68;
+  --glass-sheen: 0.75;
+  --glass-sh-a: 0.10;
+
+  /* Aurora — deep forest multi-blob backdrop */
+  --aurora:
+    radial-gradient(60% 55% at 12% 8%,  rgb(0 106 78 / 0.45), transparent 60%),
+    radial-gradient(55% 50% at 88% 12%, rgb(0 80 58 / 0.35), transparent 60%),
+    radial-gradient(60% 60% at 82% 92%, rgb(0 140 100 / 0.30), transparent 62%),
+    radial-gradient(50% 50% at 22% 96%, rgb(0 60 44 / 0.30), transparent 60%);
 }
 
 .dark {
   color-scheme: dark;
 
-  /* Core surfaces — near-black warm neutrals + light ink */
-  --c-background: 22 19 16;
-  --c-surface: 22 19 16;
-  --c-surface-bright: 52 48 42;
-  --c-surface-dim: 22 19 16;
-  --c-surface-container-lowest: 17 15 12;
-  --c-surface-container-low: 31 27 22;
-  --c-surface-container: 35 32 25;
-  --c-surface-container-high: 46 42 34;
-  --c-surface-container-highest: 57 52 43;
-  --c-surface-variant: 76 69 56;
-  --c-on-surface: 243 233 220;
-  --c-on-surface-variant: 205 191 173;
-  --c-on-background: 243 233 220;
-  --c-inverse-surface: 243 233 220;
-  --c-inverse-on-surface: 52 48 42;
-  --c-outline: 153 140 121;
-  --c-outline-variant: 76 69 56;
+  /* Core surfaces — pure AMOLED black, near-zero green undertone */
+  --c-background: 1 2 1;
+  --c-surface: 1 2 1;
+  --c-surface-bright: 8 14 10;
+  --c-surface-dim: 1 2 1;
+  --c-surface-container-lowest: 0 1 0;
+  --c-surface-container-low: 4 8 5;
+  --c-surface-container: 7 12 9;
+  --c-surface-container-high: 12 20 14;
+  --c-surface-container-highest: 18 30 22;
+  --c-surface-variant: 24 40 30;
+  --c-on-surface: 200 230 214;
+  --c-on-surface-variant: 120 170 140;
+  --c-on-background: 200 230 214;
+  --c-inverse-surface: 200 230 214;
+  --c-inverse-on-surface: 8 14 10;
+  --c-outline: 40 80 58;
+  --c-outline-variant: 20 38 28;
 
-  /* The bright color blocks (primary/secondary/tertiary/accent containers) stay
-     vivid in dark mode and keep their constant dark ink (--c-on-container). Hard
-     shadows + decorative backdrops flip to light. */
-  --c-shadow: 243 233 220;
-  --dots: rgb(22 19 16 / 0.14);
+  /* Primary — exact rgb(0 106 78), bright on AMOLED */
+  --c-primary: 0 160 118;
+  --c-on-primary: 0 16 12;
+  --c-primary-container: 0 50 36;
+  --c-on-primary-container: 160 240 210;
+
+  /* Secondary — deep forest */
+  --c-secondary: 0 106 78;
+  --c-on-secondary: 200 240 220;
+  --c-secondary-container: 0 34 24;
+  --c-on-secondary-container: 140 220 190;
+
+  /* Tertiary — muted sage */
+  --c-tertiary: 80 160 110;
+  --c-on-tertiary: 0 20 12;
+  --c-tertiary-container: 0 40 28;
+  --c-on-tertiary-container: 180 230 200;
+
+  /* Accent — bright mint CTA */
+  --c-accent: 0 200 148;
+  --c-on-accent: 0 14 10;
+  --c-accent-dim: 0 160 118;
+
+  /* Shadow — very dark, barely tinted */
+  --c-shadow: 0 8 5;
+
+  /* Frosted glass — ultra-subtle tint over AMOLED */
+  --glass-bg: 255 255 255;
+  --glass-a: 0.04;
+  --glass-brd: 0 160 118;
+  --glass-brd-a: 0.20;
+  --glass-sheen: 0.07;
+  --glass-sh-a: 0.60;
+
+  /* Aurora — deep forest blobs, dark and moody */
+  --aurora:
+    radial-gradient(60% 55% at 12% 8%,  rgb(0 106 78 / 0.50), transparent 60%),
+    radial-gradient(55% 50% at 88% 12%, rgb(0 80 58 / 0.35), transparent 60%),
+    radial-gradient(60% 60% at 82% 92%, rgb(0 60 44 / 0.38), transparent 62%),
+    radial-gradient(50% 50% at 22% 96%, rgb(0 40 28 / 0.32), transparent 60%);
 }
 
 @layer base {
@@ -116,39 +164,68 @@
   }
 
   body {
-    @apply bg-background text-on-background antialiased;
+    @apply antialiased text-on-background;
     font-family: var(--font-body), sans-serif;
-    /* Smooth, scoped cross-fade when toggling light/dark. */
+    min-height: 100vh;
+    background-color: rgb(var(--c-background));
+    background-image: var(--aurora);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Native form controls inherit the brutalist look */
   ::selection {
-    @apply bg-secondary-container text-on-container;
+    @apply bg-primary text-on-primary;
   }
 }
 
 @layer components {
-  /* Faint engineering grid backdrop (home) */
-  .bg-grid {
-    background-size: 40px 40px;
-    background-image:
-      linear-gradient(to right, rgb(var(--c-on-background)) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(var(--c-on-background)) 1px, transparent 1px);
+  /* Frosted glass surface — the base of the new design language. The blur is
+     applied through Tailwind's backdrop utilities (raw `backdrop-filter` gets
+     stripped by the CSS pipeline). */
+  .glass {
+    @apply backdrop-blur-xl backdrop-saturate-150;
+    background-color: rgb(var(--glass-bg) / var(--glass-a));
+    border: 1px solid rgb(var(--glass-brd) / var(--glass-brd-a));
+    box-shadow:
+      0 10px 30px -8px rgb(var(--c-shadow) / var(--glass-sh-a)),
+      inset 0 1px 0 0 rgb(255 255 255 / var(--glass-sheen));
   }
 
-  /* Dotted backdrop (product detail / footer) */
-  .bg-dots {
-    background-image: radial-gradient(var(--dots) 1px, transparent 1px);
-    background-size: 20px 20px;
+  /* Stronger blur for sticky chrome (navbar). */
+  .glass-nav {
+    @apply backdrop-blur-2xl backdrop-saturate-150;
+    background-color: rgb(var(--glass-bg) / calc(var(--glass-a) + 0.12));
+    border: 1px solid rgb(var(--glass-brd) / var(--glass-brd-a));
+  }
+
+  /* Multi-stop gradient text for hero accents. */
+  .text-gradient {
+    background-image: linear-gradient(
+      110deg,
+      rgb(var(--c-primary)),
+      rgb(var(--c-secondary)) 55%,
+      rgb(var(--c-tertiary))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 
-/* GSAP entrance helper: elements flagged for reveal start hidden so there is no
-   flash of un-animated content before the tween runs, then GSAP animates them
-   in. Gated on `html.js` (added by the inline boot script) so that with
-   JavaScript disabled the content is never hidden, and scoped to
-   no-preference so reduced-motion users always see it immediately. */
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -28px, 0) scale(1.08);
+  }
+}
+
+/* GSAP entrance helper: hide reveal targets pre-animation, only when JS is on
+   and the user allows motion (so no-JS / reduced-motion always see content). */
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-reveal] {
     opacity: 0;
@@ -159,7 +236,7 @@
 .material-symbols-outlined {
   font-variation-settings:
     "FILL" 1,
-    "wght" 700,
+    "wght" 500,
     "GRAD" 0,
     "opsz" 24;
   line-height: 1;

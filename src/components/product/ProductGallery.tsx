@@ -16,18 +16,17 @@ export function ProductGallery({
 }) {
   const gallery = images.length > 0 ? images : [PLACEHOLDER_IMAGE];
   const [active, setActive] = useState(0);
-  const thumbs = gallery.slice(0, 3);
-  const extra = gallery.length - thumbs.length;
+  const thumbs = gallery.slice(0, 4);
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="relative col-span-2 aspect-[4/3] border-thick border-on-background bg-surface-container-lowest p-4 shadow-neo-md">
+    <div className="flex flex-col gap-4">
+      <div className="glass relative aspect-[4/3] overflow-hidden rounded-3xl p-3 shadow-neo-md">
         {grade ? (
-          <div className="absolute left-2 top-2 z-10 -rotate-3 border-thick border-on-background bg-secondary-container px-2 py-1 font-display-lg text-lg font-black uppercase leading-none text-on-container shadow-neo-xs">
+          <div className="absolute left-4 top-4 z-10 rounded-full bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-wide text-on-secondary shadow-neo-sm">
             {grade}
           </div>
         ) : null}
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full overflow-hidden rounded-2xl bg-surface-container/60">
           <Image
             key={active}
             src={gallery[active]}
@@ -40,28 +39,24 @@ export function ProductGallery({
         </div>
       </div>
 
-      {thumbs.map((image, index) => (
-        <button
-          key={`${image}-${index}`}
-          type="button"
-          onClick={() => setActive(index)}
-          aria-label={`View image ${index + 1}`}
-          className={cn(
-            "relative aspect-square border-thick border-on-background p-2 shadow-neo transition-colors hover:bg-primary-container",
-            active === index ? "bg-primary-container" : "bg-surface-container-lowest",
-          )}
-        >
-          <div className="relative h-full w-full">
-            <Image src={image} alt="" fill sizes="25vw" className="object-contain" />
-          </div>
-        </button>
-      ))}
-
-      {extra > 0 ? (
-        <div className="flex aspect-square rotate-2 items-center justify-center border-thick border-on-background bg-primary-fixed p-2 text-center font-display-xl text-3xl font-black uppercase leading-none text-on-container shadow-neo">
-          +{extra}
-          <br />
-          MORE
+      {gallery.length > 1 ? (
+        <div className="grid grid-cols-4 gap-3">
+          {thumbs.map((image, index) => (
+            <button
+              key={`${image}-${index}`}
+              type="button"
+              onClick={() => setActive(index)}
+              aria-label={`Ver imagen ${index + 1}`}
+              className={cn(
+                "glass relative aspect-square overflow-hidden rounded-2xl p-1.5 transition-all hover:-translate-y-0.5",
+                active === index && "ring-2 ring-primary",
+              )}
+            >
+              <div className="relative h-full w-full overflow-hidden rounded-xl">
+                <Image src={image} alt="" fill sizes="20vw" className="object-cover" />
+              </div>
+            </button>
+          ))}
         </div>
       ) : null}
     </div>

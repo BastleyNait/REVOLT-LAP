@@ -10,7 +10,6 @@ import { SpecBox, type SpecColor } from "@/components/product/SpecBox";
 import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
-import { cn } from "@/lib/utils/cn";
 
 export const revalidate = 60;
 
@@ -61,61 +60,64 @@ export default async function ProductPage({ params }: PageParams) {
   ].filter(Boolean) as { label: string; value: string }[];
 
   return (
-    <main className="relative flex-1 bg-dots">
-      <div className="relative mx-auto my-8 max-w-[1440px] border-x-thick border-on-background bg-surface/90 px-4 py-10 shadow-neo-md md:px-margin-edge md:py-16">
+    <main className="relative flex-1">
+      <div className="mx-auto max-w-[1200px] px-4 py-10 md:px-8 md:py-16">
         {/* Breadcrumb */}
-        <div className="mb-8 inline-flex flex-wrap items-center gap-2 border-thick border-on-background bg-surface-container-lowest p-2 font-label-mono text-label-mono font-bold uppercase shadow-neo-xs">
-          <Link href="/" className="px-2 hover:bg-primary-container hover:text-on-container">
-            Inventory
+        <div className="mb-8 flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
+          <Link href="/" className="transition-colors hover:text-on-background">
+            Inventario
           </Link>
-          <span>/</span>
-          <Link href="/#inventario" className="px-2 hover:bg-primary-container hover:text-on-container">
+          <Icon name="chevron_right" className="text-base" />
+          <Link href="/#inventario" className="transition-colors hover:text-on-background">
             {product.brand}
           </Link>
-          <span>/</span>
-          <span className="border-thin border-on-background bg-primary-container px-2 text-on-container">
-            {product.name}
-          </span>
+          <Icon name="chevron_right" className="text-base" />
+          <span className="font-semibold text-on-background">{product.name}</span>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-12">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           {/* Gallery */}
           <div className="lg:col-span-7">
             <ProductGallery images={product.images} alt={product.name} grade={product.conditionGrade} />
           </div>
 
           {/* Info */}
-          <div className="flex flex-col gap-8 lg:col-span-5">
-            <div className="relative overflow-hidden border-thick border-on-background bg-surface-container-lowest p-6 shadow-neo-md md:p-8">
-              <h1 className="relative z-10 font-headline-lg text-headline-lg-mobile font-black uppercase leading-none md:text-headline-lg">
+          <div className="flex flex-col gap-6 lg:col-span-5">
+            <div className="glass rounded-3xl p-6 md:p-8">
+              <h1 className="font-display-lg text-3xl font-black leading-tight tracking-tight md:text-4xl">
                 {product.name}
               </h1>
 
-              <div className="relative z-10 mt-5 inline-block -rotate-3 border-thick border-secondary-container bg-on-container p-5 shadow-[8px_8px_0px_0px_rgb(255_138_194)]">
-                <span className="block font-display-lg text-display-lg leading-none tracking-tighter text-primary-fixed">
+              <div className="mt-5 flex flex-wrap items-end gap-3">
+                <span className="font-display-lg text-5xl font-black leading-none tracking-tight text-gradient md:text-6xl">
                   {formatPrice(product.price, product.currency)}
                 </span>
-                <span className="mt-2 inline-block rotate-2 bg-secondary-container px-2 py-1 font-label-mono text-label-mono uppercase text-on-container">
-                  {discount ? `SAVE ${discount}%` : "NO CORPORATE MARKUP"}
-                </span>
+                {product.originalPrice ? (
+                  <span className="pb-1 text-lg text-on-surface-variant line-through">
+                    {formatPrice(product.originalPrice, product.currency)}
+                  </span>
+                ) : null}
               </div>
+              <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-secondary">
+                <Icon name="sell" className="text-sm" />
+                {discount ? `Ahorras ${discount}%` : "Sin sobreprecio corporativo"}
+              </span>
 
               {product.description ? (
-                <p className="relative z-10 mt-6 bg-surface-container-lowest/80 p-2 font-body-lg text-body-lg">
+                <p className="mt-6 text-base leading-relaxed text-on-surface-variant">
                   {product.description}
                 </p>
               ) : null}
             </div>
 
             {specs.length ? (
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 gap-3">
                 {specs.map((spec, index) => (
                   <SpecBox
                     key={spec.label}
                     label={spec.label}
                     value={spec.value}
                     color={specColors[index % specColors.length]}
-                    rotate={index % 2 === 0}
                   />
                 ))}
               </div>
@@ -123,14 +125,10 @@ export default async function ProductPage({ params }: PageParams) {
 
             <WhatsappOrderButton product={product} productUrl={productUrl} />
 
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3">
               {siteConfig.product.trustBadges.map((badge, index) => (
-                <Badge
-                  key={badge.label}
-                  color={index % 2 === 0 ? "aqua" : "lavender"}
-                  className={cn("gap-2", index % 2 === 0 ? "rotate-2" : "-rotate-2")}
-                >
-                  <Icon name={badge.icon} className="text-lg" /> {badge.label}
+                <Badge key={badge.label} color={index % 2 === 0 ? "aqua" : "lavender"} className="gap-1.5">
+                  <Icon name={badge.icon} className="text-base" /> {badge.label}
                 </Badge>
               ))}
             </div>
@@ -138,11 +136,11 @@ export default async function ProductPage({ params }: PageParams) {
         </div>
 
         {product.verdict ? (
-          <section className="mt-16 border-thick border-on-background bg-surface-container-lowest p-6 shadow-neo-md md:p-10">
-            <h2 className="mb-4 inline-block -rotate-1 bg-on-container px-4 py-2 font-display-lg text-headline-lg-mobile font-black uppercase text-primary-fixed">
-              THE VERDICT
+          <section className="glass mt-12 rounded-3xl p-6 shadow-neo md:p-10">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+              El veredicto
             </h2>
-            <p className="font-body-lg text-body-lg">{product.verdict}</p>
+            <p className="text-lg leading-relaxed">{product.verdict}</p>
           </section>
         ) : null}
       </div>

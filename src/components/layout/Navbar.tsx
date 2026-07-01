@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { siteConfig } from "@/lib/config/site";
@@ -10,67 +11,83 @@ import { Icon } from "@/components/ui/Icon";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { cn } from "@/lib/utils/cn";
 
-const linkBase =
-  "font-label-mono text-body-md uppercase font-bold text-on-container px-2 py-1 border-thin border-transparent transition-all";
-const linkIdle = "hover:bg-on-background hover:text-surface hover:border-on-background";
-const linkHighlight =
-  "bg-secondary-container border-thick border-on-background px-4 shadow-neo-sm hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none";
-
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const whatsappHref = generalWhatsappUrl();
-  const header = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const mm = gsap.matchMedia();
     mm.add(
       "(prefers-reduced-motion: no-preference)",
       () => {
-        gsap.from(header.current, { yPercent: -100, autoAlpha: 0, duration: 0.6, ease: "power3.out" });
+        gsap.fromTo(
+          headerRef.current,
+          { y: -50, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.8, ease: "power4.out", delay: 0.2 }
+        );
       },
-      header,
+      headerRef
     );
     return () => mm.revert();
   }, []);
 
   return (
-    <header
-      ref={header}
-      className="sticky top-0 z-50 w-full border-b-heavy border-on-background bg-primary-container shadow-neo"
-    >
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-4 md:px-margin-edge">
+    <header ref={headerRef} className="sticky top-4 z-50 w-full px-4 md:px-8">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between rounded-full border border-white/10 bg-surface/40 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-all duration-500 hover:bg-surface/50 dark:border-white/5 dark:bg-black/30 dark:hover:bg-black/40">
         <Link
           href="/"
-          className="font-display-lg text-headline-lg-mobile font-black uppercase tracking-tighter text-on-container transition-transform hover:-rotate-2 hover:scale-105"
+          aria-label={siteConfig.name}
+          className="group relative z-10 flex items-center gap-2 transition-transform duration-300 hover:scale-105"
         >
-          {siteConfig.name}
+          <Image
+            src="/logo_revolt.svg"
+            alt={siteConfig.name}
+            width={520}
+            height={198}
+            priority
+            className="h-8 w-auto md:h-9"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-gutter md:flex">
-          {siteConfig.nav.map((item) => (
+        <nav className="hidden items-center md:flex relative">
+          {siteConfig.nav.map((item, index) => (
             <Link
               key={item.label}
               href={item.href}
-              className={cn(linkBase, item.highlight ? linkHighlight : linkIdle)}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={cn(
+                "relative z-10 px-5 py-2 text-sm font-medium tracking-wide transition-colors duration-300",
+                hoveredIndex === index ? "text-primary" : "text-on-surface-variant hover:text-on-surface",
+                item.highlight && "font-semibold text-primary"
+              )}
             >
               {item.label}
+              {hoveredIndex === index && (
+                <span
+                  className="absolute inset-0 -z-10 rounded-full bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.2)]"
+                  style={{ animation: "fade-in 0.2s ease-out forwards" }}
+                />
+              )}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 z-10">
           <ThemeToggle />
           <a
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonClasses({ variant: "secondary", size: "sm", className: "hidden md:inline-flex" })}
+            className="hidden items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary backdrop-blur-md transition-all duration-300 hover:bg-primary/20 hover:shadow-[0_0_20px_rgba(var(--primary),0.3)] hover:scale-105 md:inline-flex"
           >
             <Icon name="chat" className="text-lg" /> WhatsApp
           </a>
           <Link
             href="/admin"
-            className={buttonClasses({ variant: "outline", size: "sm", className: "hidden md:inline-flex" })}
+            className="hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:scale-105 md:inline-flex"
             title="Admin dashboard"
           >
             <Icon name="settings" className="text-lg" />
@@ -80,44 +97,48 @@ export function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
-            className={buttonClasses({ variant: "secondary", size: "sm", className: "md:hidden !px-2" })}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md transition-colors hover:bg-white/10 md:hidden"
           >
             <Icon name={open ? "close" : "menu"} className="text-2xl" />
           </button>
         </div>
       </div>
 
-      {open ? (
-        <div className="border-t-thick border-on-background bg-primary-container px-4 py-4 md:hidden">
-          <nav className="flex flex-col gap-3">
-            {siteConfig.nav.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={cn(linkBase, "border-thin border-on-background bg-surface-container-lowest !text-on-background text-center")}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonClasses({ variant: "secondary", size: "md", className: "mt-1 w-full" })}
-            >
-              <Icon name="chat" /> WhatsApp Us
-            </a>
+      {/* Mobile Menu */}
+      <div
+        className={cn(
+          "absolute inset-x-4 top-[calc(100%+0.5rem)] overflow-hidden rounded-3xl border border-white/10 bg-surface/60 backdrop-blur-2xl transition-all duration-500 ease-in-out md:hidden",
+          open ? "max-h-[400px] opacity-100 shadow-[0_8px_32px_rgba(0,0,0,0.12)]" : "max-h-0 opacity-0 border-transparent shadow-none"
+        )}
+      >
+        <nav className="flex flex-col gap-2 p-4">
+          {siteConfig.nav.map((item) => (
             <Link
-              href="/admin"
+              key={item.label}
+              href={item.href}
               onClick={() => setOpen(false)}
-              className={buttonClasses({ variant: "outline", size: "md", className: "w-full" })}
+              className="rounded-2xl px-4 py-3 text-center text-sm font-semibold text-on-surface transition-colors hover:bg-white/10"
             >
-              <Icon name="settings" /> Admin
+              {item.label}
             </Link>
-          </nav>
-        </div>
-      ) : null}
+          ))}
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-on-primary shadow-lg transition-transform hover:scale-[1.02]"
+          >
+            <Icon name="chat" /> WhatsApp
+          </a>
+          <Link
+            href="/admin"
+            onClick={() => setOpen(false)}
+            className="mt-2 flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-on-surface transition-colors hover:bg-white/10"
+          >
+            <Icon name="settings" /> Admin
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 }

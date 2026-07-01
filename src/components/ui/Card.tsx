@@ -1,15 +1,7 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils/cn";
 
-/** Bordered surface with a hard offset shadow — the base brutalist container. */
+/** Frosted-glass surface — the base container of the design language. */
 export function Card({ className, ...props }: ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "border-thick border-on-background bg-surface-container-lowest shadow-neo-md",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <div className={cn("glass rounded-2xl", className)} {...props} />;
 }

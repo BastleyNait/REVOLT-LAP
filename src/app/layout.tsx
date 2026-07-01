@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Montserrat, Archivo_Narrow, Space_Mono } from "next/font/google";
+import { Montserrat, Archivo_Narrow, Space_Mono, Geist } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageBackground } from "@/components/layout/PageBackground";
 import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
 import "./globals.css";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const display = Montserrat({
   subsets: ["latin"],
@@ -51,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="es"
       suppressHydrationWarning
-      className={cn(display.variable, body.variable, mono.variable)}
+      className={cn(display.variable, body.variable, mono.variable, "font-sans", geist.variable)}
     >
       <head>
         {/* Apply the persisted/system theme before first paint to avoid a flash. */}
@@ -67,7 +70,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="flex min-h-screen flex-col">
+      <body suppressHydrationWarning className="flex min-h-screen flex-col">
+        <PageBackground />
         <Navbar />
         {children}
         <Footer />

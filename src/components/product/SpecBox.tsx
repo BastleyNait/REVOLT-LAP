@@ -2,47 +2,30 @@ import { cn } from "@/lib/utils/cn";
 
 export type SpecColor = "aqua" | "lavender" | "orange" | "white";
 
-const colorMap: Record<SpecColor, { box: string; value: string; chip: string }> = {
-  // Colored boxes keep constant dark ink (on-container) in both themes; their
-  // chip is a constant dark pill with the box's light color as text.
-  aqua: { box: "bg-primary-container", value: "text-on-container", chip: "bg-on-container text-primary-container" },
-  lavender: { box: "bg-tertiary-container", value: "text-on-container", chip: "bg-on-container text-tertiary-container" },
-  orange: { box: "bg-secondary-container", value: "text-on-container", chip: "bg-on-container text-secondary-container" },
-  // Neutral box adapts with the theme.
-  white: { box: "bg-surface-container-lowest", value: "text-on-background", chip: "bg-on-background text-surface" },
+const dotColor: Record<SpecColor, string> = {
+  aqua: "bg-primary",
+  lavender: "bg-tertiary",
+  orange: "bg-secondary",
+  white: "bg-on-surface-variant",
 };
 
 export function SpecBox({
   label,
   value,
   color = "aqua",
-  rotate = false,
 }: {
   label: string;
   value: string;
   color?: SpecColor;
   rotate?: boolean;
 }) {
-  const styles = colorMap[color];
   return (
-    <div
-      className={cn(
-        "flex items-center justify-between gap-4 border-thick border-on-background p-5 shadow-neo transition-transform",
-        styles.box,
-        rotate ? "rotate-1 hover:-rotate-1" : "-rotate-1 hover:rotate-1",
-      )}
-    >
-      <span className={cn("px-3 py-1 font-label-mono text-label-mono uppercase", styles.chip)}>
+    <div className="glass flex items-center justify-between gap-4 rounded-2xl px-5 py-4 transition-transform hover:-translate-y-0.5">
+      <span className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+        <span className={cn("h-2.5 w-2.5 rounded-full", dotColor[color])} />
         {label}
       </span>
-      <span
-        className={cn(
-          "text-right font-headline-lg-mobile text-xl font-black uppercase md:text-2xl",
-          styles.value,
-        )}
-      >
-        {value}
-      </span>
+      <span className="text-right text-lg font-bold tracking-tight">{value}</span>
     </div>
   );
 }

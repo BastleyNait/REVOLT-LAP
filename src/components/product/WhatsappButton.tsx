@@ -20,13 +20,13 @@ export function WhatsappOrderButton({
       target="_blank"
       rel="noopener noreferrer"
       className={buttonClasses({
-        variant: "secondary",
+        variant: "primary",
         size: "xl",
-        className: "w-full -rotate-2 text-center",
+        className: "w-full text-center",
       })}
     >
       <span className="font-display-lg">{siteConfig.product.ctaLabel}</span>
-      <Icon name="forum" className="text-4xl" />
+      <Icon name="forum" className="text-3xl" />
     </a>
   );
 }

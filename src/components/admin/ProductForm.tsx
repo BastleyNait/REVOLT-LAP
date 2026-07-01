@@ -35,7 +35,7 @@ export function ProductForm({
   return (
     <form action={formAction} className="space-y-8">
       {state.error ? (
-        <div className="border-thick border-on-background bg-error p-4 font-label-mono text-body-md font-bold text-on-error shadow-neo">
+        <div className="rounded-2xl border border-error/40 bg-error/15 p-4 text-sm font-semibold text-error shadow-neo-sm">
           {state.error}
         </div>
       ) : null}
@@ -106,15 +106,15 @@ export function ProductForm({
       </Field>
 
       <div className="flex flex-wrap gap-8">
-        <label className="flex cursor-pointer items-center gap-3 font-label-mono text-label-mono font-bold uppercase">
+        <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
           <Checkbox name="isActive" defaultChecked={product?.isActive ?? true} /> Activo (visible en tienda)
         </label>
-        <label className="flex cursor-pointer items-center gap-3 font-label-mono text-label-mono font-bold uppercase">
+        <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
           <Checkbox name="isFeatured" defaultChecked={product?.isFeatured ?? false} /> Destacado
         </label>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 border-t-thick border-on-background pt-6">
+      <div className="flex flex-wrap items-center gap-4 border-t border-outline-variant/60 pt-6">
         <SubmitButton label={submitLabel} />
         <Link href="/admin" className={buttonClasses({ variant: "outline", size: "lg" })}>
           Cancelar

@@ -105,30 +105,35 @@ const config: Config = {
         "shadow-offset": "8px",
       },
       borderWidth: {
+        // Glassmorphism = hairline borders; the old brutalist names now map to
+        // thin strokes so existing markup softens automatically.
         DEFAULT: "1px",
-        thin: "2px",
-        thick: "6px",
-        heavy: "8px",
+        thin: "1px",
+        thick: "1px",
+        heavy: "1.5px",
       },
       borderRadius: {
-        // Neobrutalism = sharp corners. `full` kept only for pill CTAs / status dots.
-        DEFAULT: "0px",
+        // Soft, rounded corners across the board.
+        DEFAULT: "1rem",
         none: "0px",
-        sm: "0px",
-        md: "0px",
-        lg: "0px",
-        xl: "0px",
+        sm: "0.5rem",
+        md: "0.75rem",
+        lg: "1rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
         full: "9999px",
       },
       boxShadow: {
-        // Hard offset shadows in the themeable "shadow" ink: near-black in the
-        // light theme, near-white in the dark theme (see --c-shadow).
-        "neo-xs": "4px 4px 0px 0px rgb(var(--c-shadow))",
-        "neo-sm": "6px 6px 0px 0px rgb(var(--c-shadow))",
-        neo: "8px 8px 0px 0px rgb(var(--c-shadow))",
-        "neo-md": "12px 12px 0px 0px rgb(var(--c-shadow))",
-        "neo-lg": "16px 16px 0px 0px rgb(var(--c-shadow))",
-        "neo-xl": "24px 24px 0px 0px rgb(var(--c-shadow))",
+        // Soft, diffuse shadows tinted with the themeable --c-shadow ink. The
+        // old `neo-*` names now produce gentle elevation instead of hard offsets.
+        "neo-xs": "0 1px 2px 0 rgb(var(--c-shadow) / 0.10)",
+        "neo-sm": "0 2px 10px -2px rgb(var(--c-shadow) / 0.14)",
+        neo: "0 10px 30px -6px rgb(var(--c-shadow) / 0.18)",
+        "neo-md": "0 16px 40px -8px rgb(var(--c-shadow) / 0.20)",
+        "neo-lg": "0 24px 56px -12px rgb(var(--c-shadow) / 0.26)",
+        "neo-xl": "0 32px 72px -16px rgb(var(--c-shadow) / 0.32)",
+        glass: "0 8px 32px -4px rgb(var(--c-shadow) / 0.22), inset 0 1px 0 0 rgb(255 255 255 / 0.18)",
         none: "0 0 0 0 rgba(0,0,0,0)",
       },
     },

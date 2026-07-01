@@ -45,13 +45,13 @@ export const siteConfig = {
   /** Storefront marketing copy (kept out of components for easy editing). */
   home: {
     hero: {
-      eyebrow: "Hola, somos REVOLT.",
-      titleLines: ["LAPTOPS", "BRUTALES"],
+      eyebrow: "Certificados · Testeados · Stock limitado",
+      titleLines: ["LAPTOPS", "REACONDICIONADAS"],
       pitch:
-        "Rendimiento sin compromisos. Equipos reacondicionados, listos para trabajar a un precio insuperable. Stock limitado.",
+        "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
       ctaLabel: "Ver inventario",
-      badge: "Reacondicionado",
-      flash: "",
+      badge: "Desde $299 USD",
+      flash: "Envío gratis · 12 meses de garantía",
     },
     inventoryHeading: "INVENTARIO",
     inventoryEmpty: "Sin stock por ahora. Vuelve pronto — el inventario rota rápido.",
