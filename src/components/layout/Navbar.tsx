@@ -9,6 +9,7 @@ import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import GlassSurface from "@/components/ui/GlassSurface";
 import { cn } from "@/lib/utils/cn";
 
 export function Navbar() {
@@ -35,7 +36,25 @@ export function Navbar() {
 
   return (
     <header ref={headerRef} className="sticky top-4 z-50 w-full px-4 md:px-8">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between rounded-full border border-white/10 bg-surface/40 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-all duration-500 hover:bg-surface/50 dark:border-white/5 dark:bg-black/30 dark:hover:bg-black/40">
+      <GlassSurface
+        width="100%"
+        height="auto"
+        borderRadius={46}
+        backgroundOpacity={0.79}
+        saturation={0.2}
+        borderWidth={0.17}
+        brightness={50}
+        opacity={0.93}
+        blur={20}
+        displace={0.4}
+        distortionScale={-180}
+        redOffset={0}
+        greenOffset={10}
+        blueOffset={-21}
+        mixBlendMode="screen"
+        className="mx-auto max-w-[1200px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-500"
+        contentClassName="flex w-full items-center justify-between px-5 py-3"
+      >
         <Link
           href="/"
           aria-label={siteConfig.name}
@@ -102,7 +121,7 @@ export function Navbar() {
             <Icon name={open ? "close" : "menu"} className="text-2xl" />
           </button>
         </div>
-      </div>
+      </GlassSurface>
 
       {/* Mobile Menu */}
       <div
