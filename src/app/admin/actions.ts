@@ -13,6 +13,7 @@ export interface ActionState {
   ok: boolean;
   error?: string;
   fieldErrors?: Record<string, string>;
+  values?: Record<string, any>;
 }
 
 function zodToFieldErrors(error: ZodError): Record<string, string> {
@@ -22,6 +23,31 @@ function zodToFieldErrors(error: ZodError): Record<string, string> {
     if (!result[key]) result[key] = issue.message;
   }
   return result;
+}
+
+function extractFormValues(formData: FormData): Record<string, any> {
+  return {
+    name: formData.get("name") as string,
+    slug: formData.get("slug") as string,
+    brand: formData.get("brand") as string,
+    price: formData.get("price") as string,
+    originalPrice: formData.get("originalPrice") as string,
+    currency: formData.get("currency") as string,
+    conditionGrade: formData.get("conditionGrade") as string,
+    processor: formData.get("processor") as string,
+    ram: formData.get("ram") as string,
+    storage: formData.get("storage") as string,
+    display: formData.get("display") as string,
+    batteryHealth: formData.get("batteryHealth") as string,
+    description: formData.get("description") as string,
+    verdict: formData.get("verdict") as string,
+    images: formData.get("images") as string,
+    badges: formData.get("badges") as string,
+    specs: formData.get("specs") as string,
+    stock: formData.get("stock") as string,
+    isActive: formData.get("isActive") !== null,
+    isFeatured: formData.get("isFeatured") !== null,
+  };
 }
 
 function revalidateStorefront(slug?: string) {
@@ -35,13 +61,13 @@ export async function createProductAction(_prev: ActionState, formData: FormData
 
   const parsed = productInputSchema.safeParse(productInputFromFormData(formData));
   if (!parsed.success) {
-    return { ok: false, error: "Revisa los campos marcados.", fieldErrors: zodToFieldErrors(parsed.error) };
+    return { ok: false, error: "Revisa los campos marcados.", fieldErrors: zodToFieldErrors(parsed.error), values: extractFormValues(formData) };
   }
 
   try {
     await createProduct(parsed.data);
   } catch (error) {
-    return { ok: false, error: (error as Error).message };
+    return { ok: false, error: (error as Error).message, values: extractFormValues(formData) };
   }
 
   revalidateStorefront(parsed.data.slug);
@@ -57,13 +83,13 @@ export async function updateProductAction(
 
   const parsed = productInputSchema.safeParse(productInputFromFormData(formData));
   if (!parsed.success) {
-    return { ok: false, error: "Revisa los campos marcados.", fieldErrors: zodToFieldErrors(parsed.error) };
+    return { ok: false, error: "Revisa los campos marcados.", fieldErrors: zodToFieldErrors(parsed.error), values: extractFormValues(formData) };
   }
 
   try {
     await updateProduct(id, parsed.data);
   } catch (error) {
-    return { ok: false, error: (error as Error).message };
+    return { ok: false, error: (error as Error).message, values: extractFormValues(formData) };
   }
 
   revalidateStorefront(parsed.data.slug);

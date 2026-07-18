@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getProductBySlug } from "@/lib/repositories/products";
 import { siteConfig } from "@/lib/config/site";
-import { discountPercent, formatPrice } from "@/lib/utils/format";
+import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { productCover } from "@/lib/types/product";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { SpecBox, type SpecColor } from "@/components/product/SpecBox";
@@ -49,6 +49,7 @@ export default async function ProductPage({ params }: PageParams) {
 
   const productUrl = `${siteConfig.url}/products/${product.slug}`;
   const discount = discountPercent(product.price, product.originalPrice);
+  const usd = formatUsdEquivalent(product.price, product.currency);
 
   const specs = [
     product.processor && { label: "PROCESSOR", value: product.processor },
@@ -98,6 +99,11 @@ export default async function ProductPage({ params }: PageParams) {
                   </span>
                 ) : null}
               </div>
+              {usd ? (
+                <p className="mt-2 text-sm font-medium text-on-surface-variant">
+                  o paga en dólares: <span className="font-bold text-on-background">{usd}</span>
+                </p>
+              ) : null}
               <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-secondary">
                 <Icon name="sell" className="text-sm" />
                 {discount ? `Ahorras ${discount}%` : "Sin sobreprecio corporativo"}

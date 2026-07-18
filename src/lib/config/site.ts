@@ -24,8 +24,13 @@ export const siteConfig = {
     "High-performance refurbished laptops without the corporate markup. Tested, graded and ready to work, game and create.",
   /** Used for absolute URLs (OpenGraph, WhatsApp deep links). */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  locale: "en-US",
-  currency: "USD",
+  locale: "es-PE",
+  currency: "PEN",
+  /**
+   * Prices are quoted in soles (PEN). Buyers may also pay in USD; this is the
+   * reference rate (1 USD = X PEN) used to show the dollar equivalent.
+   */
+  usdRate: Number(process.env.NEXT_PUBLIC_USD_RATE ?? 3.7),
   whatsapp: {
     /** E.164 number without the leading "+", e.g. 5215512345678. Empty => generic share link. */
     phone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "",
@@ -50,7 +55,7 @@ export const siteConfig = {
       pitch:
         "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
       ctaLabel: "Ver inventario",
-      badge: "Desde $299 USD",
+      badge: "Desde S/ 1,410",
       flash: "Envío gratis · 12 meses de garantía",
     },
     inventoryHeading: "INVENTARIO",

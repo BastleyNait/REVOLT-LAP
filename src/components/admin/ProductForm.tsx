@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useEffect, useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { Product } from "@/lib/types/product";
 import type { ActionState } from "@/app/admin/actions";
@@ -9,6 +9,34 @@ import { Field, Input, Textarea, Checkbox } from "@/components/ui/form";
 import { Button, buttonClasses } from "@/components/ui/Button";
 
 const initialState: ActionState = { ok: true };
+
+type FormValues = Record<string, any>;
+
+function getInitialValues(product?: Product): FormValues {
+  const specsText = (product?.specs ?? []).map((spec) => `${spec.label}: ${spec.value}`).join("\n");
+  return {
+    name: product?.name ?? "",
+    slug: product?.slug ?? "",
+    brand: product?.brand ?? "",
+    price: String(product?.price ?? ""),
+    originalPrice: String(product?.originalPrice ?? ""),
+    currency: product?.currency ?? "PEN",
+    conditionGrade: product?.conditionGrade ?? "REFURBISHED",
+    processor: product?.processor ?? "",
+    ram: product?.ram ?? "",
+    storage: product?.storage ?? "",
+    display: product?.display ?? "",
+    batteryHealth: product?.batteryHealth ?? "",
+    description: product?.description ?? "",
+    verdict: product?.verdict ?? "",
+    images: (product?.images ?? []).join("\n"),
+    badges: (product?.badges ?? []).join("\n"),
+    specs: specsText,
+    stock: String(product?.stock ?? 0),
+    isActive: product?.isActive ?? true,
+    isFeatured: product?.isFeatured ?? false,
+  };
+}
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -29,8 +57,24 @@ export function ProductForm({
   submitLabel: string;
 }) {
   const [state, formAction] = useActionState(action, initialState);
+  const [formValues, setFormValues] = useState<FormValues>(() => getInitialValues(product));
   const errors = state.fieldErrors ?? {};
-  const specsText = (product?.specs ?? []).map((spec) => `${spec.label}: ${spec.value}`).join("\n");
+
+  // Sync action-returned values back into local state on validation/server errors
+  useEffect(() => {
+    if (state.values) {
+      setFormValues((prev) => ({ ...prev, ...state.values }));
+    }
+  }, [state.values]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   return (
     <form action={formAction} className="space-y-8">
@@ -42,19 +86,19 @@ export function ProductForm({
 
       <div className="grid gap-6 md:grid-cols-2">
         <Field label="Nombre" htmlFor="name" required error={errors["name"]}>
-          <Input id="name" name="name" defaultValue={product?.name} required />
+          <Input id="name" name="name" value={formValues.name ?? ""} onChange={handleChange} required />
         </Field>
         <Field label="Slug" htmlFor="slug" hint="Se autogenera del nombre si lo dejas vacío" error={errors["slug"]}>
-          <Input id="slug" name="slug" defaultValue={product?.slug} placeholder="thinkpad-t480" />
+          <Input id="slug" name="slug" value={formValues.slug ?? ""} onChange={handleChange} placeholder="thinkpad-t480" />
         </Field>
         <Field label="Marca" htmlFor="brand" required error={errors["brand"]}>
-          <Input id="brand" name="brand" defaultValue={product?.brand} required />
+          <Input id="brand" name="brand" value={formValues.brand ?? ""} onChange={handleChange} required />
         </Field>
         <Field label="Condición / Grado" htmlFor="conditionGrade" error={errors["conditionGrade"]}>
-          <Input id="conditionGrade" name="conditionGrade" defaultValue={product?.conditionGrade ?? "REFURBISHED"} />
+          <Input id="conditionGrade" name="conditionGrade" value={formValues.conditionGrade ?? ""} onChange={handleChange} />
         </Field>
-        <Field label="Precio" htmlFor="price" required error={errors["price"]}>
-          <Input id="price" name="price" type="number" min="0" step="1" defaultValue={product?.price} required />
+        <Field label="Precio (en soles)" htmlFor="price" hint="Precio de venta en S/. El equivalente en dólares se calcula solo." required error={errors["price"]}>
+          <Input id="price" name="price" type="number" min="0" step="1" value={formValues.price ?? ""} onChange={handleChange} required />
         </Field>
         <Field label="Precio anterior (opcional)" htmlFor="originalPrice" error={errors["originalPrice"]}>
           <Input
@@ -63,54 +107,55 @@ export function ProductForm({
             type="number"
             min="0"
             step="1"
-            defaultValue={product?.originalPrice ?? ""}
+            value={formValues.originalPrice ?? ""}
+            onChange={handleChange}
           />
         </Field>
-        <Field label="Moneda" htmlFor="currency" error={errors["currency"]}>
-          <Input id="currency" name="currency" defaultValue={product?.currency ?? "USD"} />
+        <Field label="Moneda" htmlFor="currency" hint="PEN (soles) por defecto. Usa USD para precios en dólares." error={errors["currency"]}>
+          <Input id="currency" name="currency" value={formValues.currency ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Stock" htmlFor="stock" error={errors["stock"]}>
-          <Input id="stock" name="stock" type="number" min="0" step="1" defaultValue={product?.stock ?? 0} />
+          <Input id="stock" name="stock" type="number" min="0" step="1" value={formValues.stock ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Procesador" htmlFor="processor">
-          <Input id="processor" name="processor" defaultValue={product?.processor ?? ""} />
+          <Input id="processor" name="processor" value={formValues.processor ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Memoria (RAM)" htmlFor="ram">
-          <Input id="ram" name="ram" defaultValue={product?.ram ?? ""} />
+          <Input id="ram" name="ram" value={formValues.ram ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Almacenamiento" htmlFor="storage">
-          <Input id="storage" name="storage" defaultValue={product?.storage ?? ""} />
+          <Input id="storage" name="storage" value={formValues.storage ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Pantalla" htmlFor="display">
-          <Input id="display" name="display" defaultValue={product?.display ?? ""} />
+          <Input id="display" name="display" value={formValues.display ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Salud de batería" htmlFor="batteryHealth">
-          <Input id="batteryHealth" name="batteryHealth" defaultValue={product?.batteryHealth ?? ""} />
+          <Input id="batteryHealth" name="batteryHealth" value={formValues.batteryHealth ?? ""} onChange={handleChange} />
         </Field>
       </div>
 
       <Field label="Descripción" htmlFor="description">
-        <Textarea id="description" name="description" defaultValue={product?.description ?? ""} />
+        <Textarea id="description" name="description" value={formValues.description ?? ""} onChange={handleChange} />
       </Field>
       <Field label="Veredicto (sección THE VERDICT)" htmlFor="verdict">
-        <Textarea id="verdict" name="verdict" defaultValue={product?.verdict ?? ""} />
+        <Textarea id="verdict" name="verdict" value={formValues.verdict ?? ""} onChange={handleChange} />
       </Field>
       <Field label="Imágenes — una URL por línea" htmlFor="images">
-        <Textarea id="images" name="images" defaultValue={(product?.images ?? []).join("\n")} placeholder="https://…" />
+        <Textarea id="images" name="images" value={formValues.images ?? ""} onChange={handleChange} placeholder="https://…" />
       </Field>
       <Field label="Badges — uno por línea" htmlFor="badges">
-        <Textarea id="badges" name="badges" defaultValue={(product?.badges ?? []).join("\n")} placeholder="BEST SELLER" rows={3} />
+        <Textarea id="badges" name="badges" value={formValues.badges ?? ""} onChange={handleChange} placeholder="BEST SELLER" rows={3} />
       </Field>
       <Field label="Specs extra — formato «Etiqueta: Valor», una por línea" htmlFor="specs">
-        <Textarea id="specs" name="specs" defaultValue={specsText} placeholder="GPU: NVIDIA RTX 3060" rows={3} />
+        <Textarea id="specs" name="specs" value={formValues.specs ?? ""} onChange={handleChange} placeholder="GPU: NVIDIA RTX 3060" rows={3} />
       </Field>
 
       <div className="flex flex-wrap gap-8">
         <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
-          <Checkbox name="isActive" defaultChecked={product?.isActive ?? true} /> Activo (visible en tienda)
+          <Checkbox name="isActive" checked={formValues.isActive ?? true} onChange={handleChange} /> Activo (visible en tienda)
         </label>
         <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
-          <Checkbox name="isFeatured" defaultChecked={product?.isFeatured ?? false} /> Destacado
+          <Checkbox name="isFeatured" checked={formValues.isFeatured ?? false} onChange={handleChange} /> Destacado
         </label>
       </div>
 

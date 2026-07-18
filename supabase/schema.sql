@@ -12,7 +12,7 @@ create table if not exists public.products (
   brand           text not null,
   price           numeric(10, 2) not null default 0,
   original_price  numeric(10, 2),
-  currency        text not null default 'USD',
+  currency        text not null default 'PEN',
   condition_grade text not null default 'REFURBISHED',
   processor       text,
   ram             text,

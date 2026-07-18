@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/types/product";
 import { siteConfig } from "@/lib/config/site";
-import { formatPrice } from "@/lib/utils/format";
+import { formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 
 interface WhatsappOptions {
   phone?: string;
@@ -21,7 +21,11 @@ export function buildWhatsappUrl(
   const phone = options.phone ?? siteConfig.whatsapp.phone;
   const message = options.message ?? siteConfig.whatsapp.defaultMessage;
 
-  const lines = [message, `*${product.name}* — ${formatPrice(product.price, product.currency)}`];
+  const usd = formatUsdEquivalent(product.price, product.currency);
+  const priceLabel = usd
+    ? `${formatPrice(product.price, product.currency)} (o ${usd})`
+    : formatPrice(product.price, product.currency);
+  const lines = [message, `*${product.name}* — ${priceLabel}`];
   if (options.productUrl) lines.push(options.productUrl);
 
   const endpoint = phone ? `https://wa.me/${phone}` : "https://wa.me/";

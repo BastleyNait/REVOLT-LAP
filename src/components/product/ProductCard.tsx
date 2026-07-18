@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types/product";
 import { productCover } from "@/lib/types/product";
-import { discountPercent, formatPrice } from "@/lib/utils/format";
+import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { buttonClasses } from "@/components/ui/Button";
@@ -12,6 +12,7 @@ export function ProductCard({ product }: { product: Product; index?: number }) {
   const href = `/products/${product.slug}`;
   const discount = discountPercent(product.price, product.originalPrice);
   const chips = [product.ram, product.storage].filter(Boolean) as string[];
+  const usd = formatUsdEquivalent(product.price, product.currency);
 
   return (
     <article className="group glass flex h-full flex-col gap-4 rounded-3xl p-5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:bg-surface/60 dark:hover:bg-surface/20" style={{ perspective: "1000px" }}>
@@ -72,6 +73,9 @@ export function ProductCard({ product }: { product: Product; index?: number }) {
           <span className="font-display-lg text-3xl font-black leading-none tracking-tight group-hover:text-primary transition-colors duration-300">
             {formatPrice(product.price, product.currency)}
           </span>
+          {usd ? (
+            <span className="text-xs font-medium text-on-surface-variant">o {usd}</span>
+          ) : null}
         </div>
         <Link href={href} className={cn(buttonClasses({ variant: "primary", size: "sm" }), "transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary),0.5)]")}>
           Ver <Icon name="arrow_forward" className="text-lg ml-1 group-hover:translate-x-1 transition-transform" />
