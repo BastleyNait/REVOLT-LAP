@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { PLACEHOLDER_IMAGE } from "@/lib/types/product";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { cn } from "@/lib/utils/cn";
 
 export function ProductGallery({
@@ -27,7 +27,7 @@ export function ProductGallery({
           </div>
         ) : null}
         <div className="relative h-full w-full overflow-hidden rounded-2xl bg-surface-container/60">
-          <Image
+          <SafeImage
             key={active}
             src={gallery[active]}
             alt={alt}
@@ -53,7 +53,7 @@ export function ProductGallery({
               )}
             >
               <div className="relative h-full w-full overflow-hidden rounded-xl">
-                <Image src={image} alt="" fill sizes="20vw" className="object-cover" />
+                <SafeImage src={image} alt="" fill sizes="20vw" className="object-cover" />
               </div>
             </button>
           ))}

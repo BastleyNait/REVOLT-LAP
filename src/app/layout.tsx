@@ -64,11 +64,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
         {/* Apply the persisted/system theme before first paint to avoid a flash. */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.classList.add('dark');}}catch(e){}})();`,
           }}
-        />
+        /> */}
       </head>
       <body suppressHydrationWarning className="flex min-h-screen flex-col">
         <PageBackground />

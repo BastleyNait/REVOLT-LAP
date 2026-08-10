@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types/product";
 import { productCover } from "@/lib/types/product";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: Product; index?: number }) {
 
         <Link href={href} aria-label={product.name} className="block group/link">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-container before:absolute before:inset-0 before:z-10 before:rounded-2xl before:bg-gradient-to-t before:from-black/40 before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 group-hover:before:opacity-100 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] group-hover:shadow-[0_0_30px_rgba(var(--primary),0.3)] transition-all duration-500">
-            <Image
+            <SafeImage
               src={productCover(product)}
               alt={product.name}
               fill

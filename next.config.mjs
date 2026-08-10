@@ -8,6 +8,8 @@ const remotePatterns = [
   { protocol: "https", hostname: "lh3.googleusercontent.com" },
   { protocol: "https", hostname: "images.unsplash.com" },
   { protocol: "https", hostname: "drive.google.com" },
+  { protocol: "https", hostname: "greengreenstore.co.uk" },
+  { protocol: "https", hostname: "www.greengreenstore.co.uk" },
 ];
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
