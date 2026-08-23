@@ -70,6 +70,11 @@ Supabase, copia los valores desde _Project Settings → API_:
 | `ADMIN_PASSWORD`                | Contraseña del panel. Vacío = `/admin` abierto (dev) |
 | `NEXT_PUBLIC_SITE_URL`          | URL canónica del sitio                               |
 | `NEXT_PUBLIC_WHATSAPP_PHONE`    | Número WhatsApp en E.164 sin `+`                      |
+| `R2_BUCKET`                     | Nombre del bucket R2 (ej. `revolt-images`)           |
+| `R2_ACCOUNT_ID`                 | Account ID de Cloudflare                             |
+| `R2_ACCESS_KEY_ID`              | Access Key del token API de R2                       |
+| `R2_SECRET_ACCESS_KEY`          | Secret Key del token API de R2                       |
+| `R2_PUBLIC_URL`                 | URL pública del bucket (ej. `https://pub-xxx.r2.dev`) |
 
 ### 4. Base de datos (Supabase)
 
@@ -127,8 +132,38 @@ curl -X POST http://localhost:3000/api/products \
 2. En **Settings → Environment Variables**, añade las mismas variables de `.env.local`.
 3. Deploy. El App Router se despliega como funciones serverless sin configuración extra.
 
-> `next/image` ya permite los hosts de Supabase y de las imágenes de demo
+> `next/image` ya permite los hosts de Supabase, de Cloudflare R2 y de las imágenes de demo
 > (ver `next.config.mjs`). Si usas otro CDN de imágenes, agrégalo ahí.
+
+---
+
+## 🖼️ Cloudflare R2 (Image hosting)
+
+Las imágenes de productos se almacenan en un bucket de Cloudflare R2 y se sirven a través
+de un CDN global. El panel de administración incluye un **ImageUploader** con drag & drop
+que sube archivos directamente al bucket vía una función serverless.
+
+### Configuración
+
+1. Crea un bucket en [Cloudflare R2](https://dash.cloudflare.com/r2).
+2. Crea un **API Token** con acceso al bucket (o un User con permisos de lectura/escritura).
+3. Obtén tu **Account ID** desde el dashboard de Cloudflare.
+4. Configura las variables de entorno (ver `.env.example`).
+
+### Flujo de imágenes
+
+1. **Upload**: El admin sube imágenes desde `/admin/new` o `/admin/[id]/edit`.
+2. **Storage**: Las imágenes se guardan en `products/{uploadId}/{timestamp}-{fileName}`.
+3. **Serve**: `next/image` sirve las imágenes desde `R2_PUBLIC_URL` con optimización automática.
+4. **Cleanup**: Al editar un producto, las imágenes reemplazadas se eliminan del bucket. Al borrar un producto, todas sus imágenes se eliminan.
+
+### Endpoint serverless
+
+| Método | Ruta          | Auth | Descripción                           |
+| ------ | ------------- | ---- | ------------------------------------- |
+| `POST` | `/api/upload` | ✅   | Sube 1-10 imágenes (multipart/form)   |
+
+Respuesta: `{ "urls": ["https://...", ...] }`
 
 ---
 

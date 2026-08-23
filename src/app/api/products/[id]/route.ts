@@ -65,7 +65,20 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
   if (!(await isRequestAuthorized(request))) return unauthorized();
   const { id } = await params;
   try {
+    const product = await getProductById(id);
     await deleteProduct(id);
+
+    // Clean up associated R2 images
+    if (product?.images?.length) {
+      const { deleteImageByPublicUrl } = await import("@/lib/r2/upload");
+      const { isR2Configured } = await import("@/lib/r2/client");
+      if (isR2Configured) {
+        await Promise.all(
+          product.images.map((url: string) => deleteImageByPublicUrl(url).catch(() => {})),
+        );
+      }
+    }
+
     return NextResponse.json({ data: { id } });
   } catch (error) {
     return serverError(error);

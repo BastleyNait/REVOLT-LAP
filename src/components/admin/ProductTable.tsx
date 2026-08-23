@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Product } from "@/lib/types/product";
 import { productCover } from "@/lib/types/product";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { formatPrice } from "@/lib/utils/format";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
@@ -27,7 +27,7 @@ export function ProductTable({ products }: { products: Product[] }) {
           className="glass flex flex-col gap-4 rounded-2xl p-4 transition-all hover:-translate-y-0.5 md:flex-row md:items-center"
         >
           <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl bg-surface-container">
-            <Image src={productCover(product)} alt={product.name} fill sizes="96px" className="object-cover" />
+            <SafeImage src={productCover(product)} alt={product.name} fill sizes="96px" className="object-cover" />
           </div>
 
           <div className="flex-grow">

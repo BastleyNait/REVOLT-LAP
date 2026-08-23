@@ -52,6 +52,7 @@ export function Hero() {
 
       <div
         className="absolute inset-0"
+        suppressHydrationWarning
         style={{
           background:
             "linear-gradient(150deg, rgba(0,0,0,0.78) 0%, rgba(0,4,2,0.58) 55%, rgba(0,8,5,0.70) 100%)",
@@ -61,6 +62,7 @@ export function Hero() {
       {/* Fade inferior — integra la imagen con el fondo de la página */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-64 z-10"
+        suppressHydrationWarning
         style={{ background: "linear-gradient(to bottom, transparent, rgb(1 2 1))" }}
       />
 

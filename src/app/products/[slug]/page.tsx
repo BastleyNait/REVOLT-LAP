@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getProductBySlug } from "@/lib/repositories/products";
 import { siteConfig } from "@/lib/config/site";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
+import { resolveSiteUrl } from "@/lib/utils/site-url";
 import { productCover } from "@/lib/types/product";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { SpecBox, type SpecColor } from "@/components/product/SpecBox";
@@ -47,7 +48,8 @@ export default async function ProductPage({ params }: PageParams) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const productUrl = `${siteConfig.url}/products/${product.slug}`;
+  const baseUrl = await resolveSiteUrl();
+  const productUrl = `${baseUrl}/products/${product.slug}`;
   const discount = discountPercent(product.price, product.originalPrice);
   const usd = formatUsdEquivalent(product.price, product.currency);
 

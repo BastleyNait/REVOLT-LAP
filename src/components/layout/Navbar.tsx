@@ -8,7 +8,6 @@ import { siteConfig } from "@/lib/config/site";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import GlassSurface from "@/components/ui/GlassSurface";
 import { cn } from "@/lib/utils/cn";
 
@@ -95,7 +94,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3 z-10">
-          <ThemeToggle />
           <a
             href={whatsappHref}
             target="_blank"

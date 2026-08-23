@@ -8,8 +8,6 @@ const remotePatterns = [
   { protocol: "https", hostname: "lh3.googleusercontent.com" },
   { protocol: "https", hostname: "images.unsplash.com" },
   { protocol: "https", hostname: "drive.google.com" },
-  { protocol: "https", hostname: "greengreenstore.co.uk" },
-  { protocol: "https", hostname: "www.greengreenstore.co.uk" },
 ];
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,6 +20,19 @@ if (supabaseUrl) {
 } else {
   // Allow any Supabase storage bucket until the project URL is configured.
   remotePatterns.push({ protocol: "https", hostname: "*.supabase.co" });
+}
+
+const r2PublicUrl = process.env.R2_PUBLIC_URL;
+if (r2PublicUrl) {
+  try {
+    remotePatterns.push({ protocol: "https", hostname: new URL(r2PublicUrl).hostname });
+  } catch {
+    // ignore malformed URL during local/dev
+  }
+} else {
+  // Allow R2 default edge domains until the project URL is configured.
+  remotePatterns.push({ protocol: "https", hostname: "*.r2.dev" });
+  remotePatterns.push({ protocol: "https", hostname: "r2.dev" });
 }
 
 const nextConfig = {

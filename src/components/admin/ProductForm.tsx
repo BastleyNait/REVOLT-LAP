@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useActionState, useState } from "react";
+import { useEffect, useActionState, useState, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import type { Product } from "@/lib/types/product";
 import type { ActionState } from "@/app/admin/actions";
 import { Field, Input, Textarea, Checkbox } from "@/components/ui/form";
 import { Button, buttonClasses } from "@/components/ui/Button";
+import { ImageUploader } from "./ImageUploader";
+import { isR2Configured } from "@/lib/env";
 
 const initialState: ActionState = { ok: true };
 
@@ -60,10 +62,20 @@ export function ProductForm({
   const [formValues, setFormValues] = useState<FormValues>(() => getInitialValues(product));
   const errors = state.fieldErrors ?? {};
 
+  // Image state — separate from formValues so the uploader manages its own list
+  const [imageUrls, setImageUrls] = useState<string[]>(product?.images ?? []);
+  // Hidden input ref to write the final image URLs into the form before submit
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   // Sync action-returned values back into local state on validation/server errors
   useEffect(() => {
     if (state.values) {
       setFormValues((prev) => ({ ...prev, ...state.values }));
+      // Also restore images from the error state
+      const raw = state.values.images ?? "";
+      if (typeof raw === "string" && raw) {
+        setImageUrls(raw.split("\n").filter((l: string) => l.trim()));
+      }
     }
   }, [state.values]);
 
@@ -140,9 +152,22 @@ export function ProductForm({
       <Field label="Veredicto (sección THE VERDICT)" htmlFor="verdict">
         <Textarea id="verdict" name="verdict" value={formValues.verdict ?? ""} onChange={handleChange} />
       </Field>
-      <Field label="Imágenes — una URL por línea" htmlFor="images">
-        <Textarea id="images" name="images" value={formValues.images ?? ""} onChange={handleChange} placeholder="https://…" />
+
+      {/* Image uploader — replaces the old textarea */}
+      <Field label="Imágenes del producto" htmlFor="images-upload">
+        <ImageUploader
+          currentUrls={product?.images ?? []}
+          onChange={setImageUrls}
+        />
+        {/* Hidden input — the form action reads this to get the final image URLs */}
+        <input
+          ref={imageInputRef}
+          type="hidden"
+          name="images"
+          value={imageUrls.join("\n")}
+        />
       </Field>
+
       <Field label="Badges — uno por línea" htmlFor="badges">
         <Textarea id="badges" name="badges" value={formValues.badges ?? ""} onChange={handleChange} placeholder="BEST SELLER" rows={3} />
       </Field>

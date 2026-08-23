@@ -34,13 +34,13 @@ export const siteConfig = {
   whatsapp: {
     /** E.164 number without the leading "+", e.g. 5215512345678. Empty => generic share link. */
     phone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "",
-    defaultMessage: "Hola REVOLT 👋, me interesa este equipo:",
+    defaultMessage: "Hola REVOLT, me interesa este equipo:",
   },
   nav: [
-    { label: "Inventory", href: "/#inventario" },
-    { label: "Specs", href: "/#inventario" },
-    { label: "Deals", href: "/#inventario", highlight: true },
-    { label: "About", href: "/#about" },
+    { label: "Inventario", href: "/#inventario" },
+    { label: "Especificaciones", href: "/#inventario" },
+    { label: "Ofertas", href: "/#inventario", highlight: true },
+    { label: "Sobre nosotros", href: "/#about" },
   ] satisfies NavItem[],
   socials: [
     { label: "Facebook", href: "#" },
@@ -56,7 +56,7 @@ export const siteConfig = {
         "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
       ctaLabel: "Ver inventario",
       badge: "Desde S/ 1,410",
-      flash: "Envío gratis · 12 meses de garantía",
+      flash: "Envío gratis · Equipos en stock y a pedido",
     },
     inventoryHeading: "INVENTARIO",
     inventoryEmpty: "Sin stock por ahora. Vuelve pronto — el inventario rota rápido.",

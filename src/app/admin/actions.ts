@@ -8,6 +8,8 @@ import { productInputFromFormData, productInputSchema } from "@/lib/validators/p
 import { createProduct, deleteProduct, updateProduct } from "@/lib/repositories/products";
 import { isAuthed } from "@/lib/auth/admin";
 import { ADMIN_COOKIE } from "@/lib/auth/token";
+import { deleteImageByPublicUrl, listImages } from "@/lib/r2/upload";
+import { isR2Configured } from "@/lib/r2/client";
 
 export interface ActionState {
   ok: boolean;
@@ -56,6 +58,27 @@ function revalidateStorefront(slug?: string) {
   if (slug) revalidatePath(`/products/${slug}`);
 }
 
+/**
+ * Clean up R2 images that are no longer referenced by the product.
+ * Compares the old image URLs with the new ones and deletes orphans.
+ */
+async function cleanupOrphanedImages(oldUrls: string[], newUrls: string[]): Promise<void> {
+  if (!isR2Configured) return;
+
+  const toDelete = oldUrls.filter((url) => !newUrls.includes(url));
+  await Promise.all(toDelete.map((url) => deleteImageByPublicUrl(url).catch(() => {})));
+}
+
+/**
+ * Delete all R2 images associated with a product when it's being removed.
+ */
+async function deleteProductImages(imageUrls: string[]): Promise<void> {
+  if (!isR2Configured) return;
+  await Promise.all(
+    imageUrls.map((url) => deleteImageByPublicUrl(url).catch(() => {})),
+  );
+}
+
 export async function createProductAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   if (!(await isAuthed())) return { ok: false, error: "No autorizado. Inicia sesión de nuevo." };
 
@@ -87,7 +110,15 @@ export async function updateProductAction(
   }
 
   try {
+    // Get current product to track old images for cleanup
+    const { getProductById } = await import("@/lib/repositories/products");
+    const current = await getProductById(id);
+    const oldImages = current?.images ?? [];
+
     await updateProduct(id, parsed.data);
+
+    // Clean up orphaned R2 images
+    await cleanupOrphanedImages(oldImages, parsed.data.images);
   } catch (error) {
     return { ok: false, error: (error as Error).message, values: extractFormValues(formData) };
   }
@@ -102,7 +133,16 @@ export async function deleteProductAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   if (id) {
     try {
+      // Get product images before deleting
+      const { getProductById } = await import("@/lib/repositories/products");
+      const product = await getProductById(id);
+
       await deleteProduct(id);
+
+      // Delete associated R2 images
+      if (product?.images?.length) {
+        await deleteProductImages(product.images);
+      }
     } catch {
       redirect("/admin?status=delete-error");
     }

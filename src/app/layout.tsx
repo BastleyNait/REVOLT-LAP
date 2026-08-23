@@ -53,8 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      suppressHydrationWarning
-      className={cn(display.variable, body.variable, mono.variable, "font-sans", geist.variable)}
+      className={cn("dark", display.variable, body.variable, mono.variable, "font-sans", geist.variable)}
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -63,12 +62,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap"
           rel="stylesheet"
         />
-        {/* Apply the persisted/system theme before first paint to avoid a flash. */}
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.classList.add('dark');}}catch(e){}})();`,
-          }}
-        /> */}
       </head>
       <body suppressHydrationWarning className="flex min-h-screen flex-col">
         <PageBackground />
