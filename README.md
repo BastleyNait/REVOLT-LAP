@@ -20,7 +20,7 @@ pública. Las pantallas provienen del proyecto de Stitch _"Revolt Neobrutalist L
 - **Modo demo**: si no configuras Supabase, la tienda funciona con datos de respaldo.
 - **WhatsApp checkout**: el CTA arma un enlace `wa.me` con el producto.
 - **Design system tokenizado** en `tailwind.config.ts` (colores, tipografías, sombras duras).
-- **Auth de admin** simple por contraseña (middleware + cookie), opcional.
+- **Auth de admin** simple por contraseña (proxy + cookie), opcional.
 
 ## 🧱 Stack
 
@@ -96,7 +96,7 @@ npm run typecheck
 ## 🔐 Panel de administración
 
 - Entra en **`/admin`** (enlace ⚙️ en la navbar).
-- Si definiste `ADMIN_PASSWORD`, el `middleware` te redirige a `/admin/login`.
+- Si definiste `ADMIN_PASSWORD`, el `proxy` te redirige a `/admin/login`.
 - Crear/editar/borrar persiste en Supabase mediante Server Actions (service role) y
   revalida la tienda automáticamente (`revalidatePath`).
 - Sin `SUPABASE_SERVICE_ROLE_KEY`, el panel muestra datos de demo en **solo lectura**
@@ -191,7 +191,7 @@ src/
 │  ├─ auth/                    # Token + helpers del gate de admin
 │  ├─ types/                   # Tipos de dominio y de BD
 │  └─ data/fallback-products.ts# Catálogo de demo
-└─ middleware.ts               # Protege /admin
+└─ proxy.ts                    # Protege /admin
 ```
 
 ## 🎨 Design tokens

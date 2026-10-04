@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { siteConfig } from "@/lib/config/site";
+import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils/cn";
@@ -123,7 +124,7 @@ export function Hero() {
               {hero.ctaLabel} <Icon name="arrow_forward" className="ml-1" />
             </Link>
             <a
-              href={`https://wa.me/${siteConfig.whatsapp.phone}`}
+              href={generalWhatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:scale-105 shadow-[0_4px_16px_rgba(0,0,0,0.1)]"

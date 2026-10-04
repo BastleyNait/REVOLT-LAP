@@ -6,7 +6,7 @@ import { ADMIN_COOKIE, computeAdminToken } from "@/lib/auth/token";
  * (local dev convenience, with a visible warning in the UI). Otherwise an
  * invalid/absent session cookie is redirected to the login page.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const password = process.env.ADMIN_PASSWORD ?? "";
   if (!password) return NextResponse.next();
 

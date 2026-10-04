@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils/cn";
 export type BadgeColor = "aqua" | "orange" | "lavender" | "dark" | "white" | "danger";
 
 const colorClasses: Record<BadgeColor, string> = {
-  aqua: "bg-primary-container/80 text-on-container",
-  orange: "bg-secondary-container/80 text-on-container",
-  lavender: "bg-tertiary-container/80 text-on-container",
+  aqua: "bg-primary/90 text-on-primary dark:bg-primary-container/80 dark:text-on-primary-container",
+  orange: "bg-secondary/90 text-on-secondary dark:bg-secondary-container/80 dark:text-on-secondary-container",
+  lavender: "bg-tertiary-container/90 text-on-tertiary-container",
   dark: "bg-on-background/85 text-background",
   white: "glass text-on-background",
   danger: "bg-error/90 text-on-error",

@@ -11,14 +11,14 @@ interface WhatsappOptions {
 
 /**
  * Build a `wa.me` deep link prefilled with the product the buyer is interested
- * in. Falls back to a generic share link when no phone number is configured.
+ * in, addressed to the store's number (`siteConfig.whatsapp.phone`).
  * Only product/marketing data is encoded — never personal buyer data.
  */
 export function buildWhatsappUrl(
   product: Pick<Product, "name" | "price" | "currency">,
   options: WhatsappOptions = {},
 ): string {
-  const phone = options.phone ?? siteConfig.whatsapp.phone;
+  const phone = (options.phone ?? siteConfig.whatsapp.phone).replace(/\D/g, "");
   const message = options.message ?? siteConfig.whatsapp.defaultMessage;
 
   const usd = formatUsdEquivalent(product.price, product.currency);
@@ -34,7 +34,5 @@ export function buildWhatsappUrl(
 
 /** Generic "contact us" WhatsApp link (navbar / footer), no specific product. */
 export function generalWhatsappUrl(message: string = siteConfig.whatsapp.defaultMessage): string {
-  const phone = siteConfig.whatsapp.phone;
-  const endpoint = phone ? `https://wa.me/${phone}` : "https://wa.me/";
-  return `${endpoint}?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${siteConfig.whatsapp.phone}?text=${encodeURIComponent(message)}`;
 }

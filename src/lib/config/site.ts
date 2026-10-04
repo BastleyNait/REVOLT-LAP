@@ -32,8 +32,8 @@ export const siteConfig = {
    */
   usdRate: Number(process.env.NEXT_PUBLIC_USD_RATE ?? 3.7),
   whatsapp: {
-    /** E.164 number without the leading "+", e.g. 5215512345678. Empty => generic share link. */
-    phone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "",
+    /** E.164 number without the leading "+" (digits only), e.g. 51987545926. */
+    phone: (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").replace(/\D/g, ""),
     defaultMessage: "Hola REVOLT, me interesa este equipo:",
   },
   nav: [
