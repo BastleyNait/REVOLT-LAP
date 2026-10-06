@@ -28,11 +28,14 @@ export interface FaqItem {
  * On Vercel it falls back to the production domain automatically.
  */
 function resolveBaseUrl(): string {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
-  if (explicit) return explicit.replace(/\/+$/, "");
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+  const isLocal = !explicit || /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?$/i.test(explicit);
+  // On Vercel a localhost value (copied from .env) must never leak into
+  // WhatsApp links, canonical tags or the sitemap.
+  if (explicit && !(isLocal && process.env.VERCEL)) return explicit;
   const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (vercelProduction) return `https://${vercelProduction}`;
-  return "http://localhost:3000";
+  return explicit ?? "http://localhost:3000";
 }
 
 const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").replace(/\D/g, "");
