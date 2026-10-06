@@ -52,7 +52,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="flex flex-1 flex-col gap-3 px-2 pb-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">{product.brand}</p>
-            <h3 className="mt-1 line-clamp-2 text-lg font-bold leading-snug">
+            <h3 className="mt-1 line-clamp-2 text-lg font-bold leading-snug transition-colors duration-200 group-hover:text-primary">
               <Link
                 href={href}
                 className="outline-none after:absolute after:inset-0 after:rounded-3xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-primary"
@@ -73,7 +73,7 @@ export function ProductCard({ product }: { product: Product }) {
             </ul>
           ) : null}
 
-          <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-4">
+          <div className="mt-auto border-t border-white/[0.07] pt-4">
             <div>
               {product.originalPrice && discount ? (
                 <p className="text-sm text-on-surface-variant line-through">{formatPrice(product.originalPrice, product.currency)}</p>
@@ -83,12 +83,6 @@ export function ProductCard({ product }: { product: Product }) {
               </p>
               {usd ? <p className="mt-1.5 text-sm text-on-surface-variant">o {usd}</p> : null}
             </div>
-            <span
-              aria-hidden
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-on-primary transition-transform duration-200 ease-out-strong group-hover:translate-x-0.5"
-            >
-              <Icon name="arrow" className="text-xl" />
-            </span>
           </div>
           <StockStatus stock={product.stock} compact />
         </div>

@@ -115,12 +115,16 @@ export default async function ProductPage({ params }: PageParams) {
           </ol>
         </nav>
 
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
+        {/*
+         * Desktop: gallery + details flow down the left column while the buy
+         * card stays pinned on the right. Mobile order: gallery → buy → details.
+         */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-14">
           <div className="lg:col-span-7">
             <ProductGallery images={product.images} alt={`${product.name} reacondicionada`} />
           </div>
 
-          <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:col-span-5">
+          <div className="self-start lg:sticky lg:top-28 lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1">
             <div className="glass rounded-3xl p-6 md:p-8">
               <p className="flex flex-wrap items-center gap-x-2 text-sm font-semibold">
                 <span className="text-primary">{product.brand}</span>
@@ -170,50 +174,49 @@ export default async function ProductPage({ params }: PageParams) {
                   </li>
                 ))}
               </ul>
-            </div>
 
-            <aside className="glass flex gap-4 rounded-3xl p-5">
-              <Icon name="verified" className="mt-0.5 text-2xl text-primary" />
-              <div>
-                <p className="font-bold">{siteConfig.promise.title}</p>
-                <p className="mt-1 text-[0.9375rem] leading-relaxed text-on-surface-variant">{siteConfig.promise.body}</p>
-              </div>
-            </aside>
+              <p className="mt-6 flex gap-3 border-t border-white/10 pt-6 text-[0.9375rem] leading-relaxed text-on-surface-variant">
+                <Icon name="verified" className="mt-0.5 text-xl text-primary" />
+                <span>
+                  <strong className="font-semibold text-on-surface">{siteConfig.promise.title}.</strong> {siteConfig.promise.body}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-12 lg:col-span-7 lg:row-start-2">
+            <section aria-labelledby="descripcion">
+              <h2 id="descripcion" className="mb-4 text-2xl font-extrabold">Descripción</h2>
+              {product.description ? (
+                <RichText html={product.description} />
+              ) : (
+                <p className="leading-relaxed text-on-surface-variant">{productSummary(product, 400)}</p>
+              )}
+            </section>
+
+            <section aria-labelledby="especificaciones">
+              <h2 id="especificaciones" className="mb-2 text-2xl font-extrabold">Especificaciones</h2>
+              <dl className="divide-y divide-white/[0.07]">
+                {specs.map((spec) => (
+                  <div key={`${spec.label}-${spec.value}`} className="flex items-start justify-between gap-4 py-3.5">
+                    <dt className="flex items-center gap-2.5 text-on-surface-variant">
+                      <Icon name={spec.icon} className="text-lg text-primary" />
+                      {spec.label}
+                    </dt>
+                    <dd className="text-right font-semibold">{spec.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+
+            {product.verdict ? (
+              <section aria-labelledby="opinion">
+                <h2 id="opinion" className="mb-4 text-2xl font-extrabold">Nuestra opinión</h2>
+                <RichText html={product.verdict} className="border-l-2 border-primary/60 pl-5 text-lg text-on-surface" />
+              </section>
+            ) : null}
           </div>
         </div>
-
-        <div className="mt-12 grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
-          <section aria-labelledby="descripcion" className="glass rounded-3xl p-6 md:p-8 lg:col-span-7">
-            <h2 id="descripcion" className="mb-5 text-2xl font-extrabold">Descripción</h2>
-            {product.description ? (
-              <RichText html={product.description} />
-            ) : (
-              <p className="leading-relaxed text-on-surface-variant">{productSummary(product, 400)}</p>
-            )}
-          </section>
-
-          <section aria-labelledby="especificaciones" className="glass rounded-3xl p-6 md:p-8 lg:col-span-5">
-            <h2 id="especificaciones" className="mb-5 text-2xl font-extrabold">Especificaciones</h2>
-            <dl className="divide-y divide-white/10">
-              {specs.map((spec) => (
-                <div key={`${spec.label}-${spec.value}`} className="flex items-start justify-between gap-4 py-3">
-                  <dt className="flex items-center gap-2.5 text-on-surface-variant">
-                    <Icon name={spec.icon} className="text-lg text-primary" />
-                    {spec.label}
-                  </dt>
-                  <dd className="text-right font-semibold">{spec.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        </div>
-
-        {product.verdict ? (
-          <section aria-labelledby="opinion" className="glass mt-6 rounded-3xl p-6 md:p-10">
-            <h2 id="opinion" className="mb-4 text-2xl font-extrabold">Nuestra opinión</h2>
-            <RichText html={product.verdict} className="text-lg text-on-surface" />
-          </section>
-        ) : null}
 
         {related.length ? (
           <section aria-labelledby="relacionadas" className="mt-20 space-y-8">
