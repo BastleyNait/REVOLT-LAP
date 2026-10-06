@@ -44,10 +44,6 @@ export function Hero({ minPrice }: { minPrice: number | null }) {
 
       <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40">
         <div className="flex flex-col items-start lg:max-w-[65%]">
-          <span className="animate-enter mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-accent motion-reduce:animate-none" />
-            {hero.eyebrow}
-          </span>
 
           <div className="animate-enter mb-4 w-full max-w-[32.5rem]" style={delay(50)}>
             <HeroLogo />

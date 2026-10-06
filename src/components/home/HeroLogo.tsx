@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/config/site";
 
 // React Bits — ElectricLogo (WebGL via ogl). Loaded after hydration so the
-// static logo paints first and stays the LCP element; desktop only.
+// static logo paints first and stays the LCP element.
 const ElectricLogo = dynamic(() => import("@/components/ElectricLogo"), { ssr: false });
 
 /**
@@ -26,15 +26,11 @@ export function HeroLogo() {
     let idle = 0;
     let fallback: ReturnType<typeof setTimeout> | undefined;
 
-    // The effect reacts to the cursor and its shader compiles synchronously
-    // (~300–500 ms on a typical PC, far more on phones), so it only runs on
-    // mouse-driven devices with enough cores, once the page has loaded and the
-    // main thread is idle. Phones keep the static logo (no tap-time freezes).
-    const capable =
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches && (navigator.hardwareConcurrency ?? 4) >= 4;
-
+    // Runs on every device once the page has loaded and the main thread is
+    // idle. The shader compiles in parallel (KHR_parallel_shader_compile), so it
+    // no longer freezes the page; only "reduce motion" users keep the static logo.
     const start = () => {
-      if (reduce.matches || !capable) return;
+      if (reduce.matches) return;
       if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setElectric(true), { timeout: 2500 });
       else fallback = setTimeout(() => setElectric(true), 1200);
     };

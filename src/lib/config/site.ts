@@ -106,7 +106,6 @@ export const siteConfig = {
   /** Storefront marketing copy (kept out of components for easy editing). */
   home: {
     hero: {
-      eyebrow: "Certificados · Testeados · Stock limitado",
       /** Rendered as the page <h1> in the original tracked-caps style. */
       title: "Laptops reacondicionadas en Arequipa",
       pitch:
