@@ -28,7 +28,7 @@ function badRequest(message: string) {
 
 export async function POST(request: NextRequest) {
   if (!(await isRequestAuthorized(request))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
   if (!isR2Configured) {

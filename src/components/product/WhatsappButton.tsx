@@ -1,32 +1,38 @@
 import type { Product } from "@/lib/types/product";
 import { buildWhatsappUrl } from "@/lib/services/whatsapp";
 import { buttonClasses } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
+import { WhatsappIcon } from "@/components/ui/Icon";
+import { WhatsappLink } from "@/components/analytics/WhatsappLink";
+import ClickSpark from "@/components/ClickSpark";
 import { siteConfig } from "@/lib/config/site";
 
-/** The giant "PEDIR POR WHATSAPP" call-to-action on the product detail page. */
+/** The main "Pedir por WhatsApp" call to action on the product detail page (React Bits ClickSpark). */
 export function WhatsappOrderButton({
   product,
   productUrl,
+  compact = false,
 }: {
   product: Product;
   productUrl: string;
+  compact?: boolean;
 }) {
   const href = buildWhatsappUrl(product, { productUrl });
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={buttonClasses({
-        variant: "primary",
-        size: "xl",
-        className: "w-full text-center",
-      })}
-    >
-      <span className="font-display-lg">{siteConfig.product.ctaLabel}</span>
-      <Icon name="forum" className="text-3xl" />
-    </a>
+    <ClickSpark sparkColor="#12B480" sparkSize={12} sparkRadius={26} sparkCount={10} duration={450} className={compact ? "shrink-0" : "w-full"}>
+      <WhatsappLink
+        href={href}
+        source={compact ? "producto_barra_movil" : "producto"}
+        product={product.slug}
+        className={buttonClasses({
+          variant: "primary",
+          size: compact ? "md" : "xl",
+          className: compact ? "min-h-12 shrink-0" : "min-h-16 w-full text-center",
+        })}
+      >
+        <WhatsappIcon className={compact ? "text-xl" : "text-2xl"} />
+        {siteConfig.product.ctaLabel}
+      </WhatsappLink>
+    </ClickSpark>
   );
 }

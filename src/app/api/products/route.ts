@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function unauthorized() {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 }
 
 function serverError(error: unknown) {
@@ -41,13 +41,13 @@ export async function POST(request: NextRequest) {
       ? await request.json()
       : productInputFromFormData(await request.formData());
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ error: "Cuerpo de la solicitud inválido" }, { status: 400 });
   }
 
   const parsed = productInputSchema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Validation failed", issues: parsed.error.flatten() },
+      { error: "Validación fallida", issues: parsed.error.flatten() },
       { status: 422 },
     );
   }

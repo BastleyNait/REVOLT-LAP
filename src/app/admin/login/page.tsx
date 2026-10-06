@@ -5,7 +5,7 @@ import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 
-export const metadata = { title: "Admin · Login" };
+export const metadata = { title: "Acceso al panel" };
 
 export default async function LoginPage({
   searchParams,

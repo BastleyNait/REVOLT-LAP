@@ -1,5 +1,3 @@
-"use client";
-
 import Image, { ImageProps } from "next/image";
 import { PLACEHOLDER_IMAGE } from "@/lib/types/product";
 import { isAllowedImageHost } from "@/lib/config/image-hosts";

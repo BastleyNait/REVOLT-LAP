@@ -6,14 +6,14 @@ import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "Administración",
   robots: { index: false, follow: false },
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex-1">
-      <div className="mx-auto max-w-[1200px] px-4 py-10 md:px-8">
+      <div className="mx-auto max-w-[75rem] px-4 py-10 md:px-8">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/60 pb-6">
           <div>
             <Link

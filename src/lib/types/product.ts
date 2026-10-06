@@ -28,7 +28,7 @@ export interface Product {
   /** Free-form extra specs rendered as the "bento" boxes on the detail page. */
   specs: ProductSpec[];
   images: string[];
-  /** Marketing chips e.g. "BEST SELLER", "GRADE A". */
+  /** Marketing chips e.g. "MÁS VENDIDA", "EXCELENTE ESTADO". */
   badges: string[];
   stock: number;
   isActive: boolean;
@@ -36,6 +36,9 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
+/** Default condition label for new products (Spanish, shown on the storefront). */
+export const DEFAULT_CONDITION = "Reacondicionada";
 
 /** The cover image, with a deterministic fallback so cards never render empty. */
 export function productCover(product: Pick<Product, "images" | "name">): string {

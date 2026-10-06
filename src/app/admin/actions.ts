@@ -55,7 +55,8 @@ function extractFormValues(formData: FormData): Record<string, any> {
 function revalidateStorefront(slug?: string) {
   revalidatePath("/");
   revalidatePath("/admin");
-  if (slug) revalidatePath(`/products/${slug}`);
+  revalidatePath("/sitemap.xml");
+  if (slug) revalidatePath(`/laptops/${slug}`);
 }
 
 /**

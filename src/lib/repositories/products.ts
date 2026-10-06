@@ -1,9 +1,11 @@
+import { cache } from "react";
 import type { Product } from "@/lib/types/product";
 import type { ProductInsert, ProductRow } from "@/lib/types/database";
 import type { ProductInput } from "@/lib/validators/product";
 import { getPublicClient } from "@/lib/supabase/client";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseAdminConfigured, isSupabaseConfigured } from "@/lib/env";
+import { sanitizeRichText } from "@/lib/rich-text/sanitize";
 import {
   fallbackProducts,
   findFallbackById,
@@ -60,8 +62,9 @@ function inputToInsert(input: ProductInput): ProductInsert {
     storage: input.storage ?? null,
     display: input.display ?? null,
     battery_health: input.batteryHealth ?? null,
-    description: input.description ?? null,
-    verdict: input.verdict ?? null,
+    // Rich text from the admin editor / API — sanitized before it is stored.
+    description: sanitizeRichText(input.description),
+    verdict: sanitizeRichText(input.verdict),
     specs: input.specs,
     images: input.images,
     badges: input.badges,
@@ -73,8 +76,8 @@ function inputToInsert(input: ProductInput): ProductInsert {
 
 /* ----------------------------- Reads (public) ---------------------------- */
 
-/** Active products for the storefront, featured first. */
-export async function getProducts(): Promise<Product[]> {
+/** Active products for the storefront, featured first (deduped per request). */
+export const getProducts = cache(async (): Promise<Product[]> => {
   const supabase = getPublicClient();
   if (!supabase) return fallbackProducts.filter((p) => p.isActive);
 
@@ -85,9 +88,9 @@ export async function getProducts(): Promise<Product[]> {
     .order("is_featured", { ascending: false })
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error(`Failed to load products: ${error.message}`);
+  if (error) throw new Error(`No se pudieron cargar los productos: ${error.message}`);
   return (data ?? []).map(rowToProduct);
-}
+});
 
 export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
   const products = await getProducts();
@@ -95,13 +98,23 @@ export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
   return (featured.length > 0 ? featured : products).slice(0, limit);
 }
 
-export async function getProductBySlug(slug: string): Promise<Product | null> {
+/** Deduped per request: generateMetadata and the page share one query. */
+export const getProductBySlug = cache(async (slug: string): Promise<Product | null> => {
   const supabase = getPublicClient();
   if (!supabase) return findFallbackBySlug(slug);
 
   const { data, error } = await supabase.from(TABLE).select("*").eq("slug", slug).maybeSingle();
-  if (error) throw new Error(`Failed to load product: ${error.message}`);
+  if (error) throw new Error(`No se pudo cargar el producto: ${error.message}`);
   return data ? rowToProduct(data) : null;
+});
+
+/** Other active products for the "you may also like" strip, same brand first. */
+export async function getRelatedProducts(product: Pick<Product, "id" | "brand">, limit = 3): Promise<Product[]> {
+  const products = await getProducts();
+  const others = products.filter((p) => p.id !== product.id);
+  const sameBrand = others.filter((p) => p.brand === product.brand);
+  const rest = others.filter((p) => p.brand !== product.brand);
+  return [...sameBrand, ...rest].slice(0, limit);
 }
 
 /** Slugs for static params / sitemap generation. */
@@ -110,7 +123,7 @@ export async function getAllSlugs(): Promise<string[]> {
   if (!supabase) return fallbackProducts.map((p) => p.slug);
 
   const { data, error } = await supabase.from(TABLE).select("slug").eq("is_active", true);
-  if (error) throw new Error(`Failed to load slugs: ${error.message}`);
+  if (error) throw new Error(`No se pudieron cargar los slugs: ${error.message}`);
   return (data ?? []).map((row) => row.slug);
 }
 
@@ -125,7 +138,7 @@ export async function getAllProductsAdmin(): Promise<Product[]> {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error(`Failed to load products: ${error.message}`);
+  if (error) throw new Error(`No se pudieron cargar los productos: ${error.message}`);
   return (data ?? []).map(rowToProduct);
 }
 
@@ -134,7 +147,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 
   const supabase = getAdminClient();
   const { data, error } = await supabase.from(TABLE).select("*").eq("id", id).maybeSingle();
-  if (error) throw new Error(`Failed to load product: ${error.message}`);
+  if (error) throw new Error(`No se pudo cargar el producto: ${error.message}`);
   return data ? rowToProduct(data) : null;
 }
 

@@ -33,6 +33,6 @@ export function buildWhatsappUrl(
 }
 
 /** Generic "contact us" WhatsApp link (navbar / footer), no specific product. */
-export function generalWhatsappUrl(message: string = siteConfig.whatsapp.defaultMessage): string {
+export function generalWhatsappUrl(message: string = siteConfig.whatsapp.generalMessage): string {
   return `https://wa.me/${siteConfig.whatsapp.phone}?text=${encodeURIComponent(message)}`;
 }

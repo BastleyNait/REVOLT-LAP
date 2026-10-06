@@ -3,187 +3,260 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/* REVOLT design tokens — "Botella Noir" palette                       */
-/* AMOLED black · Bottle Green · Emerald · Lime · Obsidian.            */
+/* REVOLT design tokens                                                */
+/* Brand green #12B480 (sampled from the logo) on a deep green-black,  */
+/* plus an orange "deal" accent reserved for discounts and urgency.    */
 /* Space-separated RGB triplets wrapped by Tailwind in rgb(... / a).   */
-/* `:root` = light theme, `.dark` overrides the dark theme.            */
+/* `:root` = light theme, `.dark` = the theme the storefront ships.    */
 /* ------------------------------------------------------------------ */
 
 :root {
   color-scheme: light;
 
-  /* Core surfaces — cold green-tinted off-white */
-  --c-background: 234 240 234;
-  --c-surface: 248 252 248;
+  --c-background: 240 246 242;
+  --c-surface: 250 253 251;
   --c-surface-bright: 255 255 255;
-  --c-surface-dim: 218 228 218;
+  --c-surface-dim: 222 232 226;
   --c-surface-container-lowest: 255 255 255;
-  --c-surface-container-low: 242 248 242;
-  --c-surface-container: 235 243 235;
-  --c-surface-container-high: 224 235 224;
-  --c-surface-container-highest: 210 224 210;
-  --c-surface-variant: 210 224 210;
-  --c-on-surface: 10 20 10;
-  --c-on-surface-variant: 38 70 38;
-  --c-on-background: 10 20 10;
-  --c-on-container: 10 20 10;
-  --c-inverse-surface: 16 32 16;
-  --c-inverse-on-surface: 234 248 234;
-  --c-outline: 72 110 72;
-  --c-outline-variant: 178 210 178;
+  --c-surface-container-low: 244 249 246;
+  --c-surface-container: 236 244 239;
+  --c-surface-container-high: 226 237 230;
+  --c-surface-container-highest: 214 228 219;
+  --c-surface-variant: 214 228 219;
+  --c-on-surface: 9 22 15;
+  --c-on-surface-variant: 52 78 63;
+  --c-on-background: 9 22 15;
+  --c-on-container: 9 22 15;
+  --c-inverse-surface: 16 32 24;
+  --c-inverse-on-surface: 232 246 238;
+  --c-outline: 92 122 105;
+  --c-outline-variant: 182 208 192;
 
-  /* Primary — Deep Forest rgb(0 106 78) */
-  --c-primary: 0 106 78;
+  --c-primary: 4 120 87;
   --c-on-primary: 255 255 255;
-  --c-primary-container: 0 160 118;
-  --c-on-primary-container: 0 32 22;
-  --c-primary-fixed: 160 220 196;
-  --c-primary-fixed-dim: 0 140 104;
-  --c-on-primary-fixed: 0 28 20;
-  --c-on-primary-fixed-variant: 0 80 58;
-  --c-inverse-primary: 0 180 134;
-  --c-surface-tint: 0 106 78;
+  --c-primary-container: 167 243 208;
+  --c-on-primary-container: 2 44 30;
+  --c-primary-fixed: 167 243 208;
+  --c-primary-fixed-dim: 18 180 128;
+  --c-on-primary-fixed: 2 30 20;
+  --c-on-primary-fixed-variant: 4 90 64;
+  --c-inverse-primary: 52 211 153;
+  --c-surface-tint: 4 120 87;
 
-  /* Secondary — Dark Teal */
-  --c-secondary: 0 80 58;
+  --c-secondary: 5 150 105;
   --c-on-secondary: 255 255 255;
-  --c-secondary-container: 0 120 88;
-  --c-on-secondary-container: 200 240 224;
-  --c-secondary-fixed: 140 210 184;
-  --c-secondary-fixed-dim: 0 106 78;
-  --c-on-secondary-fixed: 0 24 16;
-  --c-on-secondary-fixed-variant: 0 70 50;
+  --c-secondary-container: 209 250 229;
+  --c-on-secondary-container: 6 78 59;
+  --c-secondary-fixed: 167 243 208;
+  --c-secondary-fixed-dim: 5 150 105;
+  --c-on-secondary-fixed: 2 30 20;
+  --c-on-secondary-fixed-variant: 4 90 64;
 
-  /* Tertiary — Lime Electric */
-  --c-tertiary: 101 163 13;
+  --c-tertiary: 77 124 15;
   --c-on-tertiary: 255 255 255;
-  --c-tertiary-container: 190 235 100;
-  --c-on-tertiary-container: 26 42 0;
+  --c-tertiary-container: 217 249 157;
+  --c-on-tertiary-container: 26 46 5;
   --c-tertiary-fixed: 217 249 157;
   --c-tertiary-fixed-dim: 132 204 22;
   --c-on-tertiary-fixed: 20 36 0;
-  --c-on-tertiary-fixed-variant: 70 120 8;
+  --c-on-tertiary-fixed-variant: 63 98 18;
 
-  /* Accent — Vibrant Forest CTA */
-  --c-accent: 0 200 148;
-  --c-on-accent: 0 20 14;
-  --c-accent-dim: 0 160 118;
+  --c-accent: 5 150 105;
+  --c-on-accent: 255 255 255;
+  --c-accent-dim: 4 120 87;
 
-  /* Error */
-  --c-error: 220 38 38;
+  /* Deal / urgency — orange (text-safe on light backgrounds) */
+  --c-deal: 194 65 12;
+  --c-deal-strong: 234 88 12;
+  --c-on-deal: 255 255 255;
+
+  --c-error: 185 28 28;
   --c-on-error: 255 255 255;
   --c-error-container: 254 202 202;
   --c-on-error-container: 127 29 29;
 
-  /* Soft-shadow ink */
-  --c-shadow: 10 30 10;
+  --c-shadow: 10 30 20;
 
-  /* Frosted glass — light mode: white-tinted panels */
   --glass-bg: 255 255 255;
-  --glass-a: 0.52;
-  --glass-brd: 255 255 255;
-  --glass-brd-a: 0.68;
-  --glass-sheen: 0.75;
-  --glass-sh-a: 0.10;
+  --glass-a: 0.7;
+  --glass-brd: 9 22 15;
+  --glass-brd-a: 0.08;
+  --glass-sheen: 0.8;
+  --glass-sh-a: 0.08;
 
-  /* Aurora — deep forest multi-blob backdrop */
   --aurora:
-    radial-gradient(60% 55% at 12% 8%,  rgb(0 106 78 / 0.45), transparent 60%),
-    radial-gradient(55% 50% at 88% 12%, rgb(0 80 58 / 0.35), transparent 60%),
-    radial-gradient(60% 60% at 82% 92%, rgb(0 140 100 / 0.30), transparent 62%),
-    radial-gradient(50% 50% at 22% 96%, rgb(0 60 44 / 0.30), transparent 60%);
+    radial-gradient(55% 45% at 10% 0%, rgb(18 180 128 / 0.16), transparent 70%),
+    radial-gradient(45% 40% at 95% 20%, rgb(52 211 153 / 0.12), transparent 70%);
 }
 
 .dark {
   color-scheme: dark;
 
-  /* Core surfaces — pure AMOLED black, near-zero green undertone */
+  /* Surfaces — AMOLED black (original) with gently lifted containers */
   --c-background: 1 2 1;
-  --c-surface: 1 2 1;
-  --c-surface-bright: 8 14 10;
+  --c-surface: 9 15 12;
+  --c-surface-bright: 22 34 28;
   --c-surface-dim: 1 2 1;
-  --c-surface-container-lowest: 0 1 0;
-  --c-surface-container-low: 4 8 5;
-  --c-surface-container: 7 12 9;
-  --c-surface-container-high: 12 20 14;
-  --c-surface-container-highest: 18 30 22;
-  --c-surface-variant: 24 40 30;
-  --c-on-surface: 200 230 214;
-  --c-on-surface-variant: 120 170 140;
-  --c-on-background: 200 230 214;
-  --c-inverse-surface: 200 230 214;
-  --c-inverse-on-surface: 8 14 10;
-  --c-outline: 40 80 58;
-  --c-outline-variant: 20 38 28;
+  --c-surface-container-lowest: 3 6 4;
+  --c-surface-container-low: 10 17 13;
+  --c-surface-container: 14 23 18;
+  --c-surface-container-high: 19 30 24;
+  --c-surface-container-highest: 26 40 32;
+  --c-surface-variant: 30 46 37;
+  --c-on-surface: 232 242 236;
+  --c-on-surface-variant: 159 181 168;
+  --c-on-background: 232 242 236;
+  --c-on-container: 232 242 236;
+  --c-inverse-surface: 232 242 236;
+  --c-inverse-on-surface: 9 15 12;
+  --c-outline: 62 92 75;
+  --c-outline-variant: 32 50 40;
 
-  /* Primary — exact rgb(0 106 78), bright on AMOLED */
-  --c-primary: 0 160 118;
-  --c-on-primary: 0 16 12;
-  --c-primary-container: 0 50 36;
-  --c-on-primary-container: 160 240 210;
+  /* Primary — brand green #12B480 */
+  --c-primary: 18 180 128;
+  --c-on-primary: 2 20 13;
+  --c-primary-container: 9 52 38;
+  --c-on-primary-container: 150 236 200;
 
-  /* Secondary — deep forest */
-  --c-secondary: 0 106 78;
-  --c-on-secondary: 200 240 220;
-  --c-secondary-container: 0 34 24;
-  --c-on-secondary-container: 140 220 190;
+  /* Secondary — light mint for small accents */
+  --c-secondary: 52 211 153;
+  --c-on-secondary: 2 20 13;
+  --c-secondary-container: 8 40 30;
+  --c-on-secondary-container: 167 243 208;
 
-  /* Tertiary — muted sage */
-  --c-tertiary: 80 160 110;
-  --c-on-tertiary: 0 20 12;
-  --c-tertiary-container: 0 40 28;
-  --c-on-tertiary-container: 180 230 200;
+  /* Tertiary — lime, used sparingly */
+  --c-tertiary: 163 230 53;
+  --c-on-tertiary: 20 36 0;
+  --c-tertiary-container: 30 46 8;
+  --c-on-tertiary-container: 217 249 157;
 
-  /* Accent — bright mint CTA */
-  --c-accent: 0 200 148;
-  --c-on-accent: 0 14 10;
-  --c-accent-dim: 0 160 118;
+  --c-accent: 45 212 152;
+  --c-on-accent: 2 20 13;
+  --c-accent-dim: 18 180 128;
 
-  /* Shadow — very dark, barely tinted */
-  --c-shadow: 0 8 5;
+  /* Deal / urgency — orange */
+  --c-deal: 251 146 60;
+  --c-deal-strong: 249 115 22;
+  --c-on-deal: 26 10 0;
 
-  /* Frosted glass — ultra-subtle tint over AMOLED */
+  --c-error: 248 113 113;
+  --c-on-error: 40 4 4;
+  --c-error-container: 69 10 10;
+  --c-on-error-container: 254 202 202;
+
+  --c-shadow: 0 0 0;
+
+  /* Frosted glass — ultra-subtle tint over the dark backdrop (original values) */
   --glass-bg: 255 255 255;
   --glass-a: 0.04;
   --glass-brd: 0 160 118;
-  --glass-brd-a: 0.20;
+  --glass-brd-a: 0.2;
   --glass-sheen: 0.07;
-  --glass-sh-a: 0.60;
+  --glass-sh-a: 0.6;
 
-  /* Aurora — deep forest blobs, dark and moody */
+  /* Aurora — deep forest glow the glass surfaces refract */
   --aurora:
-    radial-gradient(60% 55% at 12% 8%,  rgb(0 106 78 / 0.50), transparent 60%),
+    radial-gradient(60% 55% at 12% 8%, rgb(0 106 78 / 0.5), transparent 60%),
     radial-gradient(55% 50% at 88% 12%, rgb(0 80 58 / 0.35), transparent 60%),
     radial-gradient(60% 60% at 82% 92%, rgb(0 60 44 / 0.38), transparent 62%),
     radial-gradient(50% 50% at 22% 96%, rgb(0 40 28 / 0.32), transparent 60%);
 }
 
 @layer base {
+  :root {
+    /* Headings and text share the condensed Archivo Narrow family. */
+    --font-display: var(--font-body);
+
+    /* Motion tokens (Emil Kowalski): strong ease-out for UI, ease-in-out for movement */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 16px;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /*
+   * Large screens (2K / 1440p and up): scale the whole rem-based layout with
+   * the viewport from 1920px, so 2560px looks like Full HD — just bigger —
+   * instead of a small column in an empty screen. Capped at 22px (≈ 4K).
+   */
+  @media (min-width: 1921px) {
+    html {
+      font-size: clamp(16px, 0.8334vw, 22px);
+    }
   }
 
   body {
     @apply antialiased text-on-background;
-    font-family: var(--font-body), sans-serif;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
     min-height: 100vh;
     background-color: rgb(var(--c-background));
     background-image: var(--aurora);
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Controls: instant taps, no text selection on long-press (content stays selectable). */
+  button,
+  a,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+  button,
+  summary,
+  [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* iOS zooms into inputs under 16px. */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), system-ui, sans-serif;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
     @apply bg-primary text-on-primary;
   }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-primary));
+    outline-offset: 3px;
+  }
 }
 
 @layer components {
-  /* Frosted glass surface — the base of the new design language. The blur is
-     applied through Tailwind's backdrop utilities (raw `backdrop-filter` gets
-     stripped by the CSS pipeline). */
+  /* Frosted glass surface — the base container of the design language. */
   .glass {
     @apply backdrop-blur-xl backdrop-saturate-150;
     background-color: rgb(var(--glass-bg) / var(--glass-a));
@@ -193,24 +266,91 @@
       inset 0 1px 0 0 rgb(255 255 255 / var(--glass-sheen));
   }
 
-  /* Stronger blur for sticky chrome (navbar). */
-  .glass-nav {
-    @apply backdrop-blur-2xl backdrop-saturate-150;
-    background-color: rgb(var(--glass-bg) / calc(var(--glass-a) + 0.12));
-    border: 1px solid rgb(var(--glass-brd) / var(--glass-brd-a));
-  }
-
-  /* Multi-stop gradient text for hero accents. */
+  /* Kept for the admin header only. */
   .text-gradient {
-    background-image: linear-gradient(
-      110deg,
-      rgb(var(--c-primary)),
-      rgb(var(--c-secondary)) 55%,
-      rgb(var(--c-tertiary))
-    );
+    background-image: linear-gradient(110deg, rgb(var(--c-primary)), rgb(var(--c-secondary)) 60%, rgb(var(--c-tertiary)));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  /* Horizontal scrollers without the native scrollbar (carousels, thumbnails). */
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Rich text (product descriptions) — rendered pages and the admin editor. */
+  .rich-text {
+    @apply text-base leading-relaxed text-on-surface-variant;
+  }
+  .rich-text > * + * {
+    margin-top: 0.85em;
+  }
+  .rich-text h2,
+  .rich-text h3,
+  .rich-text h4 {
+    @apply font-bold leading-snug tracking-tight text-on-background;
+    margin-top: 1.4em;
+  }
+  .rich-text h2 {
+    font-size: 1.3rem;
+  }
+  .rich-text h3 {
+    font-size: 1.12rem;
+  }
+  .rich-text h4 {
+    font-size: 1rem;
+  }
+  .rich-text > :first-child {
+    margin-top: 0;
+  }
+  .rich-text strong,
+  .rich-text b {
+    @apply font-bold text-on-background;
+  }
+  .rich-text a {
+    @apply font-semibold text-primary underline decoration-primary/40 underline-offset-2 transition-colors hover:decoration-primary;
+  }
+  .rich-text ul,
+  .rich-text ol {
+    padding-left: 1.35em;
+  }
+  .rich-text ul {
+    list-style: disc;
+  }
+  .rich-text ol {
+    list-style: decimal;
+  }
+  .rich-text li + li {
+    margin-top: 0.3em;
+  }
+  .rich-text li::marker {
+    color: rgb(var(--c-primary));
+  }
+  .rich-text li > p {
+    margin: 0;
+  }
+  .rich-text blockquote {
+    @apply rounded-r-xl border-l-4 border-primary/60 bg-primary/5 py-2 pl-4 pr-3 italic text-on-surface;
+  }
+  .rich-text hr {
+    @apply my-6 border-outline-variant;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion — CSS only, short, ease-out (Emil Kowalski's rules).          */
+/* Only the first-visit hero entrance and the ambient glow move;        */
+/* functional UI (catalogue, product page) never animates on scroll.    */
+/* ------------------------------------------------------------------ */
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
   }
 }
 
@@ -224,21 +364,22 @@
   }
 }
 
-/* GSAP entrance helper: hide reveal targets pre-animation, only when JS is on
-   and the user allows motion (so no-JS / reduced-motion always see content). */
 @media (prefers-reduced-motion: no-preference) {
-  html.js [data-reveal] {
-    opacity: 0;
+  .animate-enter {
+    animation: enter 300ms var(--ease-out) both;
+    animation-delay: var(--delay, 0ms);
   }
 }
 
-/* Material Symbols (loaded via <link> in the root layout) */
-.material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 1,
-    "wght" 500,
-    "GRAD" 0,
-    "opsz" 24;
-  line-height: 1;
-  user-select: none;
+@media (prefers-reduced-motion: reduce) {
+  .blob {
+    animation: none !important;
+  }
+}
+
+/* Leave room for the fixed mobile buy bar on product pages. */
+@media (max-width: 767px) {
+  body:has([data-sticky-cta]) {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
 }

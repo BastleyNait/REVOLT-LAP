@@ -47,7 +47,7 @@ export function ProductTable({ products }: { products: Product[] }) {
 
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`/products/${product.slug}`}
+              href={`/laptops/${product.slug}`}
               target="_blank"
               className={buttonClasses({ variant: "outline", size: "sm" })}
             >

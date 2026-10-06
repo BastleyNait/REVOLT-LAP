@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useEffect, useActionState, useState, useRef } from "react";
 import { useFormStatus } from "react-dom";
-import type { Product } from "@/lib/types/product";
+import { DEFAULT_CONDITION, type Product } from "@/lib/types/product";
 import type { ActionState } from "@/app/admin/actions";
 import { Field, Input, Textarea, Checkbox } from "@/components/ui/form";
 import { Button, buttonClasses } from "@/components/ui/Button";
 import { ImageUploader } from "./ImageUploader";
-import { isR2Configured } from "@/lib/env";
+import { RichTextEditor } from "./RichTextEditor";
 
 const initialState: ActionState = { ok: true };
 
@@ -23,7 +23,7 @@ function getInitialValues(product?: Product): FormValues {
     price: String(product?.price ?? ""),
     originalPrice: String(product?.originalPrice ?? ""),
     currency: product?.currency ?? "PEN",
-    conditionGrade: product?.conditionGrade ?? "REFURBISHED",
+    conditionGrade: product?.conditionGrade ?? DEFAULT_CONDITION,
     processor: product?.processor ?? "",
     ram: product?.ram ?? "",
     storage: product?.storage ?? "",
@@ -79,6 +79,8 @@ export function ProductForm({
     }
   }, [state.values]);
 
+  const setField = (name: string) => (value: string) => setFormValues((prev) => ({ ...prev, [name]: value }));
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -100,13 +102,13 @@ export function ProductForm({
         <Field label="Nombre" htmlFor="name" required error={errors["name"]}>
           <Input id="name" name="name" value={formValues.name ?? ""} onChange={handleChange} required />
         </Field>
-        <Field label="Slug" htmlFor="slug" hint="Se autogenera del nombre si lo dejas vacío" error={errors["slug"]}>
+        <Field label="URL del producto (slug)" htmlFor="slug" hint="Se genera sola a partir del nombre si la dejas vacía. Ej.: /laptops/thinkpad-t480" error={errors["slug"]}>
           <Input id="slug" name="slug" value={formValues.slug ?? ""} onChange={handleChange} placeholder="thinkpad-t480" />
         </Field>
         <Field label="Marca" htmlFor="brand" required error={errors["brand"]}>
           <Input id="brand" name="brand" value={formValues.brand ?? ""} onChange={handleChange} required />
         </Field>
-        <Field label="Condición / Grado" htmlFor="conditionGrade" error={errors["conditionGrade"]}>
+        <Field label="Estado del equipo" htmlFor="conditionGrade" hint="Ej.: Excelente estado, Buen estado, Grado A" error={errors["conditionGrade"]}>
           <Input id="conditionGrade" name="conditionGrade" value={formValues.conditionGrade ?? ""} onChange={handleChange} />
         </Field>
         <Field label="Precio (en soles)" htmlFor="price" hint="Precio de venta en S/. El equivalente en dólares se calcula solo." required error={errors["price"]}>
@@ -146,11 +148,30 @@ export function ProductForm({
         </Field>
       </div>
 
-      <Field label="Descripción" htmlFor="description">
-        <Textarea id="description" name="description" value={formValues.description ?? ""} onChange={handleChange} />
+      <Field
+        label="Descripción"
+        hint="Texto enriquecido: usa negritas, subtítulos, listas y enlaces. Indica aquí cualquier detalle que no esté al 100 %."
+        error={errors["description"]}
+      >
+        <RichTextEditor
+          id="description"
+          label="Descripción"
+          value={formValues.description ?? ""}
+          onChange={setField("description")}
+          placeholder="Para quién es ideal, qué incluye, estado de la batería…"
+          invalid={Boolean(errors["description"])}
+        />
+        <input type="hidden" name="description" value={formValues.description ?? ""} />
       </Field>
-      <Field label="Veredicto (sección THE VERDICT)" htmlFor="verdict">
-        <Textarea id="verdict" name="verdict" value={formValues.verdict ?? ""} onChange={handleChange} />
+      <Field label="Nuestra opinión (opcional)" hint="Se muestra como una sección destacada al final de la ficha." error={errors["verdict"]}>
+        <RichTextEditor
+          id="verdict"
+          label="Nuestra opinión"
+          value={formValues.verdict ?? ""}
+          onChange={setField("verdict")}
+          placeholder="Ej.: La mejor opción para universitarios que programan…"
+        />
+        <input type="hidden" name="verdict" value={formValues.verdict ?? ""} />
       </Field>
 
       {/* Image uploader — replaces the old textarea */}
@@ -168,10 +189,10 @@ export function ProductForm({
         />
       </Field>
 
-      <Field label="Badges — uno por línea" htmlFor="badges">
-        <Textarea id="badges" name="badges" value={formValues.badges ?? ""} onChange={handleChange} placeholder="BEST SELLER" rows={3} />
+      <Field label="Etiquetas destacadas — una por línea" htmlFor="badges">
+        <Textarea id="badges" name="badges" value={formValues.badges ?? ""} onChange={handleChange} placeholder="MÁS VENDIDA" rows={3} />
       </Field>
-      <Field label="Specs extra — formato «Etiqueta: Valor», una por línea" htmlFor="specs">
+      <Field label="Especificaciones extra — formato «Etiqueta: Valor», una por línea" htmlFor="specs">
         <Textarea id="specs" name="specs" value={formValues.specs ?? ""} onChange={handleChange} placeholder="GPU: NVIDIA RTX 3060" rows={3} />
       </Field>
 

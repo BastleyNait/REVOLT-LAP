@@ -1,60 +1,63 @@
+import type { Metadata } from "next";
 import { getProducts } from "@/lib/repositories/products";
 import { Hero } from "@/components/home/Hero";
+import { HowToBuy } from "@/components/home/HowToBuy";
+import { AboutTeaser } from "@/components/home/AboutTeaser";
+import { Faq } from "@/components/home/Faq";
+import { FinalCta } from "@/components/home/FinalCta";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
 
 export const revalidate = 60;
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default async function HomePage() {
   const products = await getProducts();
+  const minPrice = products.length ? Math.min(...products.map((product) => product.price)) : null;
+  const { inventory } = siteConfig.home;
 
   return (
     <main className="relative flex-1">
-      {/* Hero — full-width, outside the max-w container */}
-      <Hero />
+      <JsonLd data={[itemListJsonLd(products), faqJsonLd(siteConfig.home.faq)]} />
+      <Hero minPrice={minPrice} />
 
       {/*
-       * Transición hero → catálogo.
-       * El problema del gradiente negro→transparente es que el body tiene
-       * background-color AMOLED negro, así que "transparente" sigue siendo negro.
-       * Solución: un pulso verde radial que emerge de la oscuridad —
-       * el mismo verde del brand, visible contra el fondo negro.
+       * Hero → catálogo: la sección arranca en el mismo negro del hero y se
+       * disuelve hacia la aurora, con el pulso verde original sobre la unión.
        */}
-      <div aria-hidden className="pointer-events-none relative w-full overflow-hidden" style={{ height: 220, marginTop: -110, zIndex: 5 }}>
-        {/* Capa negra superior que cubre el borde del hero */}
-        
-        {/* Pulso de aurora verde — el efecto visible */}
-        <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: "70vw",
-            height: 140,
-            background: "radial-gradient(ellipse at center, rgb(0 106 78 / 0.28) 0%, rgb(0 60 44 / 0.12) 50%, transparent 75%)",
-            filter: "blur(24px)",
-          }}
-        />
-        {/* Capa negra inferior que se funde con el fondo del catálogo */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-1/2"
-          style={{ background: "linear-gradient(to bottom, rgb(1 2 1) 0%, transparent 100%)" }}
-        />
+      <div aria-hidden className="pointer-events-none relative z-[2] h-0">
+        <div className="absolute inset-x-0 top-0 h-[26rem] bg-[linear-gradient(to_bottom,rgb(1_2_1)_0%,rgb(1_2_1/0.85)_30%,rgb(1_2_1/0.4)_65%,transparent_100%)]" />
+        <div className="absolute left-1/2 top-0 h-36 w-[70vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgb(0_106_78/0.28)_0%,rgb(0_60_44/0.12)_50%,transparent_75%)] blur-2xl" />
       </div>
 
-      <div className="mx-auto max-w-[1200px] space-y-24 px-4 py-10 md:px-8 md:py-16">
-        <section id="inventario" className="scroll-mt-28 space-y-10">
-          <div className="space-y-2 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-              {siteConfig.home.inventoryHeading}
-            </p>
-            <h2 className="font-display-lg text-4xl font-black tracking-tight md:text-5xl">
-              Equipos disponibles
-            </h2>
-          </div>
-
+      <div className="relative z-[3] mx-auto max-w-[75rem] space-y-24 px-4 pb-20 pt-6 md:space-y-32 md:px-8 md:pb-28">
+        <section id="laptops" aria-labelledby="laptops-title" className="space-y-8">
+          <SectionHeading
+            id="laptops-title"
+            title={inventory.title}
+            subtitle={inventory.subtitle}
+            aside={
+              products.length ? (
+                <p className="text-sm font-semibold text-on-surface-variant">
+                  {products.length} {products.length === 1 ? "equipo" : "equipos"} en stock
+                </p>
+              ) : null
+            }
+          />
           <ProductGrid products={products} />
         </section>
+
+        <HowToBuy />
+        <AboutTeaser />
+        <Faq />
+        <FinalCta />
       </div>
     </main>
   );
 }
-

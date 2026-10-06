@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 type RouteContext = { params: Promise<{ id: string }> };
 
 function unauthorized() {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 }
 
 function serverError(error: unknown) {
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
   const { id } = await params;
   try {
     const product = await getProductById(id);
-    if (!product) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!product) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
     return NextResponse.json({ data: product });
   } catch (error) {
     return serverError(error);
@@ -41,13 +41,13 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       ? await request.json()
       : productInputFromFormData(await request.formData());
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ error: "Cuerpo de la solicitud inválido" }, { status: 400 });
   }
 
   const parsed = productInputSchema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Validation failed", issues: parsed.error.flatten() },
+      { error: "Validación fallida", issues: parsed.error.flatten() },
       { status: 422 },
     );
   }

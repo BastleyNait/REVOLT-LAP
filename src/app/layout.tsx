@@ -1,73 +1,106 @@
-import type { Metadata } from "next";
-import { Montserrat, Archivo_Narrow, Space_Mono, Geist } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Archivo_Narrow } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBackground } from "@/components/layout/PageBackground";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
 import "./globals.css";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const display = Montserrat({
+// Archivo Narrow — the store's original typeface: condensed, squared letters
+// that sit well next to the logo. One variable font for headings and text.
+const archivo = Archivo_Narrow({
   subsets: ["latin"],
-  weight: ["700", "800", "900"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const body = Archivo_Narrow({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
   variable: "--font-body",
   display: "swap",
 });
 
-const mono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
-  display: "swap",
-});
+export const viewport: Viewport = {
+  themeColor: "#010201",
+  colorScheme: "dark",
+  // Paint under the notch; fixed bars pad themselves with env(safe-area-inset-*).
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
-    template: `%s — ${siteConfig.name}`,
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  applicationName: siteConfig.name,
+  creator: siteConfig.legalName,
+  publisher: siteConfig.legalName,
+  category: "technology",
   openGraph: {
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
     type: "website",
+    locale: siteConfig.ogLocale,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: "/",
   },
-  icons: {
-    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%237fffd4'/%3E%3Ctext x='50' y='62' font-family='monospace' font-size='40' font-weight='900' text-anchor='middle' fill='%231b1b1b'%3ER%3C/text%3E%3C/svg%3E",
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  formatDetection: { telephone: false, address: false, email: false },
+  // Optional: paste the Google Search Console / Bing verification tokens here
+  // through env vars once the custom domain is live.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
+  },
+  other: {
+    "geo.region": "PE-ARE",
+    "geo.placename": siteConfig.business.city,
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="es"
-      className={cn("dark", display.variable, body.variable, mono.variable, "font-sans", geist.variable)}
-    >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body suppressHydrationWarning className="flex min-h-screen flex-col">
+    <html lang="es-PE" className={cn("dark", archivo.variable)}>
+      <body suppressHydrationWarning className="flex min-h-screen flex-col font-sans">
+        <a
+          href="#contenido"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-5 focus:py-3 focus:font-bold focus:text-on-primary"
+        >
+          Saltar al contenido
+        </a>
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <PageBackground />
         <Navbar />
-        {children}
+        <div id="contenido" className="flex flex-1 flex-col">
+          {children}
+        </div>
         <Footer />
+        {/* Vercel Web Analytics + Speed Insights (their scripts only exist on Vercel deployments). */}
+        {process.env.VERCEL ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

@@ -1,156 +1,117 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import type { CSSProperties } from "react";
 import { siteConfig } from "@/lib/config/site";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
+import { formatPrice } from "@/lib/utils/format";
 import { buttonClasses } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
-import { cn } from "@/lib/utils/cn";
+import { Icon, WhatsappIcon } from "@/components/ui/Icon";
+import { WhatsappLink } from "@/components/analytics/WhatsappLink";
+import ShinyText from "@/components/ShinyText";
+import ClickSpark from "@/components/ClickSpark";
+import { HeroLogo } from "./HeroLogo";
 
-const stats = [
-  { icon: "inventory_2",    label: "Stock disponible" },
-  { icon: "local_shipping", label: "Envío rápido" },
-  { icon: "shield",         label: "Funcionamiento garantizado" },
-  { icon: "payments",       label: "Precio insuperable" },
-];
+const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
-export function Hero() {
+/**
+ * Home hero — the store's original composition: full-bleed photo, the big
+ * REVOLT logo, tracked-caps title (the page <h1>), frosted stats bar and CTAs.
+ * React Bits: ElectricLogo on the mark, ShinyText on the title, ClickSpark on
+ * the CTAs. Entrance is a CSS stagger; reduced motion skips every effect.
+ */
+export function Hero({ minPrice }: { minPrice: number | null }) {
   const { hero } = siteConfig.home;
-  const root = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-rise]",
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.15, ease: "power3.out" },
-      );
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section
-      ref={root}
-      className="relative z-[1] flex min-h-screen w-full -mt-24 items-center justify-center overflow-hidden"
+      aria-labelledby="hero-title"
+      className="relative z-[1] -mt-[4.75rem] flex min-h-[100svh] w-full items-center justify-center overflow-hidden md:-mt-20"
     >
-      {/* Foto de fondo */}
       <Image
         src="/laptop_ultra_4k_hd_desktop_background-3840x2160.jpg"
-        alt="Laptop de alto rendimiento"
+        alt=""
         fill
-        priority
-        quality={90}
-        className="object-cover object-center scale-105 transform transition-transform duration-[20s] hover:scale-110"
+        loading="eager"
         sizes="100vw"
+        className="object-cover object-center"
       />
-
       <div
-        className="absolute inset-0"
-        suppressHydrationWarning
-        style={{
-          background:
-            "linear-gradient(150deg, rgba(0,0,0,0.78) 0%, rgba(0,4,2,0.58) 55%, rgba(0,8,5,0.70) 100%)",
-        }}
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(150deg,rgba(0,0,0,0.78)_0%,rgba(0,4,2,0.58)_55%,rgba(0,8,5,0.70)_100%)]"
       />
+      {/* Bottom fade into the page background */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-64 bg-gradient-to-b from-transparent to-background" />
 
-      {/* Fade inferior — integra la imagen con el fondo de la página */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-64 z-10"
-        suppressHydrationWarning
-        style={{ background: "linear-gradient(to bottom, transparent, rgb(1 2 1))" }}
-      />
-
-      {/* Contenido principal */}
-      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 pt-32 pb-24 md:px-8 md:pt-40 md:pb-32">
+      <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40">
         <div className="flex flex-col items-start lg:max-w-[65%]">
-
-          {/* Eyebrow */}
-          <span
-            data-rise
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
+          <span className="animate-enter mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-accent motion-reduce:animate-none" />
             {hero.eyebrow}
           </span>
 
-          {/* Logo principal — grande, sobre el fondo */}
-          <div data-rise className="mb-4 w-full max-w-[520px]">
-            <Image
-              src="/logo_revolt.svg"
-              alt="REVOLT"
-              width={520}
-              height={198}
-              priority
-              className="w-full h-auto drop-shadow-[0_0_40px_rgba(0,160,118,0.35)]"
-            />
+          <div className="animate-enter mb-4 w-full max-w-[32.5rem]" style={delay(50)}>
+            <HeroLogo />
           </div>
 
-          {/* Subtítulo: LAPTOPS REACONDICIONADAS */}
-          <p
-            data-rise
-            className="text-[clamp(1rem,3vw,1.5rem)] font-black uppercase tracking-[0.18em] text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary mb-2"
-          >
-            Laptops Reacondicionadas
-          </p>
+          <h1 id="hero-title" className="mb-2 text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[0.18em]">
+            <ShinyText text={hero.title} color="#12B480" shineColor="#d6fff0" speed={2.8} delay={2} spread={110} />
+          </h1>
 
-          {/* Pitch */}
-          <p data-rise className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-white/80 drop-shadow-md font-medium">
+          <p className="animate-enter mt-8 max-w-xl text-lg font-medium leading-relaxed text-white/80 drop-shadow-md md:text-xl" style={delay(100)}>
             {hero.pitch}
           </p>
 
-          {/* Stats */}
-          <div
-            data-rise
-            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
+          {/* Frosted stats bar */}
+          <ul
+            className="animate-enter mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
+            style={delay(150)}
           >
-            {stats.map((stat) => (
-              <span key={stat.label} className="flex items-center gap-2 text-sm font-bold text-white/90">
-                <Icon name={stat.icon} className="text-lg text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
+            {hero.stats.map((stat) => (
+              <li key={stat.label} className="flex items-center gap-2 text-sm font-bold text-white/90">
+                <Icon name={stat.icon} className="text-lg text-primary" />
                 {stat.label}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          {/* CTAs */}
-          <div data-rise className="mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/#inventario" className={cn(buttonClasses({ variant: "primary", size: "lg" }), "shadow-[0_0_20px_rgba(var(--primary),0.4)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(var(--primary),0.6)]")}>
-              {hero.ctaLabel} <Icon name="arrow_forward" className="ml-1" />
-            </Link>
-            <a
-              href={generalWhatsappUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:scale-105 shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
-            >
-              <Icon name="chat" className="transition-transform group-hover:scale-110" /> WhatsApp
-            </a>
-
-            {hero.flash && (
-              <span data-rise className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-bold text-accent backdrop-blur-md shadow-[0_0_15px_rgba(var(--accent),0.2)]">
-                <Icon name="local_fire_department" className="text-xl animate-pulse" />
+          <div className="animate-enter mt-10 flex flex-wrap items-center gap-4" style={delay(200)}>
+            <ClickSpark sparkColor="#12B480" sparkSize={12} sparkRadius={24} sparkCount={10} duration={450}>
+              <Link
+                href="/#laptops"
+                className={buttonClasses({ variant: "primary", size: "lg", className: "shadow-[0_0_20px_rgb(var(--c-primary)/0.4)]" })}
+              >
+                {hero.ctaLabel} <Icon name="arrow" />
+              </Link>
+            </ClickSpark>
+            <ClickSpark sparkColor="#12B480" sparkSize={12} sparkRadius={24} sparkCount={10} duration={450}>
+              <WhatsappLink
+                href={generalWhatsappUrl()}
+                source="hero"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(0,0,0,0.1)] backdrop-blur-md transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.97]"
+              >
+                <WhatsappIcon className="text-lg" /> WhatsApp
+              </WhatsappLink>
+            </ClickSpark>
+            {hero.flash ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-bold text-accent shadow-[0_0_15px_rgb(var(--c-accent)/0.2)] backdrop-blur-md">
+                <Icon name="flame" className="text-xl" />
                 {hero.flash}
               </span>
-            )}
+            ) : null}
           </div>
 
-          {/* Badge de precio */}
-          <p data-rise className="mt-8 text-xs font-bold uppercase tracking-[0.3em] text-white/50">
-            {hero.badge}
-          </p>
+          {minPrice ? (
+            <p className="animate-enter mt-8 text-xs font-bold uppercase tracking-[0.3em] text-white/50" style={delay(250)}>
+              Desde {formatPrice(minPrice)}
+            </p>
+          ) : null}
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 opacity-60 transition-opacity hover:opacity-100">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">Descubre más</span>
-        <span className="h-10 w-[2px] rounded-full bg-gradient-to-b from-primary to-transparent animate-pulse" />
+      <div aria-hidden className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 opacity-60 md:flex">
+        <span className="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-white">Descubre más</span>
+        <span className="h-10 w-[2px] rounded-full bg-gradient-to-b from-primary to-transparent" />
       </div>
     </section>
   );

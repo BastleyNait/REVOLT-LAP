@@ -12,17 +12,19 @@ export type ButtonVariant =
   | "glass";
 export type ButtonSize = "sm" | "md" | "lg" | "xl";
 
+// Press feedback: scale(0.97) in 150ms with a strong ease-out. Hover only
+// shifts color (hover is gated to real pointers in tailwind.config).
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-none select-none cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-none select-none cursor-pointer transition-[transform,filter,background-color,border-color] duration-150 ease-out-strong active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-primary text-on-primary shadow-neo hover:shadow-neo-md hover:brightness-110",
+  primary: "bg-primary text-on-primary shadow-neo hover:brightness-110",
   secondary: "bg-secondary text-on-secondary shadow-neo hover:shadow-neo-md hover:brightness-110",
   tertiary: "bg-tertiary text-on-tertiary shadow-neo hover:shadow-neo-md hover:brightness-110",
   accent: "bg-accent text-on-accent shadow-neo hover:shadow-neo-md hover:brightness-105",
   dark: "bg-on-background text-background shadow-neo hover:shadow-neo-md hover:opacity-90",
   danger: "bg-error text-on-error shadow-neo hover:shadow-neo-md hover:brightness-110",
-  outline: "border border-outline-variant text-on-background hover:bg-surface-container/60 hover:border-primary/40",
+  outline: "border border-white/15 bg-white/5 text-on-background backdrop-blur-md hover:border-white/30 hover:bg-white/10",
   glass: "glass text-on-background hover:brightness-105",
 };
 

@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { linesToArray, slugify } from "@/lib/utils/format";
+import { DEFAULT_CONDITION } from "@/lib/types/product";
 
 export const productSpecSchema = z.object({
-  label: z.string().min(1),
-  value: z.string().min(1),
+  label: z.string().min(1, "La etiqueta es obligatoria"),
+  value: z.string().min(1, "El valor es obligatorio"),
 });
 
 /**
@@ -11,16 +12,16 @@ export const productSpecSchema = z.object({
  * so the same schema validates both JSON API bodies and parsed form data.
  */
 export const productInputSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   slug: z
     .string()
-    .min(2, "Slug is required")
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes only"),
-  brand: z.string().min(1, "Brand is required"),
-  price: z.coerce.number().nonnegative("Price must be 0 or more"),
-  originalPrice: z.coerce.number().nonnegative().nullable().optional(),
-  currency: z.string().min(1).default("PEN"),
-  conditionGrade: z.string().min(1).default("REFURBISHED"),
+    .min(2, "La URL (slug) es obligatoria")
+    .regex(/^[a-z0-9-]+$/, "Usa solo minúsculas, números y guiones"),
+  brand: z.string().min(1, "La marca es obligatoria"),
+  price: z.coerce.number({ invalid_type_error: "Ingresa un precio válido" }).nonnegative("El precio debe ser 0 o más"),
+  originalPrice: z.coerce.number({ invalid_type_error: "Ingresa un precio válido" }).nonnegative("El precio debe ser 0 o más").nullable().optional(),
+  currency: z.string().min(1, "La moneda es obligatoria").default("PEN"),
+  conditionGrade: z.string().min(1, "Indica el estado del equipo").default(DEFAULT_CONDITION),
   processor: z.string().nullable().optional(),
   ram: z.string().nullable().optional(),
   storage: z.string().nullable().optional(),
@@ -29,9 +30,9 @@ export const productInputSchema = z.object({
   description: z.string().nullable().optional(),
   verdict: z.string().nullable().optional(),
   specs: z.array(productSpecSchema).default([]),
-  images: z.array(z.string().min(1)).default([]),
-  badges: z.array(z.string().min(1)).default([]),
-  stock: z.coerce.number().int().nonnegative().default(0),
+  images: z.array(z.string().min(1, "URL de imagen vacía")).default([]),
+  badges: z.array(z.string().min(1, "Etiqueta vacía")).default([]),
+  stock: z.coerce.number({ invalid_type_error: "Ingresa un número" }).int("El stock debe ser un número entero").nonnegative("El stock debe ser 0 o más").default(0),
   isActive: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
 });
@@ -66,7 +67,7 @@ export function productInputFromFormData(formData: FormData): Record<string, unk
     price: str("price") || "0",
     originalPrice: originalPrice === "" ? null : originalPrice,
     currency: str("currency") || "PEN",
-    conditionGrade: str("conditionGrade") || "REFURBISHED",
+    conditionGrade: str("conditionGrade") || DEFAULT_CONDITION,
     processor: str("processor") || null,
     ram: str("ram") || null,
     storage: str("storage") || null,
