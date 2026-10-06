@@ -30,28 +30,35 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <SpotlightCard
       spotlightColor="rgba(18, 180, 128, 0.18)"
-      className="glass group h-full rounded-[2rem] transition-[transform,border-color] duration-200 ease-out-strong hover:-translate-y-1 hover:border-primary/40 focus-within:border-primary/60"
+      className="group h-full rounded-[2rem] border border-primary/15 bg-[#050807] shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)] transition-[transform,border-color] duration-200 ease-out-strong hover:-translate-y-1 hover:border-primary/40 focus-within:border-primary/60"
     >
-      {/* Ambient glow: the same photo, enlarged and blurred, tints the card. */}
+      {/* Ambient glow: the same photo, enlarged and blurred, tints the top. */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-3/5 overflow-hidden [mask-image:linear-gradient(to_bottom,black,transparent)]">
-        <SafeImage src={cover} alt="" fill sizes="64px" className="scale-150 object-cover opacity-40 blur-2xl saturate-150" />
+        <SafeImage src={cover} alt="" fill sizes="64px" className="scale-150 object-cover opacity-30 blur-2xl saturate-150" />
       </div>
-      {/* Green sheen streaks */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,transparent_40%,rgb(18_180_128/0.10)_58%,transparent_72%),radial-gradient(90%_40%_at_100%_100%,rgb(18_180_128/0.14),transparent_70%)]"
-      />
+
+      {/* Light rays: thin diagonal beams of green on a black card. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-100 transition-opacity duration-500">
+        <span className="absolute -left-1/4 top-[58%] h-px w-[150%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(18_180_128/0.9),transparent)] blur-[0.5px]" />
+        <span className="absolute -left-1/4 top-[58%] h-10 w-[150%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(18_180_128/0.28),transparent)] blur-xl" />
+        <span className="absolute -left-1/3 top-[74%] h-px w-[160%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(18_180_128/0.6),transparent)]" />
+        <span className="absolute -left-1/3 top-[74%] h-16 w-[160%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(18_180_128/0.2),transparent)] blur-2xl" />
+        <span className="absolute -right-1/4 bottom-[6%] h-px w-[120%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(120_255_210/0.8),transparent)]" />
+        <span className="absolute -right-1/4 bottom-[6%] h-12 w-[120%] -rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgb(18_180_128/0.3),transparent)] blur-xl" />
+      </div>
 
       <article className="relative flex h-full flex-col">
         {/* Photo melts into the card instead of sitting in a box */}
-        <div className="relative aspect-[4/3] [mask-image:linear-gradient(to_bottom,black_45%,transparent_96%)]">
+        <div className="relative aspect-[4/3] [mask-image:linear-gradient(to_bottom,black_40%,transparent_95%)]">
           <SafeImage
             src={cover}
             alt={`${product.name} reacondicionada`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (min-width: 1921px) 20vw, 380px"
-            className="object-cover brightness-90 transition-transform duration-500 ease-out-strong group-hover:scale-[1.04]"
+            className="object-cover brightness-[0.8] contrast-110 saturate-[1.1] transition-transform duration-500 ease-out-strong group-hover:scale-[1.04]"
           />
+          {/* Vignette: swallows the light table/wall around the laptop */}
+          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_70%_75%_at_50%_45%,transparent_30%,rgb(5_8_7/0.92)_100%)]" />
         </div>
         <div className="absolute inset-x-4 top-4 flex items-start justify-between gap-2">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-black/50 px-3.5 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
