@@ -33,6 +33,16 @@ export async function generateStaticParams() {
   }
 }
 
+function withVersion(url: string, version: string): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("v", String(Date.parse(version) || version));
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
@@ -41,7 +51,12 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const path = productPath(product.slug);
   const title = `${product.name} · ${formatPrice(product.price, product.currency)}`;
   const description = productSummary(product);
-  const images = product.images.slice(0, 4).map((url) => ({ url: absoluteUrl(url), alt: `${product.name} reacondicionada` }));
+  // Only the cover: with several og:image tags WhatsApp/Facebook may pick any of
+  // them. The `v` param changes on every save so their cached preview refreshes.
+  const images = product.images.slice(0, 1).map((url) => ({
+    url: withVersion(absoluteUrl(url), product.updatedAt),
+    alt: `${product.name} reacondicionada`,
+  }));
 
   return {
     title,
