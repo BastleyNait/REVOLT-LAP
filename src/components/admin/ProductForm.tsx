@@ -176,10 +176,7 @@ export function ProductForm({
 
       {/* Image uploader — replaces the old textarea */}
       <Field label="Imágenes del producto" htmlFor="images-upload">
-        <ImageUploader
-          currentUrls={product?.images ?? []}
-          onChange={setImageUrls}
-        />
+        <ImageUploader value={imageUrls} onChange={setImageUrls} />
         {/* Hidden input — the form action reads this to get the final image URLs */}
         <input
           ref={imageInputRef}
