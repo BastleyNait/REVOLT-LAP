@@ -40,6 +40,25 @@ export interface Product {
 /** Default condition label for new products (Spanish, shown on the storefront). */
 export const DEFAULT_CONDITION = "Reacondicionada";
 
+/**
+ * "En camino": the laptop is already bought and on its way to Peru. Stored as a
+ * reserved badge so it needs no database migration — `badges` already exists
+ * and the admin API (and the deal-hunter publisher) already send it.
+ */
+export const IN_TRANSIT_BADGE = "EN CAMINO";
+export const IN_TRANSIT_ETA = "Llega en 10 a 15 días hábiles";
+/** ~15 business days, for feeds that need a concrete arrival date. */
+export const IN_TRANSIT_ETA_DAYS = 21;
+
+export function isInTransit(product: Pick<Product, "badges">): boolean {
+  return product.badges.some((badge) => badge.trim().toUpperCase() === IN_TRANSIT_BADGE);
+}
+
+/** Badges without the reserved in-transit one (it is shown as availability, not as a chip). */
+export function visibleBadges(product: Pick<Product, "badges">): string[] {
+  return product.badges.filter((badge) => badge.trim().toUpperCase() !== IN_TRANSIT_BADGE);
+}
+
 /** The cover image, with a deterministic fallback so cards never render empty. */
 export function productCover(product: Pick<Product, "images" | "name">): string {
   return product.images[0] ?? PLACEHOLDER_IMAGE;

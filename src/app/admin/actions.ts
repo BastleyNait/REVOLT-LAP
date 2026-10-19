@@ -49,6 +49,7 @@ function extractFormValues(formData: FormData): Record<string, any> {
     stock: formData.get("stock") as string,
     isActive: formData.get("isActive") !== null,
     isFeatured: formData.get("isFeatured") !== null,
+    inTransit: formData.get("inTransit") !== null,
   };
 }
 

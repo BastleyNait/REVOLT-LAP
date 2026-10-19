@@ -15,6 +15,7 @@ import {
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StockStatus } from "@/components/product/StockStatus";
+import { isInTransit } from "@/lib/types/product";
 import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
@@ -160,7 +161,7 @@ export default async function ProductPage({ params }: PageParams) {
               ) : null}
 
               <div className="mt-5">
-                <StockStatus stock={product.stock} />
+                <StockStatus stock={product.stock} inTransit={isInTransit(product)} />
               </div>
 
               <div className="mt-6">

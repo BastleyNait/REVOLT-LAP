@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@/lib/types/product";
-import { productCover } from "@/lib/types/product";
+import { isInTransit, productCover } from "@/lib/types/product";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { formatPrice } from "@/lib/utils/format";
 import { Badge } from "@/components/ui/Badge";
@@ -35,6 +35,7 @@ export function ProductTable({ products }: { products: Product[] }) {
               <h3 className="text-lg font-extrabold tracking-tight">{product.name}</h3>
               {!product.isActive ? <Badge color="dark">OCULTO</Badge> : null}
               {product.isFeatured ? <Badge color="orange">DESTACADO</Badge> : null}
+              {isInTransit(product) ? <Badge color="orange">EN CAMINO</Badge> : null}
             </div>
             <p className="mt-1 text-sm text-on-surface-variant">
               {product.brand} · /{product.slug} · stock {product.stock}

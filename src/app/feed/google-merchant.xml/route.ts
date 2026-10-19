@@ -1,6 +1,7 @@
 import { getProducts } from "@/lib/repositories/products";
 import { absoluteUrl, productPath, productSummary } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
+import { IN_TRANSIT_ETA_DAYS, isInTransit } from "@/lib/types/product";
 
 /**
  * Google Merchant Center product feed (RSS 2.0 + g: namespace) for free
@@ -25,7 +26,13 @@ export async function GET() {
         `<link>${escape(absoluteUrl(productPath(product.slug)))}</link>`,
         image ? `<g:image_link>${escape(image)}</g:image_link>` : "",
         ...extra.slice(0, 10).map((url) => `<g:additional_image_link>${escape(url)}</g:additional_image_link>`),
-        `<g:availability>${product.stock > 0 ? "in_stock" : "out_of_stock"}</g:availability>`,
+        // En camino: Google exige la fecha estimada de llegada para "backorder".
+        ...(isInTransit(product)
+          ? [
+              `<g:availability>backorder</g:availability>`,
+              `<g:availability_date>${new Date(Date.now() + IN_TRANSIT_ETA_DAYS * 86_400_000).toISOString().slice(0, 10)}</g:availability_date>`,
+            ]
+          : [`<g:availability>${product.stock > 0 ? "in_stock" : "out_of_stock"}</g:availability>`]),
         `<g:price>${product.price.toFixed(2)} ${product.currency}</g:price>`,
         `<g:condition>refurbished</g:condition>`,
         `<g:brand>${escape(product.brand)}</g:brand>`,

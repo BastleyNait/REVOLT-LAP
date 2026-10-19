@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { linesToArray, slugify } from "@/lib/utils/format";
-import { DEFAULT_CONDITION } from "@/lib/types/product";
+import { DEFAULT_CONDITION, IN_TRANSIT_BADGE } from "@/lib/types/product";
 
 export const productSpecSchema = z.object({
   label: z.string().min(1, "La etiqueta es obligatoria"),
@@ -77,7 +77,13 @@ export function productInputFromFormData(formData: FormData): Record<string, unk
     verdict: str("verdict") || null,
     specs,
     images: linesToArray(str("images")),
-    badges: linesToArray(str("badges")),
+    // "En camino" es una casilla en el admin, pero se guarda como la etiqueta
+    // reservada EN CAMINO (ver IN_TRANSIT_BADGE): se saca del texto y se agrega
+    // solo si la casilla está marcada, así nunca queda duplicada.
+    badges: [
+      ...linesToArray(str("badges")).filter((badge) => badge.toUpperCase() !== IN_TRANSIT_BADGE),
+      ...(formData.get("inTransit") != null ? [IN_TRANSIT_BADGE] : []),
+    ],
     stock: str("stock") || "0",
     isActive: formData.get("isActive") != null,
     isFeatured: formData.get("isFeatured") != null,

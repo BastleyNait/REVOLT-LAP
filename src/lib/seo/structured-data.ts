@@ -1,4 +1,4 @@
-import type { Product } from "@/lib/types/product";
+import { isInTransit, type Product } from "@/lib/types/product";
 import { siteConfig } from "@/lib/config/site";
 import { excerpt, htmlToPlainText } from "@/lib/rich-text/format";
 import { localizeLabel } from "@/lib/utils/localize";
@@ -150,7 +150,12 @@ export function productJsonLd(product: Product) {
       url,
       price: product.price.toFixed(2),
       priceCurrency: product.currency,
-      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      // En camino: se puede comprar, pero llega en 10-15 días hábiles.
+      availability: isInTransit(product)
+        ? "https://schema.org/BackOrder"
+        : product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/RefurbishedCondition",
       seller: { "@id": storeId },
       areaServed: { "@type": "Country", name: siteConfig.business.countryName },

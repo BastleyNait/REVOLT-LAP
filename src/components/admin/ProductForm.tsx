@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useActionState, useState, useRef } from "react";
 import { useFormStatus } from "react-dom";
-import { DEFAULT_CONDITION, type Product } from "@/lib/types/product";
+import { DEFAULT_CONDITION, IN_TRANSIT_ETA, isInTransit, visibleBadges, type Product } from "@/lib/types/product";
 import type { ActionState } from "@/app/admin/actions";
 import { Field, Input, Textarea, Checkbox } from "@/components/ui/form";
 import { Button, buttonClasses } from "@/components/ui/Button";
@@ -32,7 +32,9 @@ function getInitialValues(product?: Product): FormValues {
     description: product?.description ?? "",
     verdict: product?.verdict ?? "",
     images: (product?.images ?? []).join("\n"),
-    badges: (product?.badges ?? []).join("\n"),
+    // La etiqueta reservada EN CAMINO se maneja con su casilla, no en el texto.
+    badges: (product ? visibleBadges(product) : []).join("\n"),
+    inTransit: product ? isInTransit(product) : false,
     specs: specsText,
     stock: String(product?.stock ?? 0),
     isActive: product?.isActive ?? true,
@@ -199,6 +201,9 @@ export function ProductForm({
         </label>
         <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
           <Checkbox name="isFeatured" checked={formValues.isFeatured ?? false} onChange={handleChange} /> Destacado
+        </label>
+        <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
+          <Checkbox name="inTransit" checked={formValues.inTransit ?? false} onChange={handleChange} /> En camino ({IN_TRANSIT_ETA.toLowerCase()})
         </label>
       </div>
 

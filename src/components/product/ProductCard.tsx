@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@/lib/types/product";
-import { productCover } from "@/lib/types/product";
+import { isInTransit, productCover } from "@/lib/types/product";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { conditionLabel, localizeLabel, withCapacityUnit } from "@/lib/utils/localize";
@@ -100,7 +100,7 @@ export function ProductCard({ product }: { product: Product }) {
               ) : null}
               {usd ? <p className="mt-1 text-sm text-on-surface-variant">o {usd}</p> : null}
             </div>
-            <StockStatus stock={product.stock} compact pill />
+            <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
           </div>
         </div>
       </article>
