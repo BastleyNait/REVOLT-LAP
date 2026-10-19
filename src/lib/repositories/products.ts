@@ -5,7 +5,7 @@ import type { ProductInput } from "@/lib/validators/product";
 import { getPublicClient } from "@/lib/supabase/client";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseAdminConfigured, isSupabaseConfigured } from "@/lib/env";
-import { sanitizeRichText } from "@/lib/rich-text/sanitize";
+import { cleanStoredRichText, sanitizeRichText } from "@/lib/rich-text/sanitize";
 import {
   fallbackProducts,
   findFallbackById,
@@ -35,8 +35,8 @@ function rowToProduct(row: ProductRow): Product {
     storage: row.storage,
     display: row.display,
     batteryHealth: row.battery_health,
-    description: row.description,
-    verdict: row.verdict,
+    description: cleanStoredRichText(row.description),
+    verdict: cleanStoredRichText(row.verdict),
     specs: row.specs ?? [],
     images: row.images ?? [],
     badges: row.badges ?? [],
@@ -63,8 +63,8 @@ function inputToInsert(input: ProductInput): ProductInsert {
     display: input.display ?? null,
     battery_health: input.batteryHealth ?? null,
     // Rich text from the admin editor / API — sanitized before it is stored.
-    description: sanitizeRichText(input.description),
-    verdict: sanitizeRichText(input.verdict),
+    description: cleanStoredRichText(sanitizeRichText(input.description)),
+    verdict: cleanStoredRichText(sanitizeRichText(input.verdict)),
     specs: input.specs,
     images: input.images,
     badges: input.badges,

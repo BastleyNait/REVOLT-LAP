@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getProducts } from "@/lib/repositories/products";
 import { absoluteUrl, productPath } from "@/lib/seo/structured-data";
+import { landingPath, landings } from "@/lib/seo/landings";
 
 export const revalidate = 3600;
 
@@ -18,6 +19,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 1,
     },
+    {
+      url: absoluteUrl("/laptops"),
+      lastModified: latest ? new Date(latest) : new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    ...landings.map((landing) => ({
+      url: absoluteUrl(landingPath(landing.slug)),
+      lastModified: latest ? new Date(latest) : new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.9,
+    })),
     {
       url: absoluteUrl("/nosotros"),
       changeFrequency: "monthly",

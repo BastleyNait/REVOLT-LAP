@@ -44,8 +44,8 @@ export function organizationJsonLd() {
       addressCountry: business.country,
     },
     areaServed: [
-      { "@type": "City", name: business.city },
       { "@type": "Country", name: business.countryName },
+      { "@type": "City", name: business.city },
     ],
     contactPoint: {
       "@type": "ContactPoint",
@@ -115,7 +115,7 @@ export function productSummary(product: Product, max = 158): string {
   if (text) return excerpt(text, max);
   const specs = [product.processor, product.ram, product.storage].filter(Boolean).join(", ");
   return excerpt(
-    `${product.name} reacondicionada${specs ? ` (${localizeLabel(specs)})` : ""}. Revisada por técnicos y con todo funcional. Envíos a todo el Perú desde Arequipa.`,
+    `${product.name} reacondicionada${specs ? ` (${localizeLabel(specs)})` : ""}. Revisada por técnicos y con todo funcional. Envíos a todo el Perú.`,
     max,
   );
 }

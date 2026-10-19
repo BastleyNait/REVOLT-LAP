@@ -34,3 +34,27 @@ export function sanitizeRichText(value: string | null | undefined): string | nul
     .trim();
   return htmlToPlainText(clean) ? clean : null;
 }
+
+/**
+ * REVOLT does not offer a warranty, so any line that mentions one
+ * ("🛡️ Garantía de 6 meses…") is dropped from descriptions before they are
+ * stored or shown. A line is the text between tags / <br>.
+ */
+export function stripWarrantyClaims(html: string | null): string | null {
+  if (!html) return html;
+  const clean = html
+    .replace(/(?:<br\s*\/?>)?[^<>]*\b(?:garant[ií]as?|warranty)\b[^<>]*/gi, "")
+    .replace(/<p>\s*(?:<br\s*\/?>\s*)*<\/p>/g, "")
+    .trim();
+  return clean || null;
+}
+
+/** Old links to the Vercel preview domain now point to the store's own domain. */
+export function toOwnDomain(html: string | null): string | null {
+  return html?.replace(/(?:https?:\/\/)?revolt-laptops[\w-]*\.vercel\.app\/?/gi, "https://revolt-laptops.com/") ?? html;
+}
+
+/** Storefront cleanup applied to every stored description/verdict. */
+export function cleanStoredRichText(html: string | null): string | null {
+  return toOwnDomain(stripWarrantyClaims(html));
+}

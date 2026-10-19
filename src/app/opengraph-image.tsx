@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { siteConfig } from "@/lib/config/site";
 
-export const alt = "REVOLT — Laptops reacondicionadas en Arequipa";
+export const alt = "REVOLT — Laptops reacondicionadas en Perú";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -31,7 +31,7 @@ export default async function OpengraphImage() {
         <img src={`data:image/png;base64,${logo}`} height={88} width={346} alt="" />
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>
-            Laptops reacondicionadas en Arequipa
+            Laptops reacondicionadas en Perú
           </div>
           <div style={{ fontSize: 36, color: "#12B480", fontWeight: 700 }}>Todo funcional · Envíos a todo el Perú · Paga en soles o dólares</div>
         </div>

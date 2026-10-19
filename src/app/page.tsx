@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getProducts } from "@/lib/repositories/products";
 import { Hero } from "@/components/home/Hero";
 import { HowToBuy } from "@/components/home/HowToBuy";
@@ -10,6 +11,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
+import { landingPath, landings } from "@/lib/seo/landings";
+import { Icon } from "@/components/ui/Icon";
 
 export const revalidate = 60;
 
@@ -51,6 +54,21 @@ export default async function HomePage() {
             }
           />
           <ProductGrid products={products} />
+          <nav aria-labelledby="busca-por-tipo" className="space-y-3 pt-2">
+            <h3 id="busca-por-tipo" className="text-sm font-semibold text-on-surface-variant">Busca por tipo</h3>
+            <ul className="flex flex-wrap gap-2.5">
+              {landings.map((landing) => (
+                <li key={landing.slug}>
+                  <Link
+                    href={landingPath(landing.slug)}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-[0.9375rem] font-semibold transition-colors duration-150 hover:border-primary/50 hover:text-primary"
+                  >
+                    {landing.label} <Icon name="chevron-right" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </section>
 
         <HowToBuy />

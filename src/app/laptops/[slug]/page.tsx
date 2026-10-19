@@ -19,6 +19,7 @@ import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { landingBySlug, landingPath } from "@/lib/seo/landings";
 
 export const revalidate = 60;
 
@@ -88,9 +89,11 @@ export default async function ProductPage({ params }: PageParams) {
     ...product.specs.map((spec) => ({ icon: "check-plain", label: localizeLabel(spec.label), value: localizeLabel(spec.value) })),
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
+  const brandLanding = landingBySlug(`laptops-${product.brand.toLowerCase()}`);
+  const brandHref = brandLanding ? landingPath(brandLanding.slug) : "/laptops";
   const breadcrumbs = [
     { name: "Inicio", path: "/" },
-    { name: "Laptops", path: "/#laptops" },
+    { name: `Laptops ${product.brand}`, path: brandHref },
     { name: product.name, path: productPath(product.slug) },
   ];
 
@@ -106,7 +109,7 @@ export default async function ProductPage({ params }: PageParams) {
             </li>
             <li aria-hidden><Icon name="chevron-right" className="text-base" /></li>
             <li>
-              <Link href="/#laptops" className="transition-colors hover:text-on-background">Laptops {product.brand}</Link>
+              <Link href={brandHref} className="transition-colors hover:text-on-background">Laptops {product.brand}</Link>
             </li>
             <li aria-hidden><Icon name="chevron-right" className="text-base" /></li>
             <li aria-current="page" className="line-clamp-1 max-w-[16rem] font-semibold text-on-background md:max-w-md">

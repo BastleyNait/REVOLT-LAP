@@ -2,8 +2,8 @@
  * Global, content-level configuration. Anything a store owner might want to
  * tweak (brand, nav, copy, SEO, WhatsApp, business data) lives here instead of
  * being scattered across components. Everything the visitor reads is in
- * Spanish (Perú): REVOLT is an online-only store based in Arequipa that ships
- * nationwide.
+ * Spanish (Perú): REVOLT is an online-only store that sells to all of Peru
+ * (nationwide shipping; in-person delivery in Arequipa, where it is based).
  */
 
 export interface NavItem {
@@ -43,20 +43,22 @@ const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").
 export const siteConfig = {
   name: "REVOLT",
   legalName: "REVOLT Laptops",
-  tagline: "Laptops reacondicionadas en Arequipa",
+  tagline: "Laptops reacondicionadas en Perú",
   /** Default <title> for the home page (keep it under ~60 characters). */
-  title: "Laptops reacondicionadas en Arequipa | REVOLT",
+  title: "Laptops Reacondicionadas y Baratas en Perú | REVOLT",
   /** Default meta description (keep it around 150–160 characters). */
   description:
-    "Laptops reacondicionadas y seminuevas en Arequipa, revisadas por técnicos y con todo funcional. Precios en soles, pago en dólares y envíos a todo el Perú.",
+    "Laptops reacondicionadas, baratas y seminuevas en Perú: Lenovo ThinkPad, Dell y HP con todo funcional. Envíos a todo el Perú y entrega en persona en Arequipa.",
   keywords: [
     "laptops reacondicionadas",
-    "laptops reacondicionadas Arequipa",
-    "laptops baratas Arequipa",
+    "laptops reacondicionadas Perú",
     "laptops baratas Perú",
-    "laptops seminuevas",
-    "laptops de segunda Arequipa",
-    "laptops usadas Arequipa",
+    "laptops económicas Perú",
+    "laptops seminuevas Perú",
+    "laptops de segunda Perú",
+    "laptops usadas Perú",
+    "laptops baratas Lima",
+    "laptops Arequipa",
     "laptops Lenovo ThinkPad",
     "laptops Dell Latitude",
     "laptops HP EliteBook",
@@ -110,7 +112,7 @@ export const siteConfig = {
   home: {
     hero: {
       /** Rendered as the page <h1> in the original tracked-caps style. */
-      title: "Laptops reacondicionadas en Arequipa",
+      title: "Laptops reacondicionadas en Perú",
       pitch:
         "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
       ctaLabel: "Ver inventario",
@@ -138,7 +140,7 @@ export const siteConfig = {
       },
       {
         title: "Te la enviamos",
-        body: "Despachamos a Arequipa y a cualquier ciudad del Perú, lista para usar.",
+        body: "Enviamos a cualquier ciudad del Perú, lista para usar. En Arequipa también te la entregamos en persona.",
       },
     ],
     faq: [
@@ -155,11 +157,11 @@ export const siteConfig = {
       {
         question: "¿Tienen tienda física?",
         answer:
-          "No, somos una tienda 100 % online con base en Arequipa. Te atendemos por WhatsApp: si quieres, te enviamos más fotos o un video del equipo antes de comprar.",
+          "No, somos una tienda 100 % online que vende a todo el Perú. Te atendemos por WhatsApp: si quieres, te enviamos más fotos o un video del equipo antes de comprar.",
       },
       {
-        question: "¿Hacen envíos fuera de Arequipa?",
-        answer: "Sí, enviamos a todo el Perú. Coordinamos el envío contigo por WhatsApp.",
+        question: "¿Hacen envíos a todo el Perú?",
+        answer: "Sí, enviamos a Lima, Cusco, Trujillo, Piura, Tacna y cualquier ciudad del Perú. Si estás en Arequipa, también te la entregamos en persona. Todo se coordina por WhatsApp.",
       },
       {
         question: "¿Puedo pagar en dólares?",
@@ -180,9 +182,9 @@ export const siteConfig = {
   },
   about: {
     title: "Sobre nosotros",
-    metaTitle: "Sobre nosotros: laptops reacondicionadas profesionalmente en Arequipa",
+    metaTitle: "Sobre nosotros: laptops reacondicionadas profesionalmente en Perú",
     metaDescription:
-      "REVOLT es una tienda online de Arequipa que reacondiciona laptops empresariales con diagnóstico, limpieza y pruebas. Todo funcional y envíos a todo el Perú.",
+      "REVOLT es una tienda online peruana que reacondiciona laptops empresariales con diagnóstico, limpieza y pruebas. Todo funcional y envíos a todo el Perú.",
     intro:
       "REVOLT es una tienda online nacida en Arequipa con una idea simple: que comprar una buena laptop no tenga que costar una fortuna. Elegimos equipos empresariales de marcas como Lenovo, Dell y HP —hechos para durar años— y los reacondicionamos para que rindan como el primer día.",
     process: [

@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
-import { Icon, WhatsappIcon } from "@/components/ui/Icon";
+import { WhatsappIcon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
+import { landingPath, landings } from "@/lib/seo/landings";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -39,16 +40,26 @@ export function Footer() {
             </ul>
           </nav>
 
-          <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-on-surface">Por qué REVOLT</h2>
-            <ul className="space-y-2">
-              {siteConfig.trust.map((item) => (
-                <li key={item} className="flex items-center gap-2 text-on-surface-variant">
-                  <Icon name="check-plain" className="text-primary" strokeWidth={3} /> {item}
+          <nav aria-label="Categorías" className="space-y-3">
+            <h2 className="text-sm font-semibold text-on-surface">Categorías</h2>
+            <ul>
+              <li>
+                <Link href="/laptops" className="inline-flex min-h-10 items-center text-on-surface-variant transition-colors duration-150 hover:text-on-surface">
+                  Todas las laptops
+                </Link>
+              </li>
+              {landings.map((landing) => (
+                <li key={landing.slug}>
+                  <Link
+                    href={landingPath(landing.slug)}
+                    className="inline-flex min-h-10 items-center text-on-surface-variant transition-colors duration-150 hover:text-on-surface"
+                  >
+                    {landing.label}
+                  </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           <div className="space-y-3">
             <h2 className="text-sm font-semibold text-on-surface">Atención por WhatsApp</h2>
