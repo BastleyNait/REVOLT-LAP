@@ -50,6 +50,12 @@ export const IN_TRANSIT_ETA = "Llega en 10 a 15 días hábiles";
 /** ~15 business days, for feeds that need a concrete arrival date. */
 export const IN_TRANSIT_ETA_DAYS = 21;
 
+/**
+ * Promo de reserva: quien aparta una laptop en camino (todavía no está en
+ * stock) puede activar un cupón en soles, que se coordina por WhatsApp.
+ */
+export const RESERVATION_COUPON_PEN = 150;
+
 export function isInTransit(product: Pick<Product, "badges">): boolean {
   return product.badges.some((badge) => badge.trim().toUpperCase() === IN_TRANSIT_BADGE);
 }

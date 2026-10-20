@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,6 +19,7 @@ import { StockStatus } from "@/components/product/StockStatus";
 import { isInTransit } from "@/lib/types/product";
 import { dedicatedGpu } from "@/lib/utils/gpu";
 import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
+import { ReservationCheck, ReservationProvider, ReservationToast } from "@/components/product/ReservationOffer";
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -105,9 +107,16 @@ export default async function ProductPage({ params }: PageParams) {
     { name: product.name, path: productPath(product.slug) },
   ];
 
+  // Cupón de reserva: solo en laptops en camino. El provider comparte el check
+  // entre la tarjeta de compra, la barra móvil y el toast.
+  const inTransit = isInTransit(product);
+  const Scope = inTransit ? ReservationProvider : Fragment;
+
   return (
     <main className="relative flex-1">
       <JsonLd data={[productJsonLd(product), breadcrumbJsonLd(breadcrumbs)]} />
+      <Scope>
+      {inTransit ? <ReservationToast productSlug={product.slug} /> : null}
 
       <div className="mx-auto max-w-[75rem] px-4 pb-16 pt-6 md:px-8 md:pb-24 md:pt-10">
         <nav aria-label="Ruta de navegación" className="mb-6 text-sm text-on-surface-variant">
@@ -168,8 +177,14 @@ export default async function ProductPage({ params }: PageParams) {
               ) : null}
 
               <div className="mt-5">
-                <StockStatus stock={product.stock} inTransit={isInTransit(product)} />
+                <StockStatus stock={product.stock} inTransit={inTransit} />
               </div>
+
+              {inTransit ? (
+                <div className="mt-5">
+                  <ReservationCheck price={product.price} currency={product.currency} />
+                </div>
+              ) : null}
 
               <div className="mt-6">
                 <WhatsappOrderButton product={product} productUrl={productUrl} />
@@ -258,6 +273,7 @@ export default async function ProductPage({ params }: PageParams) {
           <WhatsappOrderButton product={product} productUrl={productUrl} compact />
         </div>
       </div>
+      </Scope>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import type { Product } from "@/lib/types/product";
+import { RESERVATION_COUPON_PEN, type Product } from "@/lib/types/product";
 import { siteConfig } from "@/lib/config/site";
 import { formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 
@@ -7,6 +7,8 @@ interface WhatsappOptions {
   message?: string;
   /** Absolute URL of the product page, appended so the seller has context. */
   productUrl?: string;
+  /** Pedido de reserva de una laptop en camino con el cupón activado. */
+  reserve?: boolean;
 }
 
 /**
@@ -25,7 +27,16 @@ export function buildWhatsappUrl(
   const priceLabel = usd
     ? `${formatPrice(product.price, product.currency)} (o ${usd})`
     : formatPrice(product.price, product.currency);
-  const lines = [message, `*${product.name}* — ${priceLabel}`];
+  const lines = options.reserve
+    ? [
+        `Hola REVOLT, quiero RESERVAR esta laptop que está en camino y aplicar mi cupón de ${formatPrice(RESERVATION_COUPON_PEN, "PEN")}:`,
+        `*${product.name}* — ${priceLabel}`,
+        // El cupón es en soles: solo se muestra el precio final si el producto también lo está.
+        ...(product.currency === "PEN"
+          ? [`Precio con cupón: ${formatPrice(Math.max(product.price - RESERVATION_COUPON_PEN, 0), "PEN")}`]
+          : []),
+      ]
+    : [message, `*${product.name}* — ${priceLabel}`];
   if (options.productUrl) lines.push(options.productUrl);
 
   const endpoint = phone ? `https://wa.me/${phone}` : "https://wa.me/";
