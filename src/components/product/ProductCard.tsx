@@ -8,6 +8,8 @@ import { productPath } from "@/lib/seo/structured-data";
 import { Icon } from "@/components/ui/Icon";
 import SpotlightCard from "@/components/SpotlightCard";
 import { StockStatus } from "./StockStatus";
+import { dedicatedGpu } from "@/lib/utils/gpu";
+import { cn } from "@/lib/utils/cn";
 import { CardLightRays } from "./CardLightRays";
 
 /**
@@ -20,11 +22,15 @@ export function ProductCard({ product }: { product: Product }) {
   const href = productPath(product.slug);
   const discount = discountPercent(product.price, product.originalPrice);
   const usd = formatUsdEquivalent(product.price, product.currency);
+  // Con gráfica dedicada la tarjeta suma una línea, pero no crece: RAM y
+  // almacenamiento pasan a compartir fila y la GPU ocupa la tercera.
+  const gpu = dedicatedGpu(product);
   const specs = [
-    product.processor && { icon: "cpu", value: localizeLabel(product.processor) },
-    product.ram && { icon: "memory", value: withCapacityUnit(product.ram) },
-    product.storage && { icon: "storage", value: withCapacityUnit(product.storage) },
-  ].filter(Boolean) as { icon: string; value: string }[];
+    product.processor && { icon: "cpu", value: localizeLabel(product.processor), wide: true },
+    product.ram && { icon: "memory", value: withCapacityUnit(product.ram), wide: false },
+    product.storage && { icon: "storage", value: withCapacityUnit(product.storage), wide: false },
+    gpu && { icon: "gpu", value: gpu, wide: true },
+  ].filter(Boolean) as { icon: string; value: string; wide: boolean }[];
 
   const cover = productCover(product);
 
@@ -78,9 +84,14 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           {specs.length ? (
-            <ul className="space-y-2 text-[0.9375rem] text-on-surface-variant">
+            <ul
+              className={cn(
+                "text-[0.9375rem] text-on-surface-variant",
+                gpu ? "grid grid-cols-2 gap-x-4 gap-y-2" : "space-y-2",
+              )}
+            >
               {specs.map((spec) => (
-                <li key={spec.icon} className="flex items-center gap-3">
+                <li key={spec.icon} className={cn("flex min-w-0 items-center gap-3", gpu && spec.wide && "col-span-2")}>
                   <Icon name={spec.icon} className="text-lg text-primary" />
                   <span className="line-clamp-1">{spec.value}</span>
                 </li>

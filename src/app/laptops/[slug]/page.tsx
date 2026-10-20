@@ -16,6 +16,7 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StockStatus } from "@/components/product/StockStatus";
 import { isInTransit } from "@/lib/types/product";
+import { dedicatedGpu } from "@/lib/utils/gpu";
 import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
@@ -80,14 +81,20 @@ export default async function ProductPage({ params }: PageParams) {
   const savings = discount && product.originalPrice ? product.originalPrice - product.price : null;
   const condition = conditionLabel(product.conditionGrade);
 
+  // La gráfica dedicada va como fila propia, junto a las specs principales; si
+  // estaba en "Especificaciones extra" no se repite abajo.
+  const gpu = dedicatedGpu(product);
   const specs = [
     product.processor && { icon: "cpu", label: "Procesador", value: localizeLabel(product.processor) },
     product.ram && { icon: "memory", label: "Memoria RAM", value: withCapacityUnit(product.ram) },
     product.storage && { icon: "storage", label: "Almacenamiento", value: withCapacityUnit(product.storage) },
+    gpu && { icon: "gpu", label: "Tarjeta gráfica", value: `${gpu} (dedicada)` },
     product.display && { icon: "screen", label: "Pantalla", value: localizeLabel(product.display) },
     product.batteryHealth && { icon: "battery", label: "Batería", value: localizeLabel(product.batteryHealth) },
     { icon: "verified", label: "Estado", value: condition },
-    ...product.specs.map((spec) => ({ icon: "check-plain", label: localizeLabel(spec.label), value: localizeLabel(spec.value) })),
+    ...product.specs
+      .filter((spec) => !(gpu && /\b(?:gpu|gr[aá]fic[ao]s?|graphics)\b/i.test(spec.label)))
+      .map((spec) => ({ icon: "check-plain", label: localizeLabel(spec.label), value: localizeLabel(spec.value) })),
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
   const brandLanding = landingBySlug(`laptops-${product.brand.toLowerCase()}`);
