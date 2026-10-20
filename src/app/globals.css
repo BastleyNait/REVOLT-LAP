@@ -374,6 +374,25 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Etiqueta de cupón: talón con muescas a los lados y línea de corte punteada. */
+.coupon-tag {
+  background: linear-gradient(135deg, #ffa24a 0%, #f2701a 55%, #d94f0a 100%);
+  border-radius: 0.6rem;
+  --notch: 7px;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 50%, #0000 97%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, #0000 97%, #000) 100% 0 / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 50%, #0000 97%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, #0000 97%, #000) 100% 0 / 51% 100% no-repeat;
+}
+
+.coupon-tag__tear {
+  width: 0;
+  margin: 0.4rem 0;
+  border-left: 2px dashed rgb(255 255 255 / 0.55);
+}
+
 /* Ya descartado en esta visita: lo marca un script en línea antes del primer pintado. */
 #reserva-toast[data-seen] {
   display: none;

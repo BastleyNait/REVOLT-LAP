@@ -118,10 +118,20 @@ export function ProductCard({ product }: { product: Product }) {
                 {usd ? <p className="mt-1 text-sm text-on-surface-variant">o {usd}</p> : null}
               </div>
               {couponChip ? (
-                <p className="shrink-0 rounded-2xl bg-deal-strong px-3 py-2 text-center leading-tight text-on-deal">
-                  <span className="block text-base font-extrabold">-{couponChip}</span>
-                  <span className="block text-xs font-bold">con cupón al reservar</span>
-                </p>
+                <div
+                  aria-label={`Cupón de ${couponChip} al reservar`}
+                  className="coupon-tag coupon-shine relative flex shrink-0 -rotate-3 items-stretch overflow-hidden text-white drop-shadow-[0_6px_14px_rgb(234_88_12/0.45)] transition-transform duration-200 ease-out-strong group-hover:rotate-0"
+                >
+                  <span className="flex flex-col items-center justify-center gap-0.5 bg-black/20 px-2 text-[0.6rem] font-extrabold uppercase tracking-[0.18em]">
+                    <Icon name="deal" className="text-base" />
+                    Cupón
+                  </span>
+                  <span className="coupon-tag__tear" aria-hidden />
+                  <span className="flex flex-col justify-center px-3 py-1.5 leading-none">
+                    <span className="font-display text-[1.6rem] font-extrabold tracking-tight">-{couponChip}</span>
+                    <span className="mt-1 text-[0.65rem] font-bold uppercase tracking-wider text-white/85">al reservar</span>
+                  </span>
+                </div>
               ) : null}
             </div>
             <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
