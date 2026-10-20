@@ -1,10 +1,72 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import { PLACEHOLDER_IMAGE } from "@/lib/types/product";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils/cn";
+
+const ZOOM = 2.2;
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+
+/**
+ * One carousel photo with hover zoom: on a mouse (precise pointer), hovering
+ * magnifies the photo around the cursor so the buyer can inspect scratches,
+ * keyboard wear or the screen. A high-resolution copy is requested only while
+ * zoomed — the normal photo is sized for the layout (≤ 680px) and would look
+ * blurry at 2x. Touch devices keep plain swipe: no zoom, nothing extra loaded.
+ */
+function ZoomableSlide({ image, alt, label, first }: { image: string; alt: string; label: string; first: boolean }) {
+  const [zoomed, setZoomed] = useState(false);
+  const layerRef = useRef<HTMLDivElement>(null);
+  const origin = useRef("50% 50%");
+
+  // The origin follows the cursor through the DOM directly: re-rendering on
+  // every mousemove would be wasted work for a value only CSS reads.
+  const track = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    origin.current = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
+    if (layerRef.current) layerRef.current.style.transformOrigin = origin.current;
+  };
+
+  return (
+    <div
+      role="group"
+      aria-roledescription="foto"
+      aria-label={label}
+      className="relative aspect-[4/3] w-full shrink-0 snap-center overflow-hidden [@media(hover:hover)_and_(pointer:fine)]:cursor-zoom-in"
+      onMouseEnter={(event) => {
+        if (!window.matchMedia(FINE_POINTER).matches) return;
+        track(event);
+        setZoomed(true);
+      }}
+      onMouseMove={zoomed ? track : undefined}
+      onMouseLeave={() => setZoomed(false)}
+    >
+      <div
+        ref={layerRef}
+        className="absolute inset-0 transition-transform duration-200 ease-out-strong motion-reduce:transition-none"
+        style={{ transform: zoomed ? `scale(${ZOOM})` : undefined, transformOrigin: origin.current }}
+      >
+        <SafeImage
+          src={image}
+          alt={alt}
+          fill
+          sizes="(max-width: 1024px) 100vw, (min-width: 1921px) 36vw, 680px"
+          loading={first ? "eager" : "lazy"}
+          fetchPriority={first ? "high" : undefined}
+          draggable={false}
+          className="object-contain"
+        />
+        {zoomed ? (
+          <SafeImage src={image} alt="" aria-hidden fill sizes="1600px" draggable={false} className="object-contain" />
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 /**
  * Product photo carousel. The main track is native horizontal scroll with
@@ -71,24 +133,13 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
           className="scrollbar-none flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-2xl bg-surface-container outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           {gallery.map((image, index) => (
-            <div
+            <ZoomableSlide
               key={`${image}-${index}`}
-              role="group"
-              aria-roledescription="foto"
-              aria-label={`${index + 1} de ${total}`}
-              className="relative aspect-[4/3] w-full shrink-0 snap-center"
-            >
-              <SafeImage
-                src={image}
-                alt={total > 1 ? `${alt} — foto ${index + 1} de ${total}` : alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, (min-width: 1921px) 36vw, 680px"
-                loading={index === 0 ? "eager" : "lazy"}
-                fetchPriority={index === 0 ? "high" : undefined}
-                draggable={false}
-                className="object-contain"
-              />
-            </div>
+              image={image}
+              alt={total > 1 ? `${alt} — foto ${index + 1} de ${total}` : alt}
+              label={`${index + 1} de ${total}`}
+              first={index === 0}
+            />
           ))}
         </div>
 
