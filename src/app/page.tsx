@@ -13,6 +13,8 @@ import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
 import { landingPath, landings } from "@/lib/seo/landings";
 import { Icon } from "@/components/ui/Icon";
+import { ReservationHomeToast } from "@/components/product/ReservationOffer";
+import { isInTransit } from "@/lib/types/product";
 
 export const revalidate = 60;
 
@@ -29,6 +31,7 @@ export default async function HomePage() {
     <main className="relative flex-1">
       <JsonLd data={[itemListJsonLd(products), faqJsonLd(siteConfig.home.faq)]} />
       <Hero minPrice={minPrice} />
+      <ReservationHomeToast inTransitCount={products.filter(isInTransit).length} />
 
       {/*
        * Hero → catálogo: la sección arranca en el mismo negro del hero y se

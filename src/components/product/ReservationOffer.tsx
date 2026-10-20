@@ -199,6 +199,52 @@ export function ReservationWhatsappLink({
   );
 }
 
+/**
+ * Tarjeta del aviso, común a la ficha y a la landing: lo único que cambia es
+ * el texto y la acción (activar el check, o ir a la sección de laptops).
+ */
+function ToastCard({
+  title,
+  body,
+  action,
+  onDismiss,
+  className,
+}: {
+  title: string;
+  body: string;
+  action: ReactNode;
+  onDismiss: () => void;
+  className: string;
+}) {
+  return (
+    <div role="status" aria-live="polite" className={cn("animate-toast fixed z-50", className)}>
+      <div className="relative overflow-hidden rounded-2xl border border-deal/60 bg-[#1a0f04] p-4 pr-11 shadow-[0_18px_50px_-12px_rgb(234_88_12/0.55)]">
+        <div className="flex items-start gap-3">
+          <span aria-hidden className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-deal-strong text-xl text-on-deal">
+            <Icon name="deal" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-base font-extrabold leading-snug text-white">{title}</p>
+            <p className="mt-1 text-sm leading-snug text-on-surface-variant">{body}</p>
+            {action}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label="Cerrar aviso"
+          className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <Icon name="close" className="text-lg" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const TOAST_ACTION =
+  "mt-3 inline-flex min-h-10 items-center rounded-full bg-deal-strong px-4 text-sm font-bold text-on-deal transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.97]";
+
 /** Aviso que aparece al entrar a una laptop en camino; "Activar mi cupón" marca el check. */
 export function ReservationToast({ productSlug }: { productSlug: string }) {
   const { reserved, setReserved } = useReservation();
@@ -236,43 +282,82 @@ export function ReservationToast({ productSlug }: { productSlug: string }) {
   if (!open || reserved) return null;
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
+    <ToastCard
       // En móvil queda sobre la barra de compra fija; en escritorio, abajo a la derecha.
-      className="animate-toast fixed inset-x-4 bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] z-50 md:inset-x-auto md:bottom-8 md:right-8 md:w-[24rem]"
-    >
-      <div className="relative overflow-hidden rounded-2xl border border-deal/60 bg-[#1a0f04] p-4 pr-11 shadow-[0_18px_50px_-12px_rgb(234_88_12/0.55)]">
-        <div className="flex items-start gap-3">
-          <span aria-hidden className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-deal-strong text-xl text-on-deal">
-            <Icon name="deal" />
-          </span>
-          <div className="min-w-0">
-            <p className="text-base font-extrabold leading-snug text-white">Reserva esta laptop y llévate {coupon} de cupón</p>
-            <p className="mt-1 text-sm leading-snug text-on-surface-variant">
-              Está en camino (todavía no está en stock). Aparta la tuya ahora y el cupón se descuenta de tu compra.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setReserved(true);
-                dismiss();
-              }}
-              className="mt-3 inline-flex min-h-10 items-center rounded-full bg-deal-strong px-4 text-sm font-bold text-on-deal transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.97]"
-            >
-              Activar mi cupón
-            </button>
-          </div>
-        </div>
+      className="inset-x-4 bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] md:inset-x-auto md:bottom-8 md:right-8 md:w-[24rem]"
+      title={`Reserva esta laptop y llévate ${coupon} de cupón`}
+      body="Está en camino (todavía no está en stock). Aparta la tuya ahora y el cupón se descuenta de tu compra."
+      onDismiss={dismiss}
+      action={
         <button
           type="button"
-          onClick={dismiss}
-          aria-label="Cerrar aviso"
-          className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-white/10 hover:text-white"
+          onClick={() => {
+            setReserved(true);
+            dismiss();
+          }}
+          className={TOAST_ACTION}
         >
-          <Icon name="close" className="text-lg" />
+          Activar mi cupón
         </button>
-      </div>
-    </div>
+      }
+    />
+  );
+}
+
+/**
+ * El mismo aviso en la landing, sin ficha donde activarlo: el botón lleva a la
+ * sección de laptops (#laptops). Se muestra solo si hay laptops en camino.
+ */
+export function ReservationHomeToast({ inTransitCount }: { inTransitCount: number }) {
+  const [open, setOpen] = useState(false);
+  const storageKey = "reserva-toast:home";
+
+  useEffect(() => {
+    if (inTransitCount === 0) return;
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(storageKey) === "1";
+    } catch {
+      // sin sessionStorage: se muestra igual
+    }
+    if (seen) return;
+    // Un poco después que en la ficha: la landing primero tiene que cargar fluida.
+    const timer = window.setTimeout(() => setOpen(true), 2500);
+    return () => window.clearTimeout(timer);
+  }, [inTransitCount]);
+
+  const dismiss = useCallback(() => {
+    setOpen(false);
+    try {
+      sessionStorage.setItem(storageKey, "1");
+    } catch {
+      // idem
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const timer = window.setTimeout(dismiss, 12000);
+    return () => window.clearTimeout(timer);
+  }, [open, dismiss]);
+
+  if (!open) return null;
+
+  return (
+    <ToastCard
+      className="inset-x-4 bottom-4 md:inset-x-auto md:bottom-8 md:right-8 md:w-[24rem]"
+      title={`Reserva tu laptop en camino y llévate ${coupon} de cupón`}
+      body={
+        inTransitCount === 1
+          ? "Hay una laptop en camino (todavía no está en stock). Aparta la tuya ahora y activa tu cupón."
+          : `Hay ${inTransitCount} laptops en camino (todavía no están en stock). Aparta la tuya ahora y activa tu cupón.`
+      }
+      onDismiss={dismiss}
+      action={
+        <a href="#laptops" onClick={dismiss} className={TOAST_ACTION}>
+          Ver las laptops
+        </a>
+      }
+    />
   );
 }
