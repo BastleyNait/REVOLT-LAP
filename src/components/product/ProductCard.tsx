@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@/lib/types/product";
-import { isInTransit, productCover } from "@/lib/types/product";
+import { RESERVATION_COUPON_PEN, isInTransit, productCover } from "@/lib/types/product";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { conditionLabel, localizeLabel, withCapacityUnit } from "@/lib/utils/localize";
@@ -31,6 +31,9 @@ export function ProductCard({ product }: { product: Product }) {
     product.storage && { icon: "storage", value: withCapacityUnit(product.storage), wide: false },
     gpu && { icon: "gpu", value: gpu, wide: true },
   ].filter(Boolean) as { icon: string; value: string; wide: boolean }[];
+
+  // Laptops en camino: el cupón de reserva se anuncia junto al precio.
+  const couponChip = isInTransit(product) && product.currency === "PEN" ? formatPrice(RESERVATION_COUPON_PEN, "PEN") : null;
 
   const cover = productCover(product);
 
@@ -102,16 +105,24 @@ export function ProductCard({ product }: { product: Product }) {
           ) : null}
 
           <div className="mt-auto space-y-3 border-t border-white/[0.08] pt-5">
-            <div>
-              <p className="font-display text-[2rem] font-extrabold leading-none tracking-tight text-[#c8ffe9]">
-                {formatPrice(product.price, product.currency)}
-              </p>
-              {product.originalPrice && discount ? (
-                <p className="mt-1.5 text-sm text-on-surface-variant line-through">
-                  {formatPrice(product.originalPrice, product.currency)}
+            <div className={cn(couponChip && "flex items-end justify-between gap-3")}>
+              <div className="min-w-0">
+                <p className="font-display text-[2rem] font-extrabold leading-none tracking-tight text-[#c8ffe9]">
+                  {formatPrice(product.price, product.currency)}
+                </p>
+                {product.originalPrice && discount ? (
+                  <p className="mt-1.5 text-sm text-on-surface-variant line-through">
+                    {formatPrice(product.originalPrice, product.currency)}
+                  </p>
+                ) : null}
+                {usd ? <p className="mt-1 text-sm text-on-surface-variant">o {usd}</p> : null}
+              </div>
+              {couponChip ? (
+                <p className="shrink-0 rounded-2xl bg-deal-strong px-3 py-2 text-center leading-tight text-on-deal">
+                  <span className="block text-base font-extrabold">-{couponChip}</span>
+                  <span className="block text-xs font-bold">con cupón al reservar</span>
                 </p>
               ) : null}
-              {usd ? <p className="mt-1 text-sm text-on-surface-variant">o {usd}</p> : null}
             </div>
             <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
           </div>

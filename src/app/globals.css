@@ -374,6 +374,11 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Ya descartado en esta visita: lo marca un script en línea antes del primer pintado. */
+#reserva-toast[data-seen] {
+  display: none;
+}
+
 @keyframes toast-in {
   from { opacity: 0; transform: translateY(1rem) scale(0.96); }
   to { opacity: 1; transform: none; }
@@ -386,7 +391,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .animate-toast {
-    animation: toast-in 450ms var(--ease-out) both;
+    animation: toast-in 450ms var(--ease-out) 150ms both;
   }
 
   /* Un destello que cruza el cupón, para llamar la atención sin gritar. */

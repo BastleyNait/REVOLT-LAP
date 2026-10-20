@@ -204,12 +204,16 @@ export function ReservationWhatsappLink({
  * el texto y la acción (activar el check, o ir a la sección de laptops).
  */
 function ToastCard({
+  id,
+  storageKey,
   title,
   body,
   action,
   onDismiss,
   className,
 }: {
+  id: string;
+  storageKey: string;
   title: string;
   body: string;
   action: ReactNode;
@@ -217,7 +221,15 @@ function ToastCard({
   className: string;
 }) {
   return (
-    <div role="status" aria-live="polite" className={cn("animate-toast fixed z-50", className)}>
+    <div id={id} suppressHydrationWarning role="status" aria-live="polite" className={cn("animate-toast fixed z-50", className)}>
+      {/* El aviso viene en el HTML del servidor y se pinta antes de que cargue
+          el JS. Si ya se cerró en esta visita, este script lo oculta en el
+          mismo instante (data-seen), sin esperar la hidratación. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `try{if(sessionStorage.getItem(${JSON.stringify(storageKey)})==="1")document.getElementById(${JSON.stringify(id)}).setAttribute("data-seen","")}catch(e){}`,
+        }}
+      />
       <div className="relative overflow-hidden rounded-2xl border border-deal/60 bg-[#1a0f04] p-4 pr-11 shadow-[0_18px_50px_-12px_rgb(234_88_12/0.55)]">
         <div className="flex items-start gap-3">
           <span aria-hidden className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-deal-strong text-xl text-on-deal">
@@ -245,44 +257,53 @@ function ToastCard({
 const TOAST_ACTION =
   "mt-3 inline-flex min-h-10 items-center rounded-full bg-deal-strong px-4 text-sm font-bold text-on-deal transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.97]";
 
-/** Aviso que aparece al entrar a una laptop en camino; "Activar mi cupón" marca el check. */
-export function ReservationToast({ productSlug }: { productSlug: string }) {
-  const { reserved, setReserved } = useReservation();
-  const [open, setOpen] = useState(false);
-  const storageKey = `reserva-toast:${productSlug}`;
-
-  useEffect(() => {
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(storageKey) === "1";
-    } catch {
-      // sin sessionStorage (modo privado, bloqueado): se muestra igual
-    }
-    if (seen) return;
-    const timer = window.setTimeout(() => setOpen(true), 1200);
-    return () => window.clearTimeout(timer);
-  }, [storageKey]);
+/**
+ * Abierto desde el primer render: el aviso va en el HTML del servidor para que
+ * se vea en cuanto pinta la página, sin esperar al JS. Al hidratar solo se
+ * cierra si ya se descartó en esta visita; se cierra solo a los 12 s (debe
+ * llamar la atención, no tapar la página).
+ */
+function useToastState(storageKey: string) {
+  const [open, setOpen] = useState(true);
 
   const dismiss = useCallback(() => {
     setOpen(false);
     try {
       sessionStorage.setItem(storageKey, "1");
     } catch {
-      // idem
+      // sin sessionStorage (modo privado, bloqueado): se cierra igual
     }
   }, [storageKey]);
 
-  // Se cierra solo a los 12 s: debe llamar la atención, no tapar la ficha.
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(storageKey) === "1") setOpen(false);
+    } catch {
+      // se muestra igual
+    }
+  }, [storageKey]);
+
   useEffect(() => {
     if (!open) return;
     const timer = window.setTimeout(dismiss, 12000);
     return () => window.clearTimeout(timer);
   }, [open, dismiss]);
 
+  return { open, dismiss };
+}
+
+/** Aviso que aparece al entrar a una laptop en camino; "Activar mi cupón" marca el check. */
+export function ReservationToast({ productSlug }: { productSlug: string }) {
+  const { reserved, setReserved } = useReservation();
+  const storageKey = `reserva-toast:${productSlug}`;
+  const { open, dismiss } = useToastState(storageKey);
+
   if (!open || reserved) return null;
 
   return (
     <ToastCard
+      id="reserva-toast"
+      storageKey={storageKey}
       // En móvil queda sobre la barra de compra fija; en escritorio, abajo a la derecha.
       className="inset-x-4 bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] md:inset-x-auto md:bottom-8 md:right-8 md:w-[24rem]"
       title={`Reserva esta laptop y llévate ${coupon} de cupón`}
@@ -309,42 +330,15 @@ export function ReservationToast({ productSlug }: { productSlug: string }) {
  * sección de laptops (#laptops). Se muestra solo si hay laptops en camino.
  */
 export function ReservationHomeToast({ inTransitCount }: { inTransitCount: number }) {
-  const [open, setOpen] = useState(false);
   const storageKey = "reserva-toast:home";
+  const { open, dismiss } = useToastState(storageKey);
 
-  useEffect(() => {
-    if (inTransitCount === 0) return;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(storageKey) === "1";
-    } catch {
-      // sin sessionStorage: se muestra igual
-    }
-    if (seen) return;
-    // Un poco después que en la ficha: la landing primero tiene que cargar fluida.
-    const timer = window.setTimeout(() => setOpen(true), 2500);
-    return () => window.clearTimeout(timer);
-  }, [inTransitCount]);
-
-  const dismiss = useCallback(() => {
-    setOpen(false);
-    try {
-      sessionStorage.setItem(storageKey, "1");
-    } catch {
-      // idem
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    const timer = window.setTimeout(dismiss, 12000);
-    return () => window.clearTimeout(timer);
-  }, [open, dismiss]);
-
-  if (!open) return null;
+  if (inTransitCount === 0 || !open) return null;
 
   return (
     <ToastCard
+      id="reserva-toast"
+      storageKey={storageKey}
       className="inset-x-4 bottom-4 md:inset-x-auto md:bottom-8 md:right-8 md:w-[24rem]"
       title={`Reserva tu laptop en camino y llévate ${coupon} de cupón`}
       body={

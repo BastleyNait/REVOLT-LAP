@@ -224,6 +224,15 @@ export const siteConfig = {
       },
     ],
   },
+  /**
+   * Cupón de reserva de las laptops "en camino". Este es el único lugar donde
+   * se cambia el monto: la ficha, las tarjetas, el aviso y el mensaje de
+   * WhatsApp lo leen de acá.
+   */
+  reservation: {
+    /** Monto del cupón, en soles. */
+    couponPen: 150,
+  },
   product: {
     ctaLabel: "Pedir por WhatsApp",
     trustBadges: [

@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/config/site";
 /**
  * Domain types for the storefront/admin. These are camelCase and decoupled from
  * the snake_case Supabase rows (see ./database.ts). Mapping happens in the
@@ -54,7 +55,7 @@ export const IN_TRANSIT_ETA_DAYS = 21;
  * Promo de reserva: quien aparta una laptop en camino (todavía no está en
  * stock) puede activar un cupón en soles, que se coordina por WhatsApp.
  */
-export const RESERVATION_COUPON_PEN = 150;
+export const RESERVATION_COUPON_PEN = siteConfig.reservation.couponPen;
 
 export function isInTransit(product: Pick<Product, "badges">): boolean {
   return product.badges.some((badge) => badge.trim().toUpperCase() === IN_TRANSIT_BADGE);
