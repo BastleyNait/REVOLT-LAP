@@ -1,14 +1,19 @@
 /**
- * Ambient aurora behind the whole site: soft, blurred color blobs that drift
- * slowly so the frosted-glass surfaces have something luminous to refract.
- * Pure CSS (no canvas/WebGL), fixed and non-interactive, under all content.
- * Only `transform` animates (compositor-only); reduced motion freezes it.
+ * Ambient aurora behind the whole site: soft color blobs so the frosted-glass
+ * surfaces have something luminous to refract.
+ *
+ * Static radial gradients, not blurred animated shapes. The previous version
+ * drifted three `blur-3xl` blobs forever: a GPU blur over a third of the screen
+ * each, and — worse — every frosted surface on top (the navbar, the hero chips)
+ * had to re-filter its backdrop on every frame even with nobody touching the
+ * page. On modest laptops and phones that was the constant lag. A radial
+ * gradient draws the same soft glow with no filter and no per-frame work.
  * Colors are the original palette values, independent of the UI tokens.
  */
 const blobs = [
-  { className: "left-[-12%] top-[-10%] h-[43vw] w-[30vw] bg-[rgb(0_160_118/0.45)]", delay: "0s", dur: "22s" },
-  { className: "right-[-14%] top-[6%] h-[38vw] w-[38vw] bg-[rgb(80_160_110/0.4)]", delay: "-6s", dur: "26s" },
-  { className: "bottom-[-16%] left-[18%] h-[44vw] w-[44vw] bg-[rgb(0_106_78/0.38)]", delay: "-12s", dur: "30s" },
+  { className: "left-[-12%] top-[-10%] h-[43vw] w-[30vw]", color: "rgb(0 160 118 / 0.45)" },
+  { className: "right-[-14%] top-[6%] h-[38vw] w-[38vw]", color: "rgb(80 160 110 / 0.4)" },
+  { className: "bottom-[-16%] left-[18%] h-[44vw] w-[44vw]", color: "rgb(0 106 78 / 0.38)" },
 ];
 
 export function PageBackground() {
@@ -17,8 +22,8 @@ export function PageBackground() {
       {blobs.map((blob, index) => (
         <span
           key={index}
-          className={`blob absolute block rounded-full blur-3xl will-change-transform ${blob.className}`}
-          style={{ animation: `blobFloat ${blob.dur} ease-in-out ${blob.delay} infinite` }}
+          className={`absolute block ${blob.className}`}
+          style={{ background: `radial-gradient(closest-side, ${blob.color}, transparent)` }}
         />
       ))}
     </div>

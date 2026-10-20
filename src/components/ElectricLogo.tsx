@@ -13,6 +13,8 @@ const FAR = 1e20;
 const ARCS = 5;
 const PULSES = 3;
 const PIXEL_BUDGET = 4e6;
+/** Target frame time: 30 fps. */
+const FRAME_MS = 1000 / 30;
 
 type Rgb = [number, number, number];
 
@@ -922,6 +924,12 @@ const ElectricLogo = ({
 
       const frame = (now: number) => {
         raf = 0;
+        // 30 fps: the lightning reads the same, at half the CPU/GPU cost —
+        // what keeps the page smooth on modest laptops and phones.
+        if (now - last < FRAME_MS - 2) {
+          if (visible) raf = requestAnimationFrame(frame);
+          return;
+        }
         const s = settingsRef.current;
         const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
         last = now;
@@ -1103,11 +1111,19 @@ const ElectricLogo = ({
 
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(container);
+      let onScreen = true;
       const intersectionObserver = new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting;
+        onScreen = entry.isIntersecting;
+        visible = onScreen && !document.hidden;
         start();
       });
       intersectionObserver.observe(container);
+      // A background tab draws nothing.
+      const onVisibility = () => {
+        visible = onScreen && !document.hidden;
+        start();
+      };
+      document.addEventListener('visibilitychange', onVisibility);
 
       resize();
       start();
@@ -1117,6 +1133,7 @@ const ElectricLogo = ({
         cancelAnimationFrame(raf);
         resizeObserver.disconnect();
         intersectionObserver.disconnect();
+        document.removeEventListener('visibilitychange', onVisibility);
         container.removeEventListener('pointermove', onMove);
         container.removeEventListener('pointerdown', onDown);
         container.removeEventListener('pointerleave', onLeave);

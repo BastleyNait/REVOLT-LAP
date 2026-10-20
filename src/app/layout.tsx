@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBackground } from "@/components/layout/PageBackground";
+import { HideOnAdmin } from "@/components/layout/HideOnAdmin";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
@@ -88,12 +89,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido
         </a>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-        <PageBackground />
-        <Navbar />
+        <HideOnAdmin>
+          <PageBackground />
+          <Navbar />
+        </HideOnAdmin>
         <div id="contenido" className="flex flex-1 flex-col">
           {children}
         </div>
-        <Footer />
+        <HideOnAdmin>
+          <Footer />
+        </HideOnAdmin>
         {/* Vercel Web Analytics + Speed Insights (their scripts only exist on Vercel deployments). */}
         {process.env.VERCEL ? (
           <>

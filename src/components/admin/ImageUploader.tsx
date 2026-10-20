@@ -2,7 +2,9 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { ChevronLeft, ChevronRight, GripVertical, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
+import { isAllowedImageHost } from "@/lib/config/image-hosts";
 
 interface ImageUploaderProps {
   /** Ordered list of image URLs (R2 or external). The first one is the cover. */
@@ -251,15 +253,34 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
                       : "border-outline-variant/60"
                   }`}
                 >
-                  <img
-                    src={url}
-                    alt={`Imagen ${i + 1}`}
-                    draggable={false}
-                    className="pointer-events-none aspect-[4/3] w-full select-none object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.visibility = "hidden";
-                    }}
-                  />
+                  {/* Thumbnails go through the image optimizer at thumbnail
+                      size: the originals are full photos (often 1-2 MB each),
+                      and a product has 9-15 of them. Hosts the optimizer
+                      doesn't allow still show, as a plain lazy <img>. */}
+                  {isAllowedImageHost(url) ? (
+                    <div className="pointer-events-none relative aspect-[4/3] w-full select-none">
+                      <Image
+                        src={url}
+                        alt={`Imagen ${i + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 220px"
+                        draggable={false}
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={url}
+                      alt={`Imagen ${i + 1}`}
+                      draggable={false}
+                      loading="lazy"
+                      decoding="async"
+                      className="pointer-events-none aspect-[4/3] w-full select-none object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.visibility = "hidden";
+                      }}
+                    />
+                  )}
 
                   {i === 0 && (
                     <span className="absolute left-2 top-2 rounded-md bg-primary px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-on-primary shadow-neo-sm">

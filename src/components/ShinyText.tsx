@@ -1,23 +1,29 @@
-'use client';
+import type { CSSProperties } from 'react';
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { motion, useMotionValue, useAnimationFrame, useTransform, useReducedMotion } from 'motion/react';
-
+/**
+ * React Bits — ShinyText, rewritten as pure CSS.
+ *
+ * The registry version drove the sheen from JavaScript on every frame
+ * (`motion`'s useAnimationFrame), forever, and pulled in the whole `motion`
+ * library (~124 KB) just for this: the biggest single cost of the home page on
+ * modest devices. A CSS keyframe animation draws the same sweep with no JS at
+ * all; "reduce motion" keeps the text static (see `.shiny-text` in
+ * globals.css). Same props as before for the ones in use.
+ */
 interface ShinyTextProps {
   text: string;
   disabled?: boolean;
+  /** Seconds the sheen takes to cross the text. */
   speed?: number;
   className?: string;
   color?: string;
   shineColor?: string;
   spread?: number;
-  yoyo?: boolean;
-  pauseOnHover?: boolean;
-  direction?: 'left' | 'right';
+  /** Seconds the sheen waits off-screen between passes. */
   delay?: number;
 }
 
-const ShinyText: React.FC<ShinyTextProps> = ({
+export default function ShinyText({
   text,
   disabled = false,
   speed = 2,
@@ -25,111 +31,25 @@ const ShinyText: React.FC<ShinyTextProps> = ({
   color = '#b5b5b5',
   shineColor = '#ffffff',
   spread = 120,
-  yoyo = false,
-  pauseOnHover = false,
-  direction = 'left',
-  delay = 0
-}) => {
-  const [isPaused, setIsPaused] = useState(false);
-  // Adapted: honour prefers-reduced-motion (static text, no sweeping sheen).
-  const reduceMotion = useReducedMotion();
-  const progress = useMotionValue(0);
-  const elapsedRef = useRef(0);
-  const lastTimeRef = useRef<number | null>(null);
-  const directionRef = useRef(direction === 'left' ? 1 : -1);
-
-  const animationDuration = speed * 1000;
-  const delayDuration = delay * 1000;
-
-  useAnimationFrame(time => {
-    if (disabled || isPaused || reduceMotion) {
-      lastTimeRef.current = null;
-      return;
-    }
-
-    if (lastTimeRef.current === null) {
-      lastTimeRef.current = time;
-      return;
-    }
-
-    const deltaTime = time - lastTimeRef.current;
-    lastTimeRef.current = time;
-
-    elapsedRef.current += deltaTime;
-
-    // Animation goes from 0 to 100
-    if (yoyo) {
-      const cycleDuration = animationDuration + delayDuration;
-      const fullCycle = cycleDuration * 2;
-      const cycleTime = elapsedRef.current % fullCycle;
-
-      if (cycleTime < animationDuration) {
-        // Forward animation: 0 -> 100
-        const p = (cycleTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else if (cycleTime < cycleDuration) {
-        // Delay at end
-        progress.set(directionRef.current === 1 ? 100 : 0);
-      } else if (cycleTime < cycleDuration + animationDuration) {
-        // Reverse animation: 100 -> 0
-        const reverseTime = cycleTime - cycleDuration;
-        const p = 100 - (reverseTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else {
-        // Delay at start
-        progress.set(directionRef.current === 1 ? 0 : 100);
-      }
-    } else {
-      const cycleDuration = animationDuration + delayDuration;
-      const cycleTime = elapsedRef.current % cycleDuration;
-
-      if (cycleTime < animationDuration) {
-        // Animation phase: 0 -> 100
-        const p = (cycleTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else {
-        // Delay phase - hold at end (shine off-screen)
-        progress.set(directionRef.current === 1 ? 100 : 0);
-      }
-    }
-  });
-
-  useEffect(() => {
-    directionRef.current = direction === 'left' ? 1 : -1;
-    elapsedRef.current = 0;
-    progress.set(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [direction]);
-
-  // Transform: p=0 -> 150% (shine off right), p=100 -> -50% (shine off left)
-  const backgroundPosition = useTransform(progress, p => `${150 - p * 2}% center`);
-
-  const handleMouseEnter = useCallback(() => {
-    if (pauseOnHover) setIsPaused(true);
-  }, [pauseOnHover]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (pauseOnHover) setIsPaused(false);
-  }, [pauseOnHover]);
-
-  const gradientStyle: React.CSSProperties = {
+  delay = 0,
+}: ShinyTextProps) {
+  const total = speed + delay;
+  // The sweep runs during the first `speed` seconds of each cycle and then
+  // holds off-screen for `delay` seconds, like the original.
+  const active = Math.round((speed / total) * 100);
+  const name = `shine-${active}`;
+  const style = {
     backgroundImage: `linear-gradient(${spread}deg, ${color} 0%, ${color} 35%, ${shineColor} 50%, ${color} 65%, ${color} 100%)`,
-    backgroundSize: '200% auto',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent'
-  };
+    '--shine-name': name,
+    '--shine-duration': `${total}s`,
+  } as CSSProperties;
 
   return (
-    <motion.span
-      className={`inline-block ${className}`}
-      style={{ ...gradientStyle, backgroundPosition }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {text}
-    </motion.span>
+    <>
+      <style>{`@keyframes ${name}{0%{background-position:150% center}${active}%,100%{background-position:-50% center}}`}</style>
+      <span className={`shiny-text inline-block ${disabled ? 'shiny-text--off' : ''} ${className}`.trim()} style={style}>
+        {text}
+      </span>
+    </>
   );
-};
-
-export default ShinyText;
+}

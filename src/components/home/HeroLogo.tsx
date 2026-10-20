@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/config/site";
+import { canRunRichEffects } from "@/lib/utils/device";
 
 // React Bits — ElectricLogo (WebGL via ogl). Loaded after hydration so the
 // static logo paints first and stays the LCP element.
@@ -24,27 +25,30 @@ export function HeroLogo() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     let idle = 0;
-    let fallback: ReturnType<typeof setTimeout> | undefined;
+    const INTERACTION = ["pointermove", "pointerdown", "keydown", "scroll", "touchstart"] as const;
 
-    // Runs on every device once the page has loaded and the main thread is
-    // idle. The shader compiles in parallel (KHR_parallel_shader_compile), so it
-    // no longer freezes the page; only "reduce motion" users keep the static logo.
+    // The lightning (WebGL, ~70 KB of JS plus a shader running every frame)
+    // waits for the visitor's first interaction: the page becomes usable first
+    // and the effect never competes with loading. With a mouse that is almost
+    // immediate. Modest devices (few cores, little memory, data saver, reduce
+    // motion) keep the static logo with its glow — on those the effect was lag.
     const start = () => {
-      if (reduce.matches) return;
-      if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setElectric(true), { timeout: 2500 });
-      else fallback = setTimeout(() => setElectric(true), 1200);
+      INTERACTION.forEach((type) => window.removeEventListener(type, start));
+      if (!canRunRichEffects()) return;
+      if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setElectric(true), { timeout: 1000 });
+      else setElectric(true);
     };
-    const onMotionChange = () => (reduce.matches ? setElectric(false) : start());
+    const onMotionChange = () => {
+      if (reduce.matches) setElectric(false);
+    };
 
-    if (document.readyState === "complete") start();
-    else window.addEventListener("load", start, { once: true });
+    INTERACTION.forEach((type) => window.addEventListener(type, start, { once: true, passive: true }));
     reduce.addEventListener("change", onMotionChange);
 
     return () => {
-      window.removeEventListener("load", start);
+      INTERACTION.forEach((type) => window.removeEventListener(type, start));
       reduce.removeEventListener("change", onMotionChange);
       if (idle) window.cancelIdleCallback(idle);
-      if (fallback) clearTimeout(fallback);
     };
   }, []);
 

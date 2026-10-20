@@ -4,6 +4,7 @@ import { logoutAction } from "./actions";
 import { isAdminAuthEnabled } from "@/lib/env";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { WarmEditor } from "@/components/admin/WarmEditor";
 
 export const metadata: Metadata = {
   title: "Administración",
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex-1">
+    <main className="admin-plain flex-1">
+      <WarmEditor />
       <div className="mx-auto max-w-[75rem] px-4 py-10 md:px-8">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/60 pb-6">
           <div>

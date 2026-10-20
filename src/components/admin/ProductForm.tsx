@@ -7,8 +7,17 @@ import { DEFAULT_CONDITION, IN_TRANSIT_ETA, isInTransit, visibleBadges, type Pro
 import type { ActionState } from "@/app/admin/actions";
 import { Field, Input, Textarea, Checkbox } from "@/components/ui/form";
 import { Button, buttonClasses } from "@/components/ui/Button";
+import dynamic from "next/dynamic";
 import { ImageUploader } from "./ImageUploader";
-import { RichTextEditor } from "./RichTextEditor";
+
+// TipTap is ~400 KB: it loads after the form, so every other field can be
+// typed in immediately (and WarmEditor usually has it cached already).
+const RichTextEditor = dynamic(() => import("./RichTextEditor").then((m) => m.RichTextEditor), {
+  ssr: false,
+  loading: () => (
+    <div className="min-h-[9rem] animate-pulse rounded-2xl border border-outline-variant/60 bg-surface-container/60" aria-hidden />
+  ),
+});
 
 const initialState: ActionState = { ok: true };
 

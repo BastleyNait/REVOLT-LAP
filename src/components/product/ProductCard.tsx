@@ -39,9 +39,11 @@ export function ProductCard({ product }: { product: Product }) {
       spotlightColor="rgba(18, 180, 128, 0.18)"
       className="group h-full rounded-[2rem] border border-primary/15 bg-[#050807] shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)] transition-[transform,border-color] duration-200 ease-out-strong hover:-translate-y-1 hover:border-primary/40 focus-within:border-primary/60"
     >
-      {/* Ambient glow: the same photo, enlarged, darkened and blurred, behind the laptop. */}
+      {/* Ambient glow: the same photo, enlarged, darkened and blurred, behind the laptop.
+          A 16px copy stretched over the card is already soft, so a light blur
+          finishes it — a 64px blur over the whole area was the costly part. */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-3/5 overflow-hidden [mask-image:linear-gradient(to_bottom,black,transparent)]">
-        <SafeImage src={cover} alt="" fill sizes="64px" className="scale-150 object-cover opacity-40 blur-3xl brightness-[0.3] saturate-150" />
+        <SafeImage src={cover} alt="" fill sizes="16px" className="scale-150 object-cover opacity-40 blur-xl brightness-[0.3] saturate-150" />
       </div>
 
       <CardLightRays uid={product.id} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useId, CSSProperties, ReactNode } from "react";
 import "./GlassSurface.css";
+import { canRunHeavyGlass } from "@/lib/utils/device";
 
 interface GlassSurfaceProps {
   children?: ReactNode;
@@ -102,7 +103,11 @@ const GlassSurface = ({
     return `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
   };
 
+  // The displacement map (an SVG rebuilt and re-encoded on every resize) only
+  // matters for the SVG variant: the CSS-blur fallback never reads it.
+  const svgOnRef = useRef(false);
   const updateDisplacementMap = () => {
+    if (!svgOnRef.current) return;
     feImageRef.current?.setAttribute("href", generateDisplacementMap());
   };
 
@@ -139,7 +144,13 @@ const GlassSurface = ({
   }, [width, height]);
 
   useEffect(() => {
-    setSvgSupported(supportsSVGFilters());
+    // The SVG displacement backdrop re-filters everything behind the navbar on
+    // every scroll frame: gorgeous on a strong desktop, lag on a modest laptop
+    // or a phone. Those get the CSS-blur fallback, which looks almost the same.
+    const svg = supportsSVGFilters() && canRunHeavyGlass();
+    svgOnRef.current = svg;
+    setSvgSupported(svg);
+    if (svg) updateDisplacementMap();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
