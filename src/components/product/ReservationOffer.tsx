@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ComponentProps, type ReactNode } from "react";
 import { RESERVATION_COUPON_PEN } from "@/lib/types/product";
-import { formatPrice } from "@/lib/utils/format";
+import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 import { cn } from "@/lib/utils/cn";
@@ -28,10 +28,35 @@ function useReservation() {
 
 const coupon = formatPrice(RESERVATION_COUPON_PEN, "PEN");
 
+/**
+ * Lo que se ve según el cupón: con él activo el precio grande baja y el precio
+ * anterior pasa a ser el de lista (o el de hoy si no tenía uno). Es solo
+ * presentación: el precio real del producto no cambia.
+ */
+function pricing(price: number, originalPrice: number | null, currency: string, reserved: boolean) {
+  const applies = reserved && currency === "PEN";
+  const shown = applies ? Math.max(price - RESERVATION_COUPON_PEN, 0) : price;
+  const listed = originalPrice && originalPrice > price ? originalPrice : null;
+  const was = applies ? (listed ?? price) : listed;
+  const saved = was ? was - shown : null;
+  return { applies, shown, was, saved, percent: was ? discountPercent(shown, was) : null, listed };
+}
+
 /** El check de la ficha: "Reserva y llévate S/ 150 de cupón", con el precio final al marcarlo. */
-export function ReservationCheck({ price, currency }: { price: number; currency: string }) {
+export function ReservationCheck({
+  price,
+  originalPrice,
+  currency,
+}: {
+  price: number;
+  originalPrice: number | null;
+  currency: string;
+}) {
   const { reserved, setReserved } = useReservation();
   const final = currency === "PEN" ? formatPrice(Math.max(price - RESERVATION_COUPON_PEN, 0), "PEN") : null;
+  // Ahorro total con el cupón: el descuento que ya tenía la laptop + el cupón.
+  const listed = originalPrice && originalPrice > price ? originalPrice : null;
+  const totalSaved = currency === "PEN" ? (listed ? listed - price : 0) + RESERVATION_COUPON_PEN : null;
 
   return (
     <label
@@ -58,6 +83,12 @@ export function ReservationCheck({ price, currency }: { price: number; currency:
       </span>
       <span className="min-w-0 text-[0.9375rem] leading-snug">
         <span className="block text-base font-bold text-on-background">Reserva ahora y llévate {coupon} de cupón</span>
+        {totalSaved ? (
+          <span className="mt-1 block font-bold text-deal">
+            Ahorras {formatPrice(totalSaved, "PEN")} en total
+            {listed ? ` (${formatPrice(listed - price, "PEN")} de descuento + ${coupon} de cupón)` : " con tu cupón"}
+          </span>
+        ) : null}
         <span className="mt-1 block text-on-surface-variant">
           {reserved && final ? (
             <>
@@ -69,6 +100,70 @@ export function ReservationCheck({ price, currency }: { price: number; currency:
         </span>
       </span>
     </label>
+  );
+}
+
+/** Bloque de precio de la ficha: baja al activar el cupón y el chip naranja suma el ahorro total. */
+export function ReservationPrice({
+  price,
+  originalPrice,
+  currency,
+}: {
+  price: number;
+  originalPrice: number | null;
+  currency: string;
+}) {
+  const { reserved } = useReservation();
+  const view = pricing(price, originalPrice, currency, reserved);
+  const usd = formatUsdEquivalent(view.shown, currency);
+
+  return (
+    <>
+      <div className="mt-6 flex flex-wrap items-end gap-x-3 gap-y-1">
+        <p className="font-display text-5xl font-extrabold leading-none tracking-tight text-white">
+          {formatPrice(view.shown, currency)}
+        </p>
+        {view.was ? (
+          <p className="pb-1 text-lg text-on-surface-variant">
+            <span className="sr-only">Precio anterior: </span>
+            <s>{formatPrice(view.was, currency)}</s>
+          </p>
+        ) : null}
+      </div>
+      {usd ? (
+        <p className="mt-2 text-on-surface-variant">
+          o paga en dólares: <span className="font-bold text-on-background">{usd}</span>
+        </p>
+      ) : null}
+      {view.saved ? (
+        <p className="mt-3 inline-flex flex-wrap items-center gap-1.5 rounded-full bg-deal-strong px-3 py-1 text-sm font-bold text-on-deal">
+          <Icon name="deal" /> Ahorras {formatPrice(view.saved, currency)}
+          {view.percent ? ` (${view.percent}%)` : ""}
+          {view.applies ? ` · con tu cupón de ${coupon}` : ""}
+        </p>
+      ) : null}
+    </>
+  );
+}
+
+/** El precio de la barra móvil: sigue al cupón igual que el de la ficha. */
+export function ReservationBarPrice({
+  price,
+  originalPrice,
+  currency,
+}: {
+  price: number;
+  originalPrice: number | null;
+  currency: string;
+}) {
+  const { reserved } = useReservation();
+  const view = pricing(price, originalPrice, currency, reserved);
+  const usd = formatUsdEquivalent(view.shown, currency);
+  return (
+    <div className="min-w-0">
+      <p className="font-display text-2xl font-extrabold leading-none text-white">{formatPrice(view.shown, currency)}</p>
+      {usd ? <p className="mt-1 text-xs text-on-surface-variant">o {usd}</p> : null}
+    </div>
   );
 }
 

@@ -19,7 +19,13 @@ import { StockStatus } from "@/components/product/StockStatus";
 import { isInTransit } from "@/lib/types/product";
 import { dedicatedGpu } from "@/lib/utils/gpu";
 import { WhatsappOrderButton } from "@/components/product/WhatsappButton";
-import { ReservationCheck, ReservationProvider, ReservationToast } from "@/components/product/ReservationOffer";
+import {
+  ReservationBarPrice,
+  ReservationCheck,
+  ReservationPrice,
+  ReservationProvider,
+  ReservationToast,
+} from "@/components/product/ReservationOffer";
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -154,6 +160,10 @@ export default async function ProductPage({ params }: PageParams) {
 
               <h1 className="mt-3 text-[1.75rem] font-extrabold leading-tight md:text-[2.1rem]">{product.name}</h1>
 
+              {inTransit ? (
+                <ReservationPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} />
+              ) : (
+                <>
               <div className="mt-6 flex flex-wrap items-end gap-x-3 gap-y-1">
                 <p className="font-display text-5xl font-extrabold leading-none tracking-tight text-white">
                   {formatPrice(product.price, product.currency)}
@@ -175,6 +185,8 @@ export default async function ProductPage({ params }: PageParams) {
                   <Icon name="deal" /> Ahorras {formatPrice(savings, product.currency)} ({discount}%)
                 </p>
               ) : null}
+                </>
+              )}
 
               <div className="mt-5">
                 <StockStatus stock={product.stock} inTransit={inTransit} />
@@ -182,7 +194,7 @@ export default async function ProductPage({ params }: PageParams) {
 
               {inTransit ? (
                 <div className="mt-5">
-                  <ReservationCheck price={product.price} currency={product.currency} />
+                  <ReservationCheck price={product.price} originalPrice={product.originalPrice} currency={product.currency} />
                 </div>
               ) : null}
 
@@ -266,10 +278,14 @@ export default async function ProductPage({ params }: PageParams) {
         className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-surface/80 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] pt-3 backdrop-blur-2xl md:hidden"
       >
         <div className="flex items-center justify-between gap-3">
+          {inTransit ? (
+            <ReservationBarPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} />
+          ) : (
           <div className="min-w-0">
             <p className="font-display text-2xl font-extrabold leading-none text-white">{formatPrice(product.price, product.currency)}</p>
             {usd ? <p className="mt-1 text-xs text-on-surface-variant">o {usd}</p> : null}
           </div>
+          )}
           <WhatsappOrderButton product={product} productUrl={productUrl} compact />
         </div>
       </div>
