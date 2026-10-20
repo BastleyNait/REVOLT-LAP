@@ -89,8 +89,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido
         </a>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        <PageBackground />
         <HideOnAdmin>
-          <PageBackground />
           <Navbar />
         </HideOnAdmin>
         <div id="contenido" className="flex flex-1 flex-col">

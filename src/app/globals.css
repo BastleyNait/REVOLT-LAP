@@ -267,11 +267,12 @@
   }
 
   /* The admin sits on a plain background: a backdrop blur on every table row
-     and panel cost GPU on each scroll and blurred nothing. Same look, solid. */
+     and panel cost GPU on each scroll. Same tint, no blur. */
   .admin-plain .glass {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background-color: rgb(var(--glass-bg) / 0.9);
+    /* Tailwind composes backdrop-filter from these variables; a plain
+       `backdrop-filter: none` gets mangled by the CSS minifier. */
+    --tw-backdrop-blur: ;
+    --tw-backdrop-saturate: ;
   }
 
   /* Kept for the admin header only. */
