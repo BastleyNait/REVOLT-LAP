@@ -231,7 +231,7 @@ export const siteConfig = {
    */
   reservation: {
     /** Monto del cupón, en soles. */
-    couponPen: 150,
+    couponPen: 100,
   },
   product: {
     ctaLabel: "Pedir por WhatsApp",
