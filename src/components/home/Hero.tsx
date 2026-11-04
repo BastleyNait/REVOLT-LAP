@@ -70,7 +70,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
 
           {/* Frosted stats bar */}
           <ul
-            className="animate-enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
+            className="fx-panel animate-enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
             style={delay(150)}
           >
             {hero.stats.map((stat) => (
@@ -94,7 +94,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
               <WhatsappLink
                 href={generalWhatsappUrl()}
                 source="hero"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(0,0,0,0.1)] backdrop-blur-md transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.97]"
+                className="fx-panel inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(0,0,0,0.1)] backdrop-blur-md transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.97]"
               >
                 <WhatsappIcon className="text-lg" /> WhatsApp
               </WhatsappLink>

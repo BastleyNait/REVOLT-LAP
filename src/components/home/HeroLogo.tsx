@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/config/site";
-import { canRunRichEffects } from "@/lib/utils/device";
+import { useRichFx } from "@/lib/utils/fx-client";
 
 // React Bits — ElectricLogo (WebGL via ogl). Loaded after hydration so the
 // static logo paints first and stays the LCP element.
@@ -21,6 +21,7 @@ const SPREAD = 2;
 
 export function HeroLogo() {
   const [electric, setElectric] = useState(false);
+  const rich = useRichFx();
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -32,9 +33,10 @@ export function HeroLogo() {
     // and the effect never competes with loading. With a mouse that is almost
     // immediate. Modest devices (few cores, little memory, data saver, reduce
     // motion) keep the static logo with its glow — on those the effect was lag.
+    // The decision comes from the site's effects tier (`data-fx`, see fx.ts).
     const start = () => {
       INTERACTION.forEach((type) => window.removeEventListener(type, start));
-      if (!canRunRichEffects()) return;
+      if (!rich) return;
       if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setElectric(true), { timeout: 1000 });
       else setElectric(true);
     };
@@ -50,7 +52,7 @@ export function HeroLogo() {
       reduce.removeEventListener("change", onMotionChange);
       if (idle) window.cancelIdleCallback(idle);
     };
-  }, []);
+  }, [rich]);
 
   return (
     <div className="relative w-full">
@@ -64,7 +66,7 @@ export function HeroLogo() {
         sizes="(max-width: 640px) 90vw, (min-width: 1921px) 28vw, 520px"
         className="relative h-auto w-full drop-shadow-[0_0_40px_rgba(0,160,118,0.35)]"
       />
-      {electric ? (
+      {electric && rich ? (
         <div
           aria-hidden
           className="absolute"

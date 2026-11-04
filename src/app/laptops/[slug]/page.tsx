@@ -275,7 +275,7 @@ export default async function ProductPage({ params }: PageParams) {
       {/* Mobile buy bar — the main CTA always within thumb reach */}
       <div
         data-sticky-cta
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-surface/80 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] pt-3 backdrop-blur-2xl md:hidden"
+        className="fx-solid fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-surface/80 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] pt-3 backdrop-blur-2xl md:hidden"
       >
         <div className="flex items-center justify-between gap-3">
           {inTransit ? (

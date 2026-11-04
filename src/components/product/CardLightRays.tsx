@@ -17,7 +17,7 @@ export function CardLightRays({ uid }: { uid: string }) {
   ];
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
+    <div aria-hidden className="fx-rich-only pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
       {/* Soft glow */}
       <svg className="absolute inset-0 h-full w-full blur-2xl" viewBox="0 0 400 640" preserveAspectRatio="none">
         <defs>

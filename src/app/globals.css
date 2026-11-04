@@ -258,12 +258,20 @@
 @layer components {
   /* Frosted glass surface — the base container of the design language. */
   .glass {
-    @apply backdrop-blur-xl backdrop-saturate-150;
+    /* Nivel "lite" (por defecto): transparencia simple y pulida, sin desenfoque
+       del fondo — un velo con un brillo leve arriba, borde fino y sombra suave. */
     background-color: rgb(var(--glass-bg) / var(--glass-a));
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 55%);
     border: 1px solid rgb(var(--glass-brd) / var(--glass-brd-a));
     box-shadow:
       0 10px 30px -8px rgb(var(--c-shadow) / var(--glass-sh-a)),
       inset 0 1px 0 0 rgb(255 255 255 / var(--glass-sheen));
+  }
+
+  /* Nivel "rich" (equipos potentes): el vidrio esmerilado completo. */
+  html[data-fx="rich"] .glass {
+    @apply backdrop-blur-xl backdrop-saturate-150;
+    background-image: none;
   }
 
   /* The admin sits on a plain background: a backdrop blur on every table row
@@ -273,6 +281,42 @@
        `backdrop-filter: none` gets mangled by the CSS minifier. */
     --tw-backdrop-blur: ;
     --tw-backdrop-saturate: ;
+  }
+
+  /*
+   * Niveles de efectos (ver src/lib/utils/fx.ts). `data-fx` en <html> es "rich"
+   * solo en equipos que lo aguantan; en cualquier otro caso —o sin JS— rige
+   * "lite". En lite no hay desenfoque del fondo en ninguna parte: Tailwind arma
+   * `backdrop-filter` y `filter` a partir de estas variables, así que vaciarlas
+   * en todos los elementos lo apaga sin tocar cada componente.
+   */
+  html:not([data-fx="rich"]) * {
+    --tw-backdrop-blur: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-opacity: ;
+    --tw-blur: ;
+  }
+
+  /* Capas decorativas solo para equipos potentes / solo para la versión liviana. */
+  html:not([data-fx="rich"]) .fx-rich-only,
+  html[data-fx="rich"] .fx-lite-only {
+    display: none !important;
+  }
+
+  /* La foto de la tarjeta se funde con una sola máscara lineal (la radial doble es más cara). */
+  html:not([data-fx="rich"]) .card-photo {
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 98%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 98%);
+  }
+
+  /* Sin desenfoque detrás, los paneles sobre fotos necesitan un velo algo más firme. */
+  html:not([data-fx="rich"]) .fx-panel {
+    background-color: rgb(4 10 8 / 0.6);
+  }
+  html:not([data-fx="rich"]) .fx-solid {
+    background-color: rgb(var(--c-surface) / 0.96);
   }
 
   /* Kept for the admin header only. */

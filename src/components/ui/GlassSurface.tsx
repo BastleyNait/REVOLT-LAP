@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useId, CSSProperties, ReactNode } from "react";
 import "./GlassSurface.css";
 import { canRunHeavyGlass } from "@/lib/utils/device";
+import { useRichFx } from "@/lib/utils/fx-client";
 
 interface GlassSurfaceProps {
   children?: ReactNode;
@@ -58,6 +59,8 @@ const GlassSurface = ({
   const blueGradId = `blue-grad-${uniqueId}`;
 
   const [svgSupported, setSvgSupported] = useState(false);
+  // Nivel de efectos del sitio: si baja a "lite" en caliente, el filtro SVG se apaga.
+  const rich = useRichFx();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const feImageRef = useRef<SVGFEImageElement>(null);
@@ -147,12 +150,12 @@ const GlassSurface = ({
     // The SVG displacement backdrop re-filters everything behind the navbar on
     // every scroll frame: gorgeous on a strong desktop, lag on a modest laptop
     // or a phone. Those get the CSS-blur fallback, which looks almost the same.
-    const svg = supportsSVGFilters() && canRunHeavyGlass();
+    const svg = rich && supportsSVGFilters() && canRunHeavyGlass();
     svgOnRef.current = svg;
     setSvgSupported(svg);
     if (svg) updateDisplacementMap();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [rich]);
 
   const containerStyle: CSSProperties & Record<string, unknown> = {
     ...style,

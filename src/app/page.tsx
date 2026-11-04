@@ -43,7 +43,7 @@ export default async function HomePage() {
        */}
       <div aria-hidden className="pointer-events-none relative z-[2] h-0">
         <div className="absolute inset-x-0 top-0 h-[26rem] bg-[linear-gradient(to_bottom,rgb(1_2_1)_0%,rgb(1_2_1/0.85)_30%,rgb(1_2_1/0.4)_65%,transparent_100%)]" />
-        <div className="absolute left-1/2 top-0 h-36 w-[70vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgb(0_106_78/0.28)_0%,rgb(0_60_44/0.12)_50%,transparent_75%)] blur-2xl" />
+        <div className="absolute left-1/2 top-0 h-36 w-[70vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgb(0_106_78/0.28)_0%,rgb(0_60_44/0.12)_50%,transparent_75%)]" />
       </div>
 
       <div className="relative z-[3] mx-auto max-w-[75rem] space-y-24 px-4 pb-20 pt-6 md:space-y-32 md:px-8 md:pb-28">

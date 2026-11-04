@@ -6,6 +6,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBackground } from "@/components/layout/PageBackground";
 import { HideOnAdmin } from "@/components/layout/HideOnAdmin";
+import { FxMonitor } from "@/components/layout/FxMonitor";
+import { FX_SCRIPT } from "@/lib/utils/fx";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
@@ -83,7 +85,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={cn("dark", archivo.variable)}>
+    // `data-fx` lo pone FX_SCRIPT antes de pintar (nivel de efectos): React no lo conoce.
+    <html lang="es-PE" className={cn("dark", archivo.variable)} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: FX_SCRIPT }} />
+      </head>
       <body suppressHydrationWarning className="flex min-h-screen flex-col font-sans">
         <a
           href="#contenido"
@@ -93,6 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <PageBackground />
+        <FxMonitor />
         <HideOnAdmin>
           <Navbar />
         </HideOnAdmin>

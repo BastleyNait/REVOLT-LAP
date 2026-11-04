@@ -46,9 +46,12 @@ export function ProductCard({ product }: { product: Product }) {
       {/* Ambient glow: the same photo, enlarged, darkened and blurred, behind the laptop.
           A 16px copy stretched over the card is already soft, so a light blur
           finishes it — a 64px blur over the whole area was the costly part. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-3/5 overflow-hidden [mask-image:linear-gradient(to_bottom,black,transparent)]">
+      <div aria-hidden className="fx-rich-only pointer-events-none absolute inset-x-0 top-0 h-3/5 overflow-hidden [mask-image:linear-gradient(to_bottom,black,transparent)]">
         <SafeImage src={cover} alt="" fill sizes="16px" className="scale-150 object-cover opacity-40 blur-xl brightness-[0.3] saturate-150" />
       </div>
+
+      {/* Versión liviana del brillo de arriba: un degradado, sin foto desenfocada. */}
+      <div aria-hidden className="fx-lite-only pointer-events-none absolute inset-x-0 top-0 h-3/5 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgb(18_180_128/0.14),transparent)]" />
 
       <CardLightRays uid={product.id} />
 
@@ -57,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
          * Photo melts into the card: a radial mask keeps the laptop in focus
          * and dissolves the light table/wall around it into the black card.
          */}
-        <div className="relative aspect-[4/3] [-webkit-mask-composite:source-in] [mask-composite:intersect] [mask-image:radial-gradient(ellipse_58%_60%_at_50%_46%,black_38%,transparent_100%),linear-gradient(to_bottom,black_55%,transparent_96%)]">
+        <div className="card-photo relative aspect-[4/3] [-webkit-mask-composite:source-in] [mask-composite:intersect] [mask-image:radial-gradient(ellipse_58%_60%_at_50%_46%,black_38%,transparent_100%),linear-gradient(to_bottom,black_55%,transparent_96%)]">
           <SafeImage
             src={cover}
             alt={`${product.name} reacondicionada`}

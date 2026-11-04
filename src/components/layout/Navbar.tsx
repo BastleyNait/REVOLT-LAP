@@ -103,7 +103,7 @@ export function Navbar() {
         id="menu-movil"
         inert={!open}
         className={cn(
-          "absolute inset-x-3 top-[calc(100%+0.5rem)] origin-top-right rounded-3xl border border-white/10 bg-surface/80 shadow-[0_16px_40px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-[opacity,transform,visibility] ease-out-strong motion-reduce:transform-none md:hidden",
+          "fx-solid absolute inset-x-3 top-[calc(100%+0.5rem)] origin-top-right rounded-3xl border border-white/10 bg-surface/80 shadow-[0_16px_40px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-[opacity,transform,visibility] ease-out-strong motion-reduce:transform-none md:hidden",
           open ? "visible scale-100 opacity-100 duration-200" : "invisible scale-[0.97] opacity-0 duration-150",
         )}
       >
