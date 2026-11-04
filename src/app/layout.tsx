@@ -75,6 +75,9 @@ export const metadata: Metadata = {
   other: {
     "geo.region": "PE-ARE",
     "geo.placename": siteConfig.business.city,
+    // The site is already dark: tells the Dark Reader extension to leave it alone
+    // (it injects attributes before hydration and triggers a mismatch warning).
+    "darkreader-lock": "true",
   },
 };
 

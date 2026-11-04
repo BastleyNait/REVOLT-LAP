@@ -1,14 +1,31 @@
 import type { Product } from "@/lib/types/product";
+import { availability } from "@/lib/types/product";
 import { ProductCard } from "./ProductCard";
+import { CatalogFilter } from "./CatalogFilter";
 import { siteConfig } from "@/lib/config/site";
 
-/** Server-rendered catalogue grid. Functional UI: no scroll animations. */
-export function ProductGrid({ products }: { products: Product[] }) {
+/**
+ * Server-rendered catalogue grid. Functional UI: no scroll animations.
+ * `filterable` adds the availability filter (home page catalogue).
+ */
+export function ProductGrid({ products, filterable = false }: { products: Product[]; filterable?: boolean }) {
   if (products.length === 0) {
     return (
       <div className="glass rounded-3xl p-12 text-center">
         <p className="text-lg font-semibold text-on-surface-variant">{siteConfig.home.inventory.empty}</p>
       </div>
+    );
+  }
+
+  if (filterable) {
+    return (
+      <CatalogFilter
+        items={products.map((product) => ({
+          id: product.id,
+          availability: availability(product),
+          card: <ProductCard product={product} />,
+        }))}
+      />
     );
   }
 

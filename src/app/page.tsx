@@ -14,7 +14,7 @@ import { siteConfig } from "@/lib/config/site";
 import { landingPath, landings } from "@/lib/seo/landings";
 import { Icon } from "@/components/ui/Icon";
 import { ReservationHomeToast } from "@/components/product/ReservationOffer";
-import { isInTransit } from "@/lib/types/product";
+import { availability, isInTransit } from "@/lib/types/product";
 
 export const revalidate = 60;
 
@@ -26,11 +26,15 @@ export default async function HomePage() {
   const products = await getProducts();
   const minPrice = products.length ? Math.min(...products.map((product) => product.price)) : null;
   const { inventory } = siteConfig.home;
+  const incoming = products.filter((product) => availability(product) === "incoming").length;
+  const inStock = products.filter((product) => availability(product) === "in-stock").length;
+  // Featured laptops for the hero carousel; sold-out ones are skipped.
+  const featured = products.filter((product) => product.isFeatured && availability(product) !== "sold-out").slice(0, 6);
 
   return (
     <main className="relative flex-1">
       <JsonLd data={[itemListJsonLd(products), faqJsonLd(siteConfig.home.faq)]} />
-      <Hero minPrice={minPrice} />
+      <Hero minPrice={minPrice} featured={featured} />
       <ReservationHomeToast inTransitCount={products.filter(isInTransit).length} />
 
       {/*
@@ -51,12 +55,14 @@ export default async function HomePage() {
             aside={
               products.length ? (
                 <p className="text-sm font-semibold text-on-surface-variant">
-                  {products.length} {products.length === 1 ? "equipo" : "equipos"} en stock
+                  {inStock} {inStock === 1 ? "equipo" : "equipos"} en stock
+                  {incoming ? ` · ${incoming} en camino` : ""}
+                  {products.length - inStock - incoming ? ` · ${products.length - inStock - incoming} agotadas` : ""}
                 </p>
               ) : null
             }
           />
-          <ProductGrid products={products} />
+          <ProductGrid products={products} filterable />
           <nav aria-labelledby="busca-por-tipo" className="space-y-3 pt-2">
             <h3 id="busca-por-tipo" className="text-sm font-semibold text-on-surface-variant">Busca por tipo</h3>
             <ul className="flex flex-wrap gap-2.5">

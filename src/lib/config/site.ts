@@ -117,6 +117,9 @@ export const siteConfig = {
         "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
       ctaLabel: "Ver inventario",
       flash: "Envío gratis · Equipos en stock y a pedido",
+      /** Social proof block of the hero. Rendered as "+{count} {label}". */
+      sold: { count: 10, label: "laptops vendidas" },
+      featuredLabel: "Destacadas",
       stats: [
         { icon: "package", label: "Stock disponible" },
         { icon: "truck", label: "Envío rápido" },
@@ -128,6 +131,14 @@ export const siteConfig = {
       title: "Laptops disponibles",
       subtitle: "Precios en soles. También puedes pagar el equivalente en dólares.",
       empty: "Sin stock por ahora. Vuelve pronto: el inventario rota rápido.",
+      filters: {
+        label: "Filtrar por disponibilidad",
+        all: "Todas",
+        "in-stock": "En stock",
+        incoming: "En camino",
+        "sold-out": "Agotadas",
+        emptyFilter: "No hay laptops en este estado por ahora.",
+      },
     },
     steps: [
       {

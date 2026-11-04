@@ -11,6 +11,7 @@ import { StockStatus } from "./StockStatus";
 import { dedicatedGpu } from "@/lib/utils/gpu";
 import { cn } from "@/lib/utils/cn";
 import { CardLightRays } from "./CardLightRays";
+import { ShareButton } from "./ShareButton";
 
 /**
  * Frosted-glass catalogue card inside a React Bits SpotlightCard (a brand-green
@@ -134,7 +135,10 @@ export function ProductCard({ product }: { product: Product }) {
                 </div>
               ) : null}
             </div>
-            <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
+            <div className="flex items-center justify-between gap-2">
+              <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
+              <ShareButton href={href} label={product.name} className="-mr-2" />
+            </div>
           </div>
         </div>
       </article>

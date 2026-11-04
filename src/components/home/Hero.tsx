@@ -9,7 +9,9 @@ import { Icon, WhatsappIcon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 import ShinyText from "@/components/ShinyText";
 import ClickSpark from "@/components/ClickSpark";
+import type { Product } from "@/lib/types/product";
 import { HeroLogo } from "./HeroLogo";
+import { FeaturedCarousel } from "./FeaturedCarousel";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -19,7 +21,7 @@ const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
  * React Bits: ElectricLogo on the mark, ShinyText on the title, ClickSpark on
  * the CTAs. Entrance is a CSS stagger; reduced motion skips every effect.
  */
-export function Hero({ minPrice }: { minPrice: number | null }) {
+export function Hero({ minPrice, featured }: { minPrice: number | null; featured: Product[] }) {
   const { hero } = siteConfig.home;
 
   return (
@@ -57,9 +59,18 @@ export function Hero({ minPrice }: { minPrice: number | null }) {
             {hero.pitch}
           </p>
 
+          {/* Social proof: big number on its own, outside the stats bar */}
+          <div className="animate-enter mt-8 flex items-center gap-4" style={delay(125)}>
+            <span className="font-display text-6xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-7xl">
+              +{hero.sold.count}
+            </span>
+            <span aria-hidden className="h-12 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent" />
+            <span className="max-w-[7rem] text-sm font-bold uppercase leading-snug tracking-[0.2em] text-white/80">{hero.sold.label}</span>
+          </div>
+
           {/* Frosted stats bar */}
           <ul
-            className="animate-enter mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
+            className="animate-enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
             style={delay(150)}
           >
             {hero.stats.map((stat) => (
@@ -102,6 +113,15 @@ export function Hero({ minPrice }: { minPrice: number | null }) {
             </p>
           ) : null}
         </div>
+
+        {/* Featured carousel: right column on desktop, below the CTAs on phones/tablets. */}
+        {featured.length ? (
+          <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[19rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[22rem]">
+            <div className="animate-enter" style={delay(300)}>
+              <FeaturedCarousel products={featured} />
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {/* Scroll indicator */}

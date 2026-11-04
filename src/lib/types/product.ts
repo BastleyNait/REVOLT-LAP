@@ -61,6 +61,14 @@ export function isInTransit(product: Pick<Product, "badges">): boolean {
   return product.badges.some((badge) => badge.trim().toUpperCase() === IN_TRANSIT_BADGE);
 }
 
+export type Availability = "in-stock" | "incoming" | "sold-out";
+
+/** Catalogue state of a product. "En camino" wins over stock, same as StockStatus. */
+export function availability(product: Pick<Product, "stock" | "badges">): Availability {
+  if (isInTransit(product)) return "incoming";
+  return product.stock > 0 ? "in-stock" : "sold-out";
+}
+
 /** Badges without the reserved in-transit one (it is shown as availability, not as a chip). */
 export function visibleBadges(product: Pick<Product, "badges">): string[] {
   return product.badges.filter((badge) => badge.trim().toUpperCase() !== IN_TRANSIT_BADGE);
