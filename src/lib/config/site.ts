@@ -114,11 +114,11 @@ export const siteConfig = {
       /** Rendered as the page <h1> in the original tracked-caps style. */
       title: "Laptops reacondicionadas en Perú",
       pitch:
-        "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar.",
+        "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar. Entrega presencial en Arequipa y envios a todo el Perú",
       ctaLabel: "Ver inventario",
       flash: "Envío gratis · Equipos en stock y a pedido",
       /** Social proof block of the hero. Rendered as "+{count} {label}". */
-      sold: { count: 10, label: "laptops vendidas" },
+      sold: { count: "100%", label: "Confiable" },
       featuredLabel: "Destacadas",
       stats: [
         { icon: "package", label: "Stock disponible" },

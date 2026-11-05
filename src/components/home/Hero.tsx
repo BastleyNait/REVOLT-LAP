@@ -62,10 +62,15 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
           {/* Social proof: big number on its own, outside the stats bar */}
           <div className="animate-enter mt-8 flex items-center gap-4" style={delay(125)}>
             <span className="font-display text-6xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-7xl">
-              +{hero.sold.count}
+              {hero.sold.count}
             </span>
             <span aria-hidden className="h-12 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent" />
             <span className="max-w-[7rem] text-sm font-bold uppercase leading-snug tracking-[0.2em] text-white/80">{hero.sold.label}</span>
+            <span className="font-display text-6xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-7xl">
+              6
+            </span>
+            <span aria-hidden className="h-12 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent" />
+            <span className="max-w-[7rem] text-sm font-bold uppercase leading-snug tracking-[0.2em] text-white/80">meses de Garantia</span>
           </div>
 
           {/* Frosted stats bar */}
