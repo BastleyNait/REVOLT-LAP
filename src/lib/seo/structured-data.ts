@@ -23,7 +23,7 @@ export function productPath(slug: string): string {
 
 export function organizationJsonLd() {
   const { business, whatsapp } = siteConfig;
-  const sameAs = siteConfig.socials.map((social) => social.href).filter(Boolean);
+  const sameAs = [...siteConfig.socials.map((social) => social.href), business.googleBusinessUrl].filter(Boolean);
 
   return {
     "@context": "https://schema.org",

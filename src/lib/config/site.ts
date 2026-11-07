@@ -58,6 +58,10 @@ const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").
 const DEPOSIT_PEN = 50;
 /** Meses de garantía. Cámbialo acá y se actualiza en toda la página. */
 const WARRANTY_MONTHS = 6;
+/** RUC del negocio (persona natural con negocio). Se puede cambiar con NEXT_PUBLIC_RUC. */
+const RUC = process.env.NEXT_PUBLIC_RUC || "10710027078";
+/** Horas que tiene el cliente para pagar el saldo desde que recibe la foto de la guía. */
+const BALANCE_HOURS = 24;
 
 export const siteConfig = {
   name: "REVOLT",
@@ -105,13 +109,19 @@ export const siteConfig = {
      * en la ficha y en los datos para Google: es lo primero que preguntan los
      * clientes que desconfían.
      */
-    ruc: process.env.NEXT_PUBLIC_RUC ?? "",
+    ruc: RUC,
     /**
      * Nombre del titular de las cuentas (Yape / BCP). Si lo pones, la página
      * avisa que solo se paga a ese nombre: así el cliente sabe que el depósito
      * es legítimo y no cae en imitadores. Vacío = no se muestra.
      */
-    accountHolder: process.env.NEXT_PUBLIC_ACCOUNT_HOLDER ?? "",
+    accountHolder: process.env.NEXT_PUBLIC_ACCOUNT_HOLDER || "Sebastian Chirinos",
+    /**
+     * Enlace a la ficha de Google Business (Maps → Compartir → copiar enlace).
+     * Con valor aparece "Ver reseñas en Google" en "Cómo comprar" y el pie, y
+     * Google enlaza la web con la ficha (sameAs). Vacío = no se muestra.
+     */
+    googleBusinessUrl: process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL || "",
   },
   /** Garantía, comprobante y envío: se repiten en el hero, la ficha, el FAQ y los datos para Google. */
   warranty: {
@@ -130,6 +140,7 @@ export const siteConfig = {
    */
   payment: {
     depositPen: DEPOSIT_PEN,
+    balanceHours: BALANCE_HOURS,
     methods: "Yape, transferencia o depósito BCP",
   },
   whatsapp: {
@@ -215,7 +226,7 @@ export const siteConfig = {
       {
         icon: "wallet",
         title: `Separa con S/ ${DEPOSIT_PEN}`,
-        body: "Por Yape, transferencia o depósito BCP. Es lo único que adelantas.",
+        body: "Por Yape, transferencia o depósito BCP. No es un pago extra: se descuenta del precio de la laptop.",
       },
       {
         icon: "video",
@@ -225,13 +236,13 @@ export const siteConfig = {
       {
         icon: "key",
         title: "Pagas el saldo y recoges",
-        body: "Con la guía en la mano pagas el saldo y te damos la clave para retirarla en tu agencia Shalom. En Arequipa también la entregamos en persona.",
+        body: `Con la guía en la mano tienes ${BALANCE_HOURS} horas para pagar el saldo, y te damos la clave para retirarla en tu agencia Shalom. En Arequipa también la entregamos en persona.`,
       },
     ],
     /** Short guarantees under the steps. */
     guarantees: [
       { icon: "shield", title: `${WARRANTY_MONTHS} meses de garantía`, body: "Si presenta una falla de funcionamiento, la revisamos y solucionamos." },
-      { icon: "receipt", title: "Boleta electrónica", body: "Emitimos boleta de venta electrónica al completar el pago." },
+      { icon: "receipt", title: "Boleta electrónica", body: `Con RUC ${RUC}, al completar el pago. Verificable en SUNAT.` },
       { icon: "verified", title: "Componentes originales", body: "Equipos corporativos con sus piezas de fábrica, revisados por técnicos." },
       { icon: "truck", title: "Envío con Shalom", body: "A Lima llega en 2 a 3 días hábiles. A todo el Perú." },
     ],
@@ -249,6 +260,10 @@ export const siteConfig = {
           `Sí. Solo adelantas S/ ${DEPOSIT_PEN} para separar la laptop. Luego te enviamos foto y video del equipo siendo empaquetado y la guía de Shalom a tu nombre, y recién ahí pagas el saldo. En Arequipa también te la entregamos en persona. Emitimos boleta electrónica y la laptop tiene ${WARRANTY_MONTHS} meses de garantía.`,
       },
       {
+        question: "¿Qué pasa con mi adelanto si al final no compro?",
+        answer: `Si te arrepientes antes de que enviemos la laptop, te devolvemos el adelanto completo. Una vez enviada, tienes ${BALANCE_HOURS} horas desde que te mandamos la guía para pagar el saldo; si no se concreta, el adelanto se usa para cubrir el envío de ida y el retorno de la laptop a Arequipa.`,
+      },
+      {
         question: "¿Las laptops tienen garantía?",
         answer:
           `Sí, todas tienen ${WARRANTY_MONTHS} meses de garantía. Cubre fallas de funcionamiento del equipo (placa, pantalla, teclado, puertos, memoria, almacenamiento). No cubre golpes, caídas, líquidos ni daños por mal uso. Si algo falla, nos escribes por WhatsApp y lo revisamos.`,
@@ -256,7 +271,7 @@ export const siteConfig = {
       {
         question: "¿Emiten boleta o factura?",
         answer:
-          "Sí. Trabajamos con RUC y emitimos boleta de venta electrónica una vez que completas el pago.",
+          `Sí. Trabajamos con RUC ${RUC} y emitimos boleta de venta electrónica una vez que completas el pago. Puedes verificar el RUC en la consulta RUC de SUNAT.`,
       },
       {
         question: "¿Cuánto demora el envío a Lima y provincias?",

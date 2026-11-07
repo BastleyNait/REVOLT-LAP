@@ -13,7 +13,7 @@ import { WhatsappLink } from "@/components/analytics/WhatsappLink";
  */
 export function HowToBuy() {
   const { howToBuy, steps, guarantees, deliveries } = siteConfig.home;
-  const { ruc, accountHolder } = siteConfig.business;
+  const { ruc, accountHolder, googleBusinessUrl } = siteConfig.business;
 
   return (
     <section id="como-comprar" aria-labelledby="como-comprar-title" className="glass scroll-mt-28 rounded-[2rem] p-6 md:p-10">
@@ -69,12 +69,25 @@ export function HowToBuy() {
             ) : null}
             {accountHolder ? (
               <>
-                Solo pagas a cuentas a nombre de <strong className="font-semibold text-on-surface">{accountHolder}</strong>; nunca te
-                pediremos depositar a otra persona.
+                Solo pagas a cuentas a nombre de <strong className="font-semibold text-on-surface">{accountHolder}</strong>, y los números
+                te los pasamos únicamente por nuestro WhatsApp oficial{" "}
+                <strong className="font-semibold text-on-surface">{siteConfig.whatsapp.display}</strong>. Nunca te pediremos depositar a
+                otra persona.
               </>
             ) : null}
           </span>
         </p>
+      ) : null}
+
+      {googleBusinessUrl ? (
+        <a
+          href={googleBusinessUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonClasses({ variant: "outline", size: "md", className: "mt-6 min-h-12" })}
+        >
+          <Icon name="verified" className="text-lg text-primary" /> Ver reseñas en Google
+        </a>
       ) : null}
 
       {deliveries.length ? (

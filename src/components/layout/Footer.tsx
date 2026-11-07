@@ -70,6 +70,16 @@ export function Footer() {
             >
               <WhatsappIcon className="text-lg" /> {whatsapp.display}
             </WhatsappLink>
+            {business.googleBusinessUrl ? (
+              <a
+                href={business.googleBusinessUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-10 items-center text-on-surface-variant underline decoration-white/20 underline-offset-4 transition-colors duration-150 hover:text-on-surface"
+              >
+                Ver reseñas en Google
+              </a>
+            ) : null}
             {socials.length ? (
               <ul className="flex flex-wrap gap-2 pt-1">
                 {socials.map((social) => (
