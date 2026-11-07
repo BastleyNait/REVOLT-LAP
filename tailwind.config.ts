@@ -21,6 +21,12 @@ const config: Config = {
   content: ["./src/**/*.{ts,tsx,mdx}"],
   theme: {
     extend: {
+      screens: {
+        // Laptops with a short viewport (1366×768, Full HD at 125–150 % zoom):
+        // the hero compacts so it fits on one screen. Declared after the
+        // default breakpoints, so it overrides `lg:` utilities.
+        short: { raw: "(min-width: 1024px) and (max-height: 860px)" },
+      },
       colors: {
         // Core surfaces
         background: c("background"),
