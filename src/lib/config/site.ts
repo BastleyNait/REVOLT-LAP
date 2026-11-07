@@ -61,7 +61,7 @@ const WARRANTY_MONTHS = 6;
 /** RUC del negocio (persona natural con negocio). Se puede cambiar con NEXT_PUBLIC_RUC. */
 const RUC = process.env.NEXT_PUBLIC_RUC || "10710027078";
 /** Horas que tiene el cliente para pagar el saldo desde que recibe la foto de la guía. */
-const BALANCE_HOURS = 24;
+const BALANCE_HOURS = 12;
 
 export const siteConfig = {
   name: "REVOLT",
