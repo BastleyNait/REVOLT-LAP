@@ -15,13 +15,15 @@ import { siteConfig } from "@/lib/config/site";
 export function WhatsappOrderButton({
   product,
   productUrl,
+  usdRate,
   compact = false,
 }: {
   product: Product;
   productUrl: string;
+  usdRate: number;
   compact?: boolean;
 }) {
-  const href = buildWhatsappUrl(product, { productUrl });
+  const href = buildWhatsappUrl(product, { productUrl, usdRate });
   const source = compact ? "producto_barra_movil" : "producto";
   const className = buttonClasses({
     variant: "primary",
@@ -35,7 +37,7 @@ export function WhatsappOrderButton({
       {isInTransit(product) ? (
         <ReservationWhatsappLink
           href={href}
-          reserveHref={buildWhatsappUrl(product, { productUrl, reserve: true })}
+          reserveHref={buildWhatsappUrl(product, { productUrl, reserve: true, usdRate })}
           label={siteConfig.product.ctaLabel}
           reserveLabel={compact ? "Reservar con cupón" : "Reservar con mi cupón"}
           source={source}

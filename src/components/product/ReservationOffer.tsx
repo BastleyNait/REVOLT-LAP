@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ComponentProps, type ReactNode } from "react";
 import { RESERVATION_COUPON_PEN } from "@/lib/types/product";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
+import { siteConfig } from "@/lib/config/site";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 import { cn } from "@/lib/utils/cn";
@@ -108,14 +109,16 @@ export function ReservationPrice({
   price,
   originalPrice,
   currency,
+  usdRate,
 }: {
   price: number;
   originalPrice: number | null;
   currency: string;
+  usdRate: number;
 }) {
   const { reserved } = useReservation();
   const view = pricing(price, originalPrice, currency, reserved);
-  const usd = formatUsdEquivalent(view.shown, currency);
+  const usd = formatUsdEquivalent(view.shown, currency, usdRate);
 
   return (
     <>
@@ -132,7 +135,8 @@ export function ReservationPrice({
       </div>
       {usd ? (
         <p className="mt-2 text-on-surface-variant">
-          o paga en dólares: <span className="font-bold text-on-background">{usd}</span>
+          o paga en dólares: <span className="font-bold text-on-background">{usd}</span>{" "}
+          <span className="text-sm">(ahorras hasta {formatPrice(siteConfig.usdPayment.discountPen, "PEN")})</span>
         </p>
       ) : null}
       {view.saved ? (
@@ -151,14 +155,16 @@ export function ReservationBarPrice({
   price,
   originalPrice,
   currency,
+  usdRate,
 }: {
   price: number;
   originalPrice: number | null;
   currency: string;
+  usdRate: number;
 }) {
   const { reserved } = useReservation();
   const view = pricing(price, originalPrice, currency, reserved);
-  const usd = formatUsdEquivalent(view.shown, currency);
+  const usd = formatUsdEquivalent(view.shown, currency, usdRate);
   return (
     <div className="min-w-0">
       <p className="font-display text-2xl font-extrabold leading-none text-white">{formatPrice(view.shown, currency)}</p>

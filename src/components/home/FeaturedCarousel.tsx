@@ -9,10 +9,11 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { Icon } from "@/components/ui/Icon";
 import { StockStatus } from "@/components/product/StockStatus";
 import { CarouselTrack } from "./CarouselTrack";
+import { getUsdRate } from "@/lib/services/exchange-rate";
 
-function FeaturedSlide({ product, eager }: { product: Product; eager: boolean }) {
+function FeaturedSlide({ product, eager, usdRate }: { product: Product; eager: boolean; usdRate: number }) {
   const discount = discountPercent(product.price, product.originalPrice);
-  const usd = formatUsdEquivalent(product.price, product.currency);
+  const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
   const specs = [
     product.processor && localizeLabel(product.processor),
     product.ram && withCapacityUnit(product.ram),
@@ -62,8 +63,9 @@ function FeaturedSlide({ product, eager }: { product: Product; eager: boolean })
  * Hero carousel of the featured laptops (the ones marked "Destacado" in the
  * admin). Slides render on the server; only the scrolling is client-side.
  */
-export function FeaturedCarousel({ products }: { products: Product[] }) {
+export async function FeaturedCarousel({ products }: { products: Product[] }) {
   if (products.length === 0) return null;
+  const usdRate = await getUsdRate();
 
   return (
     <CarouselTrack
@@ -75,7 +77,7 @@ export function FeaturedCarousel({ products }: { products: Product[] }) {
         </p>
       }
       slides={products.map((product, i) => (
-        <FeaturedSlide key={product.id} product={product} eager={i === 0} />
+        <FeaturedSlide key={product.id} product={product} eager={i === 0} usdRate={usdRate} />
       ))}
     />
   );

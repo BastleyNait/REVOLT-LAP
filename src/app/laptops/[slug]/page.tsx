@@ -29,6 +29,7 @@ import {
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getUsdRate } from "@/lib/services/exchange-rate";
 import { landingBySlug, landingPath } from "@/lib/seo/landings";
 
 export const revalidate = 60;
@@ -82,10 +83,10 @@ export default async function ProductPage({ params }: PageParams) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = await getRelatedProducts(product);
+  const [related, usdRate] = await Promise.all([getRelatedProducts(product), getUsdRate()]);
   const productUrl = absoluteUrl(productPath(product.slug));
   const discount = discountPercent(product.price, product.originalPrice);
-  const usd = formatUsdEquivalent(product.price, product.currency);
+  const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
   const savings = discount && product.originalPrice ? product.originalPrice - product.price : null;
   const condition = conditionLabel(product.conditionGrade);
 
@@ -161,7 +162,7 @@ export default async function ProductPage({ params }: PageParams) {
               <h1 className="mt-3 text-[1.75rem] font-extrabold leading-tight md:text-[2.1rem]">{product.name}</h1>
 
               {inTransit ? (
-                <ReservationPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} />
+                <ReservationPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} usdRate={usdRate} />
               ) : (
                 <>
               <div className="mt-6 flex flex-wrap items-end gap-x-3 gap-y-1">
@@ -177,7 +178,8 @@ export default async function ProductPage({ params }: PageParams) {
               </div>
               {usd ? (
                 <p className="mt-2 text-on-surface-variant">
-                  o paga en dólares: <span className="font-bold text-on-background">{usd}</span>
+                  o paga en dólares: <span className="font-bold text-on-background">{usd}</span>{" "}
+                  <span className="text-sm">(ahorras hasta {formatPrice(siteConfig.usdPayment.discountPen, "PEN")})</span>
                 </p>
               ) : null}
               {savings ? (
@@ -199,7 +201,7 @@ export default async function ProductPage({ params }: PageParams) {
               ) : null}
 
               <div className="mt-6">
-                <WhatsappOrderButton product={product} productUrl={productUrl} />
+                <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} />
                 <p className="mt-3 text-center text-sm leading-relaxed text-on-surface-variant">
                   {siteConfig.product.safeNote}{" "}
                   <Link
@@ -285,14 +287,14 @@ export default async function ProductPage({ params }: PageParams) {
       >
         <div className="flex items-center justify-between gap-3">
           {inTransit ? (
-            <ReservationBarPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} />
+            <ReservationBarPrice price={product.price} originalPrice={product.originalPrice} currency={product.currency} usdRate={usdRate} />
           ) : (
           <div className="min-w-0">
             <p className="font-display text-2xl font-extrabold leading-none text-white">{formatPrice(product.price, product.currency)}</p>
             {usd ? <p className="mt-1 text-xs text-on-surface-variant">o {usd}</p> : null}
           </div>
           )}
-          <WhatsappOrderButton product={product} productUrl={productUrl} compact />
+          <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} compact />
         </div>
       </div>
       </Scope>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getUsdRate } from "@/lib/services/exchange-rate";
 import type { Product } from "@/lib/types/product";
 import { RESERVATION_COUPON_PEN, isInTransit, productCover } from "@/lib/types/product";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -19,10 +20,11 @@ import { ShareButton } from "./ShareButton";
  * so the card is one big tap target without nesting interactive elements.
  * Hover is a near-imperceptible lift (seen tens of times per visit).
  */
-export function ProductCard({ product }: { product: Product }) {
+export async function ProductCard({ product }: { product: Product }) {
+  const usdRate = await getUsdRate();
   const href = productPath(product.slug);
   const discount = discountPercent(product.price, product.originalPrice);
-  const usd = formatUsdEquivalent(product.price, product.currency);
+  const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
   // Con gráfica dedicada la tarjeta suma una línea, pero no crece: RAM y
   // almacenamiento pasan a compartir fila y la GPU ocupa la tercera.
   const gpu = dedicatedGpu(product);
