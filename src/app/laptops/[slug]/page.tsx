@@ -200,8 +200,14 @@ export default async function ProductPage({ params }: PageParams) {
 
               <div className="mt-6">
                 <WhatsappOrderButton product={product} productUrl={productUrl} />
-                <p className="mt-3 text-center text-sm text-on-surface-variant">
-                  Te respondemos por WhatsApp y coordinamos pago y envío.
+                <p className="mt-3 text-center text-sm leading-relaxed text-on-surface-variant">
+                  {siteConfig.product.safeNote}{" "}
+                  <Link
+                    href="/#como-comprar"
+                    className="font-semibold text-primary underline decoration-primary/40 underline-offset-4 hover:decoration-primary"
+                  >
+                    Ver cómo funciona
+                  </Link>
                 </p>
               </div>
 

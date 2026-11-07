@@ -13,6 +13,88 @@ interface ImageUploaderProps {
   onChange: (urls: string[]) => void;
 }
 
+/** Parallel uploads (one photo per request). */
+const UPLOAD_CONCURRENCY = 3;
+/** Longest side after resizing: plenty for the zoomable product gallery. */
+const MAX_DIMENSION = 2000;
+const JPEG_QUALITY = 0.85;
+/** Files already this small and this size are uploaded untouched. */
+const KEEP_ORIGINAL_BYTES = 1.2 * 1024 * 1024;
+/** Vercel's request body limit is 4.5 MB; leave room for the multipart overhead. */
+const MAX_REQUEST_BYTES = 4.3 * 1024 * 1024;
+
+function loadImage(file: File): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new window.Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("no se pudo leer la imagen"));
+    };
+    img.src = url;
+  });
+}
+
+/**
+ * Shrink a photo in the browser: longest side to MAX_DIMENSION, re-encoded as
+ * JPEG (EXIF rotation is applied by the browser when drawing). GIFs (may be
+ * animated) and photos that are already light are left as they are. If the
+ * browser can't decode the file, the original is sent.
+ */
+async function prepareImage(file: File): Promise<File> {
+  if (file.type === "image/gif") return file;
+  try {
+    const img = await loadImage(file);
+    const { naturalWidth: w, naturalHeight: h } = img;
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(w, h));
+    if (scale === 1 && file.size <= KEEP_ORIGINAL_BYTES) return file;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    // JPEG has no transparency: paint PNG/WebP see-through areas white.
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
+    if (!blob || blob.size >= file.size) return file;
+    const name = file.name.replace(/\.[^.]+$/, "") + ".jpg";
+    return new File([blob], name, { type: "image/jpeg", lastModified: Date.now() });
+  } catch {
+    return file;
+  }
+}
+
+/** POST one image to /api/upload and return its public URL. */
+async function uploadOne(file: File): Promise<string> {
+  if (file.size > MAX_REQUEST_BYTES) {
+    throw new Error("la imagen pesa más de 4 MB incluso optimizada; expórtala más liviana");
+  }
+  const formData = new FormData();
+  formData.append("images", file);
+  const res = await fetch("/api/upload", { method: "POST", body: formData });
+
+  // Errors from Vercel itself (413, 504…) come back as plain text, not JSON.
+  const text = await res.text();
+  let data: { urls?: string[]; error?: string } = {};
+  try {
+    data = JSON.parse(text);
+  } catch {
+    if (res.status === 413) throw new Error("la imagen es demasiado pesada para el servidor");
+    throw new Error(`el servidor respondió ${res.status}${text ? `: ${text.slice(0, 80)}` : ""}`);
+  }
+  if (!res.ok || !data.urls?.[0]) throw new Error(data.error ?? `error ${res.status} al subir`);
+  return data.urls[0];
+}
+
 /** Move the item at `from` to position `to`, returning a new array. */
 function move<T>(list: T[], from: number, to: number): T[] {
   const next = [...list];
@@ -29,6 +111,7 @@ function append(list: string[], urls: string[]): string[] {
 
 export function ImageUploader({ value, onChange }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [externalUrl, setExternalUrl] = useState("");
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -49,34 +132,51 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
     [onChange],
   );
 
-  /** Upload files to R2 via the serverless endpoint. */
+  /**
+   * Upload files to R2 via the serverless endpoint. Each photo is shrunk in the
+   * browser first and sent in its own request: Vercel rejects request bodies
+   * over 4.5 MB ("Request Entity Too Large"), which a few phone photos sent
+   * together easily exceed. Order of selection is kept.
+   */
   const handleUpload = useCallback(
-    async (files: FileList) => {
+    async (fileList: FileList) => {
+      const files = Array.from(fileList);
       setUploading(true);
       setError(null);
+      setProgress({ done: 0, total: files.length });
 
-      const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
-      }
+      const results: (string | null)[] = new Array(files.length).fill(null);
+      const errors: string[] = [];
+      let next = 0;
+      let done = 0;
+
+      const worker = async () => {
+        while (next < files.length) {
+          const index = next++;
+          const file = files[index];
+          try {
+            results[index] = await uploadOne(await prepareImage(file));
+          } catch (err) {
+            errors.push(`${file.name}: ${(err as Error).message}`);
+          } finally {
+            done++;
+            setProgress({ done, total: files.length });
+          }
+        }
+      };
 
       try {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error ?? "Error al subir imágenes");
+        await Promise.all(Array.from({ length: Math.min(UPLOAD_CONCURRENCY, files.length) }, worker));
+        const urls = results.filter((url): url is string => Boolean(url));
+        if (urls.length) update(append(valueRef.current, urls));
+        if (errors.length) {
+          setError(
+            `${errors.length === files.length ? "No se pudo subir" : `Se subieron ${urls.length} de ${files.length}. Fallaron`}: ${errors.join(" · ")}`,
+          );
         }
-
-        update(append(valueRef.current, data.urls));
-      } catch (err) {
-        setError((err as Error).message);
       } finally {
         setUploading(false);
+        setProgress(null);
       }
     },
     [update],
@@ -191,10 +291,14 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
         <div className="space-y-2">
           <Icon name="cloud_upload" className="mx-auto text-3xl text-on-surface/50" />
           <p className="font-semibold text-sm">
-            {uploading ? "Subiendo…" : "Arrastra imágenes o toca para seleccionar"}
+            {uploading
+              ? progress && progress.total > 1
+                ? `Subiendo ${progress.done} de ${progress.total}…`
+                : "Subiendo…"
+              : "Arrastra imágenes o toca para seleccionar"}
           </p>
           <p className="text-xs text-on-surface/60">
-            JPEG, PNG, WebP, GIF, AVIF — máx. 10 MB por imagen
+            JPEG, PNG, WebP, GIF, AVIF — puedes elegir varias; se optimizan solas antes de subir
           </p>
         </div>
       </div>

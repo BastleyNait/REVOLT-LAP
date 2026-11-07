@@ -70,6 +70,16 @@ export function Footer() {
             >
               <WhatsappIcon className="text-lg" /> {whatsapp.display}
             </WhatsappLink>
+            {business.googleBusinessUrl ? (
+              <a
+                href={business.googleBusinessUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-10 items-center text-on-surface-variant underline decoration-white/20 underline-offset-4 transition-colors duration-150 hover:text-on-surface"
+              >
+                Ver reseñas en Google
+              </a>
+            ) : null}
             {socials.length ? (
               <ul className="flex flex-wrap gap-2 pt-1">
                 {socials.map((social) => (
@@ -92,6 +102,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-on-surface-variant md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {siteConfig.legalName} · Tienda 100 % online · {business.city}, {business.countryName}
+            {business.ruc ? ` · RUC ${business.ruc}` : ""} · Garantía de {siteConfig.warranty.months} meses · Boleta electrónica
           </p>
           <Link href="/admin" rel="nofollow" className="inline-flex min-h-10 items-center transition-colors duration-150 hover:text-on-surface">
             Administración

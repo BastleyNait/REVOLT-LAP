@@ -10,6 +10,7 @@ import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 import ShinyText from "@/components/ShinyText";
 import ClickSpark from "@/components/ClickSpark";
 import type { Product } from "@/lib/types/product";
+import { cn } from "@/lib/utils/cn";
 import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
 
@@ -59,19 +60,32 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
             {hero.pitch}
           </p>
 
-          {/* Social proof: big number on its own, outside the stats bar */}
-          <div className="animate-enter mt-8 flex items-center gap-4" style={delay(125)}>
-            <span className="font-display text-6xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-7xl">
-              {hero.sold.count}
-            </span>
-            <span aria-hidden className="h-12 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent" />
-            <span className="max-w-[7rem] text-sm font-bold uppercase leading-snug tracking-[0.2em] text-white/80">{hero.sold.label}</span>
-            <span className="font-display text-6xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-7xl">
-              6
-            </span>
-            <span aria-hidden className="h-12 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent" />
-            <span className="max-w-[7rem] text-sm font-bold uppercase leading-snug tracking-[0.2em] text-white/80">meses de Garantia</span>
-          </div>
+          {/*
+           * Proof: concrete, checkable facts (warranty, how payment works).
+           * Two equal columns on every width so nothing runs off a phone screen;
+           * on phones the caption sits under the number, from sm up beside it.
+           */}
+          <dl className="animate-enter mt-8 grid w-full max-w-xl grid-cols-2 gap-x-4 gap-y-6 sm:gap-x-8" style={delay(125)}>
+            {hero.proof.map((item, i) => (
+              <div
+                key={item.label}
+                className={cn(
+                  "flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4",
+                  i > 0 && "border-l border-primary/40 pl-4 sm:border-0 sm:pl-0",
+                )}
+              >
+                {i > 0 ? (
+                  <span aria-hidden className="order-first hidden h-12 w-px shrink-0 bg-gradient-to-b from-transparent via-primary/70 to-transparent sm:block" />
+                ) : null}
+                <dt className="text-xs font-bold uppercase leading-snug tracking-[0.14em] text-white/80 sm:max-w-[9rem] sm:text-sm sm:tracking-[0.18em]">
+                  {item.label}
+                </dt>
+                <dd className="order-first whitespace-nowrap font-display text-5xl font-extrabold leading-none tracking-tight text-primary drop-shadow-[0_0_28px_rgb(var(--c-primary)/0.5)] md:text-6xl">
+                  {item.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
 
           {/* Frosted stats bar */}
           <ul
@@ -112,11 +126,17 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
             ) : null}
           </div>
 
-          {minPrice ? (
-            <p className="animate-enter mt-8 text-xs font-bold uppercase tracking-[0.3em] text-white/50" style={delay(250)}>
-              Desde {formatPrice(minPrice)}
-            </p>
-          ) : null}
+          <div className="animate-enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
+            <Link
+              href="/#como-comprar"
+              className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
+            >
+              <Icon name="shield" className="text-lg text-primary" /> {hero.safeLink}
+            </Link>
+            {minPrice ? (
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/50">Desde {formatPrice(minPrice)}</p>
+            ) : null}
+          </div>
         </div>
 
         {/* Featured carousel: right column on desktop, below the CTAs on phones/tablets. */}
