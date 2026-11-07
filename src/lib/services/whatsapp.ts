@@ -9,6 +9,8 @@ interface WhatsappOptions {
   productUrl?: string;
   /** Pedido de reserva de una laptop en camino con el cupón activado. */
   reserve?: boolean;
+  /** PEN per USD (live rate) for the dollar price in the message. */
+  usdRate?: number;
 }
 
 /**
@@ -23,9 +25,9 @@ export function buildWhatsappUrl(
   const phone = (options.phone ?? siteConfig.whatsapp.phone).replace(/\D/g, "");
   const message = options.message ?? siteConfig.whatsapp.defaultMessage;
 
-  const usd = formatUsdEquivalent(product.price, product.currency);
+  const usd = formatUsdEquivalent(product.price, product.currency, options.usdRate);
   const priceLabel = usd
-    ? `${formatPrice(product.price, product.currency)} (o ${usd})`
+    ? `${formatPrice(product.price, product.currency)} (o ${usd} pagando en dólares)`
     : formatPrice(product.price, product.currency);
   const lines = options.reserve
     ? [

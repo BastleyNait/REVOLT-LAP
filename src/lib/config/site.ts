@@ -96,7 +96,17 @@ export const siteConfig = {
    * Prices are quoted in soles (PEN). Buyers may also pay in USD; this is the
    * reference rate (1 USD = X PEN) used to show the dollar equivalent.
    */
-  usdRate: Number(process.env.NEXT_PUBLIC_USD_RATE ?? 3.7),
+  /**
+   * Tasa de respaldo (1 USD = X PEN). La tasa real se consulta en vivo cada 6 h
+   * (src/lib/services/exchange-rate.ts); esta solo se usa si la consulta falla.
+   */
+  usdRate: Number(process.env.NEXT_PUBLIC_USD_RATE || 3.5),
+  /**
+   * Incentivo por pagar en dólares: el precio en USD se calcula sobre el precio
+   * en soles menos este monto y se redondea hacia arriba, así que el descuento
+   * real nunca pasa de este número.
+   */
+  usdPayment: { discountPen: 50 },
   /** Online-only store: no street address or opening hours on purpose. */
   business: {
     city: "Arequipa",

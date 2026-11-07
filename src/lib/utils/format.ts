@@ -14,11 +14,14 @@ export function formatPrice(
 }
 
 /**
- * Convert a soles (PEN) amount to its USD equivalent using the site reference
- * rate. Prices are quoted in soles but buyers can also pay in dollars.
+ * Dollar price of a soles (PEN) amount. Paying in dollars gets a small
+ * discount (`siteConfig.usdPayment.discountPen`): the USD price is the PEN
+ * price minus that discount at the given rate, rounded UP to the whole dollar,
+ * so the real discount never exceeds the configured amount.
  */
 export function penToUsd(amountPen: number, rate: number = siteConfig.usdRate): number {
-  return Math.round(amountPen / rate);
+  const discounted = Math.max(amountPen - siteConfig.usdPayment.discountPen, 0);
+  return Math.ceil(discounted / rate);
 }
 
 /**
