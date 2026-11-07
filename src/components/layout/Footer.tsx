@@ -92,6 +92,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-on-surface-variant md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {siteConfig.legalName} · Tienda 100 % online · {business.city}, {business.countryName}
+            {business.ruc ? ` · RUC ${business.ruc}` : ""} · Garantía de {siteConfig.warranty.months} meses · Boleta electrónica
           </p>
           <Link href="/admin" rel="nofollow" className="inline-flex min-h-10 items-center transition-colors duration-150 hover:text-on-surface">
             Administración

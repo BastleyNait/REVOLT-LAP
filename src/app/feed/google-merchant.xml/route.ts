@@ -39,6 +39,10 @@ export async function GET() {
         `<g:google_product_category>328</g:google_product_category>`,
         `<g:product_type>Computadoras &gt; Laptops &gt; Laptops reacondicionadas</g:product_type>`,
         `<g:identifier_exists>no</g:identifier_exists>`,
+        // Envío por Shalom desde Arequipa (gratis según el hero, ver siteConfig.shipping).
+        siteConfig.shipping.free
+          ? `<g:shipping><g:country>${siteConfig.business.country}</g:country><g:price>0.00 ${siteConfig.currency}</g:price></g:shipping>`
+          : "",
       ];
       return `<item>${tags.filter(Boolean).join("")}</item>`;
     })

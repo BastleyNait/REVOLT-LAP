@@ -1,4 +1,4 @@
-import { isInTransit, type Product } from "@/lib/types/product";
+import { IN_TRANSIT_ETA_DAYS, isInTransit, type Product } from "@/lib/types/product";
 import { siteConfig } from "@/lib/config/site";
 import { excerpt, htmlToPlainText } from "@/lib/rich-text/format";
 import { localizeLabel } from "@/lib/utils/localize";
@@ -37,6 +37,8 @@ export function organizationJsonLd() {
     image: absoluteUrl("/logo-revolt.png"),
     telephone: `+${whatsapp.phone}`,
     currenciesAccepted: "PEN, USD",
+    paymentAccepted: siteConfig.payment.methods,
+    ...(business.ruc ? { taxID: business.ruc, vatID: business.ruc } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: business.city,
@@ -120,6 +122,25 @@ export function productSummary(product: Product, max = 158): string {
   );
 }
 
+/**
+ * Shipping (Shalom from Arequipa) for merchant listings. Google flags offers
+ * without `shippingDetails`; in-transit laptops add the 10–15 working days
+ * the laptop needs to arrive before it can be shipped.
+ */
+function shippingDetailsJsonLd(inTransit: boolean) {
+  const { shipping } = siteConfig;
+  return {
+    "@type": "OfferShippingDetails",
+    shippingDestination: { "@type": "DefinedRegion", addressCountry: siteConfig.business.country },
+    ...(shipping.free ? { shippingRate: { "@type": "MonetaryAmount", value: 0, currency: siteConfig.currency } } : {}),
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      handlingTime: { "@type": "QuantitativeValue", minValue: inTransit ? 10 : 0, maxValue: inTransit ? 15 : 1, unitCode: "DAY" },
+      transitTime: { "@type": "QuantitativeValue", minValue: shipping.transitDays.min, maxValue: shipping.transitDays.max, unitCode: "DAY" },
+    },
+  };
+}
+
 export function productJsonLd(product: Product) {
   const url = absoluteUrl(productPath(product.slug));
   const additionalProperty = [
@@ -157,6 +178,14 @@ export function productJsonLd(product: Product) {
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/RefurbishedCondition",
+      ...(isInTransit(product)
+        ? { availabilityStarts: new Date(Date.now() + IN_TRANSIT_ETA_DAYS * 86_400_000).toISOString().slice(0, 10) }
+        : {}),
+      shippingDetails: shippingDetailsJsonLd(isInTransit(product)),
+      warranty: {
+        "@type": "WarrantyPromise",
+        durationOfWarranty: { "@type": "QuantitativeValue", value: siteConfig.warranty.months, unitCode: "MON" },
+      },
       seller: { "@id": storeId },
       areaServed: { "@type": "Country", name: siteConfig.business.countryName },
     },

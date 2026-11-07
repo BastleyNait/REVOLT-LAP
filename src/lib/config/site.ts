@@ -17,6 +17,20 @@ export interface SocialItem {
   href: string;
 }
 
+export interface ProofItem {
+  /** Big number/word, e.g. "6". */
+  value: string;
+  /** Short caption next to it, e.g. "meses de garantía". */
+  label: string;
+}
+
+export interface DeliveryPhoto {
+  /** Path under /public, e.g. "/entregas/arequipa-01.jpg". */
+  src: string;
+  /** What the photo shows, e.g. "Entrega en persona en Arequipa — ThinkPad T480". */
+  alt: string;
+}
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -39,6 +53,11 @@ function resolveBaseUrl(): string {
 }
 
 const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").replace(/\D/g, "");
+
+/** Adelanto para separar una laptop (soles). Cámbialo acá y se actualiza en toda la página. */
+const DEPOSIT_PEN = 50;
+/** Meses de garantía. Cámbialo acá y se actualiza en toda la página. */
+const WARRANTY_MONTHS = 6;
 
 export const siteConfig = {
   name: "REVOLT",
@@ -80,6 +99,38 @@ export const siteConfig = {
     region: "Arequipa",
     country: "PE",
     countryName: "Perú",
+    /**
+     * RUC del negocio (persona natural con negocio, RUC 10). Déjalo vacío para
+     * ocultarlo. Cuando lo pongas aparece en el pie de página, en "Cómo comprar",
+     * en la ficha y en los datos para Google: es lo primero que preguntan los
+     * clientes que desconfían.
+     */
+    ruc: process.env.NEXT_PUBLIC_RUC ?? "",
+    /**
+     * Nombre del titular de las cuentas (Yape / BCP). Si lo pones, la página
+     * avisa que solo se paga a ese nombre: así el cliente sabe que el depósito
+     * es legítimo y no cae en imitadores. Vacío = no se muestra.
+     */
+    accountHolder: process.env.NEXT_PUBLIC_ACCOUNT_HOLDER ?? "",
+  },
+  /** Garantía, comprobante y envío: se repiten en el hero, la ficha, el FAQ y los datos para Google. */
+  warranty: {
+    months: WARRANTY_MONTHS,
+  },
+  shipping: {
+    carrier: "Shalom",
+    /** Días hábiles estimados de Arequipa a Lima (y la mayoría de ciudades). */
+    transitDays: { min: 2, max: 3 },
+    /** true = el envío no le cuesta al cliente (lo dice el hero: "Envío gratis"). */
+    free: true,
+  },
+  /**
+   * Compra segura: el flujo de pago que ya explican por WhatsApp, ahora en la
+   * página. `depositPen` es el adelanto para separar la laptop.
+   */
+  payment: {
+    depositPen: DEPOSIT_PEN,
+    methods: "Yape, transferencia o depósito BCP",
   },
   whatsapp: {
     /** E.164 number without the leading "+" (digits only), e.g. 51987545926. */
@@ -114,17 +165,26 @@ export const siteConfig = {
       /** Rendered as the page <h1> in the original tracked-caps style. */
       title: "Laptops reacondicionadas en Perú",
       pitch:
-        "Rendimiento real a precios insuperables. Cada equipo testeado, certificado y listo para trabajar, crear y jugar. Entrega presencial en Arequipa y envios a todo el Perú",
+        "Rendimiento real a precios insuperables. Cada equipo testeado y listo para trabajar, crear y jugar. Entrega en persona en Arequipa y envíos a todo el Perú.",
       ctaLabel: "Ver inventario",
       flash: "Envío gratis · Equipos en stock y a pedido",
-      /** Social proof block of the hero. Rendered as "+{count} {label}". */
-      sold: { count: "100%", label: "Confiable" },
+      /**
+       * Hechos comprobables debajo del texto del hero (garantía, comprobante…).
+       * Mejor datos concretos que "100% confiable": quien desconfía no cree en
+       * adjetivos, cree en garantías que puede exigir. Máximo 2–3 items.
+       */
+      proof: [
+        { value: String(WARRANTY_MONTHS), label: "meses de garantía" },
+        { value: `S/ ${DEPOSIT_PEN}`, label: "para separar, el resto al ver la guía" },
+      ] satisfies ProofItem[],
+      /** Link under the CTAs that jumps to the safe-purchase steps. */
+      safeLink: "¿Cómo pago sin riesgo?",
       featuredLabel: "Destacadas",
       stats: [
         { icon: "package", label: "Stock disponible" },
         { icon: "truck", label: "Envío rápido" },
         { icon: "check", label: "Todo funcional" },
-        { icon: "wallet", label: "Precio insuperable" },
+        { icon: "receipt", label: "Boleta electrónica" },
       ],
     },
     inventory: {
@@ -140,21 +200,74 @@ export const siteConfig = {
         emptyFilter: "No hay laptops en este estado por ahora.",
       },
     },
+    /** "Cómo comprar": el flujo real de pago, paso a paso (lo que más preguntan por WhatsApp). */
+    howToBuy: {
+      title: "Cómo comprar sin riesgo",
+      subtitle:
+        "Somos una tienda 100 % online. Para que no arriesgues tu dinero, solo separas con un adelanto y pagas el resto cuando tu laptop ya está empaquetada y enviada a tu nombre.",
+    },
     steps: [
       {
-        title: "Elige tu laptop",
-        body: "Mira las fotos reales, las especificaciones y el estado de cada equipo.",
+        icon: "chat",
+        title: "Elige y escríbenos",
+        body: "Por WhatsApp te mandamos más fotos o un video del equipo y resolvemos tus dudas antes de pagar nada.",
       },
       {
-        title: "Escríbenos por WhatsApp",
-        body: "Resolvemos tus dudas, te mandamos más fotos o un video y coordinamos el pago.",
+        icon: "wallet",
+        title: `Separa con S/ ${DEPOSIT_PEN}`,
+        body: "Por Yape, transferencia o depósito BCP. Es lo único que adelantas.",
       },
       {
-        title: "Te la enviamos",
-        body: "Enviamos a cualquier ciudad del Perú, lista para usar. En Arequipa también te la entregamos en persona.",
+        icon: "video",
+        title: "Te mostramos el envío",
+        body: "Te enviamos foto y video de tu laptop siendo empaquetada y la foto de la guía de Shalom a tu nombre.",
+      },
+      {
+        icon: "key",
+        title: "Pagas el saldo y recoges",
+        body: "Con la guía en la mano pagas el saldo y te damos la clave para retirarla en tu agencia Shalom. En Arequipa también la entregamos en persona.",
       },
     ],
+    /** Short guarantees under the steps. */
+    guarantees: [
+      { icon: "shield", title: `${WARRANTY_MONTHS} meses de garantía`, body: "Si presenta una falla de funcionamiento, la revisamos y solucionamos." },
+      { icon: "receipt", title: "Boleta electrónica", body: "Emitimos boleta de venta electrónica al completar el pago." },
+      { icon: "verified", title: "Componentes originales", body: "Equipos corporativos con sus piezas de fábrica, revisados por técnicos." },
+      { icon: "truck", title: "Envío con Shalom", body: "A Lima llega en 2 a 3 días hábiles. A todo el Perú." },
+    ],
+    /**
+     * Fotos de entregas reales (las que mandas por WhatsApp como "una de las
+     * ventas que realicé"). Ponlas en /public/entregas/ y agrégalas acá: la
+     * sección "Entregas reales" aparece sola cuando hay al menos una.
+     * Pide permiso al cliente o no muestres su cara.
+     */
+    deliveries: [] as DeliveryPhoto[],
     faq: [
+      {
+        question: "¿Es seguro comprarles si no tienen tienda física?",
+        answer:
+          `Sí. Solo adelantas S/ ${DEPOSIT_PEN} para separar la laptop. Luego te enviamos foto y video del equipo siendo empaquetado y la guía de Shalom a tu nombre, y recién ahí pagas el saldo. En Arequipa también te la entregamos en persona. Emitimos boleta electrónica y la laptop tiene ${WARRANTY_MONTHS} meses de garantía.`,
+      },
+      {
+        question: "¿Las laptops tienen garantía?",
+        answer:
+          `Sí, todas tienen ${WARRANTY_MONTHS} meses de garantía. Cubre fallas de funcionamiento del equipo (placa, pantalla, teclado, puertos, memoria, almacenamiento). No cubre golpes, caídas, líquidos ni daños por mal uso. Si algo falla, nos escribes por WhatsApp y lo revisamos.`,
+      },
+      {
+        question: "¿Emiten boleta o factura?",
+        answer:
+          "Sí. Trabajamos con RUC y emitimos boleta de venta electrónica una vez que completas el pago.",
+      },
+      {
+        question: "¿Cuánto demora el envío a Lima y provincias?",
+        answer:
+          "Enviamos por Shalom desde Arequipa. A Lima llega en 2 a 3 días hábiles y a la mayoría de ciudades en un plazo similar. Te pasamos la guía para que sigas tu envío, y recoges la laptop en tu agencia Shalom con una clave.",
+      },
+      {
+        question: "¿Los componentes son originales?",
+        answer:
+          "Sí. Son laptops de uso corporativo con sus componentes originales de fábrica. Si alguna pieza fue reemplazada o mejorada (por ejemplo, más RAM o un SSD más grande), lo indicamos en la descripción del equipo.",
+      },
       {
         question: "¿Qué es una laptop reacondicionada?",
         answer:
@@ -168,7 +281,7 @@ export const siteConfig = {
       {
         question: "¿Tienen tienda física?",
         answer:
-          "No, somos una tienda 100 % online que vende a todo el Perú. Te atendemos por WhatsApp: si quieres, te enviamos más fotos o un video del equipo antes de comprar.",
+          "No, somos una tienda 100 % online para mantener precios bajos. Estamos en Arequipa: ahí te la entregamos en persona, y al resto del Perú la enviamos por Shalom. Por WhatsApp te enviamos más fotos o un video del equipo antes de comprar.",
       },
       {
         question: "¿Hacen envíos a todo el Perú?",
@@ -247,10 +360,13 @@ export const siteConfig = {
   product: {
     ctaLabel: "Pedir por WhatsApp",
     trustBadges: [
-      { icon: "wrench", label: "Reacondicionada por técnicos" },
+      { icon: "shield", label: `${WARRANTY_MONTHS} meses de garantía` },
+      { icon: "receipt", label: "Boleta electrónica" },
       { icon: "check", label: "Todo funcional, salvo que se indique" },
-      { icon: "truck", label: "Envíos a todo el Perú" },
+      { icon: "truck", label: "Envío por Shalom a todo el Perú (Lima: 2 a 3 días hábiles)" },
     ],
+    /** Under the WhatsApp button: the one line that answers "¿y si pierdo mi plata?". */
+    safeNote: `Separas con S/ ${DEPOSIT_PEN} y pagas el saldo cuando veas tu laptop empaquetada y la guía de envío.`,
   },
 } as const;
 
