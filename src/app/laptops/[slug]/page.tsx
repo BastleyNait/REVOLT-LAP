@@ -29,6 +29,7 @@ import {
 import { RichText } from "@/components/ui/RichText";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { isAllowedImageHost } from "@/lib/config/image-hosts";
 import { getUsdRate } from "@/lib/services/exchange-rate";
 import { landingBySlug, landingPath } from "@/lib/seo/landings";
 
@@ -45,6 +46,16 @@ export async function generateStaticParams() {
   }
 }
 
+/** Width of the link-preview image: a size the optimizer allows, light enough for WhatsApp. */
+const OG_IMAGE_WIDTH = 1080;
+
+/** Absolute URL of a product photo resized to OG_IMAGE_WIDTH by Next's image optimizer. */
+function ogImageUrl(src: string): string {
+  // Hosts the optimizer doesn't accept are linked as they are.
+  if (!isAllowedImageHost(src)) return absoluteUrl(src);
+  return absoluteUrl(`/_next/image?url=${encodeURIComponent(src)}&w=${OG_IMAGE_WIDTH}&q=75`);
+}
+
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
@@ -53,7 +64,14 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const path = productPath(product.slug);
   const title = `${product.name} · ${formatPrice(product.price, product.currency)}`;
   const description = productSummary(product);
-  const images = product.images.slice(0, 4).map((url) => ({ url: absoluteUrl(url), alt: `${product.name} reacondicionada` }));
+  // Link previews (WhatsApp, Messenger, Facebook…) use ONE image: the cover
+  // (first photo), resized by the site's image optimizer. Original phone
+  // photos weigh 1–3 MB and those apps skip images that heavy, so with
+  // several og:image tags they ended up showing a later, lighter photo.
+  const cover = product.images[0];
+  const images = cover
+    ? [{ url: ogImageUrl(cover), width: OG_IMAGE_WIDTH, alt: `${product.name} reacondicionada` }]
+    : [];
 
   return {
     title,
