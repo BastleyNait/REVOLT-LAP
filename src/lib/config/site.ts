@@ -164,7 +164,7 @@ export const siteConfig = {
   },
   nav: [
     { label: "Laptops", href: "/#laptops" },
-    { label: "Cómo comprar", href: "/#como-comprar" },
+    { label: "Cómo comprar", href: "/como-comprar" },
     { label: "Nosotros", href: "/nosotros" },
     { label: "Preguntas", href: "/#preguntas" },
   ] satisfies NavItem[],
@@ -196,9 +196,9 @@ export const siteConfig = {
        */
       proof: [
         { value: String(WARRANTY_MONTHS), label: "meses de garantía" },
-        { value: `S/ ${DEPOSIT_PEN}`, label: "para separar, el resto al ver la guía" },
+        { value: "2–3", label: "días hábiles de envío a Lima" },
       ] satisfies ProofItem[],
-      /** Link under the CTAs that jumps to the safe-purchase steps. */
+      /** Link under the CTAs to the purchase-procedure page. */
       safeLink: "¿Cómo pago sin riesgo?",
       featuredLabel: "Destacadas",
       stats: [
@@ -222,6 +222,34 @@ export const siteConfig = {
       },
     },
     /** "Cómo comprar": el flujo real de pago, paso a paso (lo que más preguntan por WhatsApp). */
+    /**
+     * Página /como-comprar: el procedimiento completo (con montos y plazos)
+     * para mandar por WhatsApp a clientes de fuera de Arequipa. El monto del
+     * adelanto solo aparece acá y en el FAQ, no en el hero ni en las fichas.
+     */
+    purchasePage: {
+      path: "/como-comprar",
+      metaTitle: "Cómo comprar una laptop con envío a todo el Perú",
+      metaDescription:
+        "Paso a paso para comprar tu laptop reacondicionada desde cualquier ciudad del Perú: adelanto, video del empaquetado, guía de Shalom, saldo y garantía.",
+      title: "Cómo comprar si no estás en Arequipa",
+      intro:
+        "Te enviamos la laptop por Shalom a cualquier ciudad del Perú. Así funciona, paso a paso, para que compres con total seguridad.",
+      details: [
+        { icon: "wallet", title: `Adelanto: S/ ${DEPOSIT_PEN}`, body: "Se descuenta del precio de la laptop. No es un pago extra." },
+        {
+          icon: "key",
+          title: `Saldo: dentro de ${BALANCE_HOURS} horas`,
+          body: "Desde que te enviamos la foto de la guía de Shalom. Al pagar, te damos la clave para retirarla.",
+        },
+        {
+          icon: "check",
+          title: "Si cambias de opinión",
+          body: "Antes del envío te devolvemos el adelanto completo. Después del envío, el adelanto cubre el envío de ida y el retorno.",
+        },
+        { icon: "pin", title: "¿Estás en Arequipa?", body: "Te la entregamos en persona: coordinamos el lugar y la hora por WhatsApp." },
+      ],
+    },
     howToBuy: {
       title: "Cómo comprar sin riesgo",
       subtitle:
@@ -235,8 +263,8 @@ export const siteConfig = {
       },
       {
         icon: "wallet",
-        title: `Separa con S/ ${DEPOSIT_PEN}`,
-        body: "Por Yape, transferencia o depósito BCP. No es un pago extra: se descuenta del precio de la laptop.",
+        title: "Separa tu laptop",
+        body: "Con un pequeño adelanto por Yape, transferencia o depósito BCP. No es un pago extra: se descuenta del precio de la laptop.",
       },
       {
         icon: "video",
@@ -246,7 +274,7 @@ export const siteConfig = {
       {
         icon: "key",
         title: "Pagas el saldo y recoges",
-        body: `Con la guía en la mano tienes ${BALANCE_HOURS} horas para pagar el saldo, y te damos la clave para retirarla en tu agencia Shalom. En Arequipa también la entregamos en persona.`,
+        body: "Con la guía en la mano pagas el saldo y te damos la clave para retirarla en tu agencia Shalom. En Arequipa también la entregamos en persona.",
       },
     ],
     /** Short guarantees under the steps. */
@@ -391,7 +419,7 @@ export const siteConfig = {
       { icon: "truck", label: "Envío por Shalom a todo el Perú (Lima: 2 a 3 días hábiles)" },
     ],
     /** Under the WhatsApp button: the one line that answers "¿y si pierdo mi plata?". */
-    safeNote: `Separas con S/ ${DEPOSIT_PEN} y pagas el saldo cuando veas tu laptop empaquetada y la guía de envío.`,
+    safeNote: "Separas con un pequeño adelanto y pagas el saldo cuando veas tu laptop empaquetada y la guía de envío.",
   },
 } as const;
 

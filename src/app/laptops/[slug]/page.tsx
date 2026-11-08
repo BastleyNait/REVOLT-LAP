@@ -223,7 +223,7 @@ export default async function ProductPage({ params }: PageParams) {
                 <p className="mt-3 text-center text-sm leading-relaxed text-on-surface-variant">
                   {siteConfig.product.safeNote}{" "}
                   <Link
-                    href="/#como-comprar"
+                    href={siteConfig.home.purchasePage.path}
                     className="font-semibold text-primary underline decoration-primary/40 underline-offset-4 hover:decoration-primary"
                   >
                     Ver cómo funciona

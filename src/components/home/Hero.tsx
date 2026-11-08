@@ -128,7 +128,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
 
           <div className="animate-enter mt-8 short:mt-3 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
             <Link
-              href="/#como-comprar"
+              href={siteConfig.home.purchasePage.path}
               className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
             >
               <Icon name="shield" className="text-lg text-primary" /> {hero.safeLink}
