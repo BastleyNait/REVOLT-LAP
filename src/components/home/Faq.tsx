@@ -3,13 +3,24 @@ import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 
-/** Native <details> accordion: accessible, crawlable and zero JavaScript. */
-export function Faq() {
+/**
+ * Native <details> accordion: accessible, crawlable and zero JavaScript.
+ * Defaults to the home FAQ; landings pass their own questions.
+ */
+export function Faq({
+  items = siteConfig.home.faq,
+  title = "Preguntas frecuentes",
+  id = "preguntas",
+}: {
+  items?: ReadonlyArray<{ question: string; answer: string }>;
+  title?: string;
+  id?: string;
+} = {}) {
   return (
-    <section id="preguntas" aria-labelledby="preguntas-title" className="grid items-start gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <section id={id} aria-labelledby={`${id}-title`} className="grid items-start gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
       <div className="space-y-4 lg:sticky lg:top-32">
-        <h2 id="preguntas-title" className="text-3xl font-extrabold leading-[1.1] md:text-[2.6rem]">
-          Preguntas frecuentes
+        <h2 id={`${id}-title`} className="text-3xl font-extrabold leading-[1.1] md:text-[2.6rem]">
+          {title}
         </h2>
         <p className="text-lg leading-relaxed text-on-surface-variant">
           ¿Otra duda?{" "}
@@ -25,7 +36,7 @@ export function Faq() {
       </div>
 
       <div className="space-y-3">
-        {siteConfig.home.faq.map((item) => (
+        {items.map((item) => (
           <details key={item.question} className="glass group rounded-2xl transition-[border-color] duration-200 open:border-primary/40">
             <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-[1.05rem] font-semibold [&::-webkit-details-marker]:hidden">
               {item.question}

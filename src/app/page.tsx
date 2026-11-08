@@ -6,8 +6,7 @@ import { HowToBuy } from "@/components/home/HowToBuy";
 import { AboutTeaser } from "@/components/home/AboutTeaser";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
-import { ProductGrid } from "@/components/product/ProductGrid";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Catalog } from "@/components/product/Catalog";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
@@ -25,9 +24,6 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const products = await getProducts();
   const minPrice = products.length ? Math.min(...products.map((product) => product.price)) : null;
-  const { inventory } = siteConfig.home;
-  const incoming = products.filter((product) => availability(product) === "incoming").length;
-  const inStock = products.filter((product) => availability(product) === "in-stock").length;
   // Featured laptops for the hero carousel; sold-out ones are skipped.
   const featured = products.filter((product) => product.isFeatured && availability(product) !== "sold-out").slice(0, 6);
 
@@ -47,22 +43,7 @@ export default async function HomePage() {
       </div>
 
       <div className="relative z-[3] mx-auto max-w-[75rem] space-y-24 px-4 pb-20 pt-6 md:space-y-32 md:px-8 md:pb-28">
-        <section id="laptops" aria-labelledby="laptops-title" className="space-y-8">
-          <SectionHeading
-            id="laptops-title"
-            title={inventory.title}
-            subtitle={inventory.subtitle}
-            aside={
-              products.length ? (
-                <p className="text-sm font-semibold text-on-surface-variant">
-                  {inStock} {inStock === 1 ? "equipo" : "equipos"} en stock
-                  {incoming ? ` · ${incoming} en camino` : ""}
-                  {products.length - inStock - incoming ? ` · ${products.length - inStock - incoming} agotadas` : ""}
-                </p>
-              ) : null
-            }
-          />
-          <ProductGrid products={products} filterable />
+        <Catalog products={products}>
           <nav aria-labelledby="busca-por-tipo" className="space-y-3 pt-2">
             <h3 id="busca-por-tipo" className="text-sm font-semibold text-on-surface-variant">Busca por tipo</h3>
             <ul className="flex flex-wrap gap-2.5">
@@ -78,7 +59,7 @@ export default async function HomePage() {
               ))}
             </ul>
           </nav>
-        </section>
+        </Catalog>
 
         <HowToBuy />
         <AboutTeaser />
