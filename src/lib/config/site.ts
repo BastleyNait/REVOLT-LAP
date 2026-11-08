@@ -196,7 +196,7 @@ export const siteConfig = {
        */
       proof: [
         { value: String(WARRANTY_MONTHS), label: "meses de garantía" },
-        { value: "2–3", label: "días hábiles de envío a Lima" },
+        { value: "Pro", label: "corporativas, hechas para durar años" },
       ] satisfies ProofItem[],
       /** Link under the CTAs to the purchase-procedure page. */
       safeLink: "¿Cómo pago sin riesgo?",
