@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils/cn";
 import { siteConfig } from "@/lib/config/site";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { buttonClasses } from "@/components/ui/Button";
@@ -12,8 +14,8 @@ import { WhatsappLink } from "@/components/analytics/WhatsappLink";
  * questions buyers kept asking on WhatsApp ("¿es confiable?", "¿tienen RUC?").
  */
 export function HowToBuy() {
-  const { howToBuy, steps, guarantees, deliveries } = siteConfig.home;
-  const { ruc, accountHolder, googleBusinessUrl } = siteConfig.business;
+  const { howToBuy, deliveries } = siteConfig.home;
+  const { googleBusinessUrl } = siteConfig.business;
 
   return (
     <section id="como-comprar" aria-labelledby="como-comprar-title" className="glass scroll-mt-28 rounded-[2rem] p-6 md:p-10">
@@ -33,51 +35,15 @@ export function HowToBuy() {
         </WhatsappLink>
       </div>
 
-      <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-white/10">
-        {steps.map((step, index) => (
-          <li key={step.title} className="lg:px-6 lg:first:pl-0 lg:last:pr-0">
-            <span className="flex items-center gap-2.5">
-              <span className="font-display text-sm font-bold tabular-nums text-primary">0{index + 1}</span>
-              <Icon name={step.icon} className="text-xl text-primary" />
-            </span>
-            <h3 className="mt-2 text-xl font-bold">{step.title}</h3>
-            <p className="mt-2 leading-relaxed text-on-surface-variant">{step.body}</p>
-          </li>
-        ))}
-      </ol>
+      <PurchaseSteps className="mt-10" />
+      <PurchaseGuarantees className="mt-10 border-t border-white/10 pt-8" />
 
-      <ul className="mt-10 grid gap-3 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-        {guarantees.map((item) => (
-          <li key={item.title} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <Icon name={item.icon} className="mt-0.5 shrink-0 text-xl text-primary" />
-            <div>
-              <p className="font-bold">{item.title}</p>
-              <p className="mt-1 text-[0.9375rem] leading-relaxed text-on-surface-variant">{item.body}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {ruc || accountHolder ? (
-        <p className="mt-6 flex gap-2.5 text-[0.9375rem] leading-relaxed text-on-surface-variant">
-          <Icon name="verified" className="mt-0.5 shrink-0 text-lg text-primary" />
-          <span>
-            {ruc ? (
-              <>
-                RUC <strong className="font-semibold text-on-surface">{ruc}</strong>.{" "}
-              </>
-            ) : null}
-            {accountHolder ? (
-              <>
-                Solo pagas a cuentas a nombre de <strong className="font-semibold text-on-surface">{accountHolder}</strong>, y los números
-                te los pasamos únicamente por nuestro WhatsApp oficial{" "}
-                <strong className="font-semibold text-on-surface">{siteConfig.whatsapp.display}</strong>. Nunca te pediremos depositar a
-                otra persona.
-              </>
-            ) : null}
-          </span>
-        </p>
-      ) : null}
+      <Link
+        href={siteConfig.home.purchasePage.path}
+        className="mt-6 inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors duration-150 hover:decoration-primary"
+      >
+        Ver el procedimiento completo de envío <Icon name="arrow" />
+      </Link>
 
       {googleBusinessUrl ? (
         <a
@@ -104,5 +70,65 @@ export function HowToBuy() {
         </div>
       ) : null}
     </section>
+  );
+}
+
+/** The four purchase steps (no amounts: those live on /como-comprar and in the FAQ). */
+export function PurchaseSteps({ className }: { className?: string }) {
+  const { steps } = siteConfig.home;
+  return (
+      <ol className={cn("grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-white/10", className)}>
+        {steps.map((step, index) => (
+          <li key={step.title} className="lg:px-6 lg:first:pl-0 lg:last:pr-0">
+            <span className="flex items-center gap-2.5">
+              <span className="font-display text-sm font-bold tabular-nums text-primary">0{index + 1}</span>
+              <Icon name={step.icon} className="text-xl text-primary" />
+            </span>
+            <h3 className="mt-2 text-xl font-bold">{step.title}</h3>
+            <p className="mt-2 leading-relaxed text-on-surface-variant">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+  );
+}
+
+/** Warranty, receipt, original parts, shipping — plus RUC and account holder. */
+export function PurchaseGuarantees({ className }: { className?: string }) {
+  const { guarantees } = siteConfig.home;
+  const { ruc, accountHolder } = siteConfig.business;
+  return (
+    <div className={className}>
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {guarantees.map((item) => (
+          <li key={item.title} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <Icon name={item.icon} className="mt-0.5 shrink-0 text-xl text-primary" />
+            <div>
+              <p className="font-bold">{item.title}</p>
+              <p className="mt-1 text-[0.9375rem] leading-relaxed text-on-surface-variant">{item.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {ruc || accountHolder ? (
+        <p className="mt-6 flex gap-2.5 text-[0.9375rem] leading-relaxed text-on-surface-variant">
+          <Icon name="verified" className="mt-0.5 shrink-0 text-lg text-primary" />
+          <span>
+            {ruc ? (
+              <>
+                RUC <strong className="font-semibold text-on-surface">{ruc}</strong>.{" "}
+              </>
+            ) : null}
+            {accountHolder ? (
+              <>
+                Solo pagas a cuentas a nombre de <strong className="font-semibold text-on-surface">{accountHolder}</strong>, y los números
+                te los pasamos únicamente por nuestro WhatsApp oficial{" "}
+                <strong className="font-semibold text-on-surface">{siteConfig.whatsapp.display}</strong>. Nunca te pediremos depositar a
+                otra persona.
+              </>
+            ) : null}
+          </span>
+        </p>
+      ) : null}
+    </div>
   );
 }
