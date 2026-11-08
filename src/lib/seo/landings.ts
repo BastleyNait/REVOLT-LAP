@@ -1,4 +1,5 @@
 import type { Product } from "@/lib/types/product";
+import { siteConfig } from "@/lib/config/site";
 
 /**
  * SEO landing pages: one page per search intent ("laptops baratas",
@@ -17,6 +18,8 @@ export interface Landing {
   /** Meta description (~155 chars). */
   description: string;
   h1: string;
+  /** One-line pitch under the <h1> (falls back to the first intro paragraph). */
+  lead?: string;
   /** Intro paragraphs (keyword + synonyms in the first sentence). */
   intro: string[];
   /** "Qué buscar" tips: genuinely useful buying advice. */
@@ -97,6 +100,7 @@ export const landings: Landing[] = [
     description:
       "Laptops reacondicionadas en Perú: Lenovo ThinkPad, Dell Latitude y HP EliteBook revisadas por técnicos, con todo funcional y fotos reales. Envíos a todo el Perú.",
     h1: "Laptops reacondicionadas en Perú",
+    lead: `Lenovo ThinkPad, Dell y HP de línea empresarial, revisadas por técnicos, con ${siteConfig.warranty.months} meses de garantía y envío a todo el Perú.`,
     intro: [
       "Una laptop reacondicionada es un equipo de primer uso empresarial que se revisa, limpia y prueba a fondo antes de volver a venderse. Así obtienes una laptop de gama alta a precio de laptop barata.",
       "En REVOLT cada laptop reacondicionada se entrega con todo funcional, a menos que se especifique lo contrario en su descripción. Publicamos fotos reales de cada equipo para que sepas exactamente lo que recibes.",
@@ -111,7 +115,8 @@ export const landings: Landing[] = [
       { question: "¿Las laptops reacondicionadas funcionan bien?", answer: "Sí. Se entregan con todo funcional, a menos que se especifique lo contrario en la ficha del producto." },
       { question: "¿De dónde vienen las laptops reacondicionadas?", answer: "Principalmente de renovaciones de equipos en empresas, por eso son modelos de línea empresarial como ThinkPad, Latitude y EliteBook." },
     ],
-    select: byPrice,
+    // Same set and order as the home catalogue (featured first, then newest).
+    select: (products) => products,
     emptyNote: "",
     related: ["laptops-de-segunda", "laptops-thinkpad", "laptops-baratas"],
     keywords: ["laptops reacondicionadas", "laptops reacondicionadas perú", "laptop reacondicionada", "laptops refurbished", "laptops reacondicionadas lima", "laptops reacondicionadas arequipa"],

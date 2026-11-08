@@ -13,6 +13,7 @@ import type { Product } from "@/lib/types/product";
 import { cn } from "@/lib/utils/cn";
 import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
+import { TrustBar } from "./TrustBar";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -88,17 +89,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
           </dl>
 
           {/* Frosted stats bar */}
-          <ul
-            className="fx-panel animate-enter mt-8 short:mt-5 short:py-3 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-3xl border border-white/15 bg-black/20 px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl"
-            style={delay(150)}
-          >
-            {hero.stats.map((stat) => (
-              <li key={stat.label} className="flex items-center gap-2 text-sm font-bold text-white/90">
-                <Icon name={stat.icon} className="text-lg text-primary" />
-                {stat.label}
-              </li>
-            ))}
-          </ul>
+          <TrustBar className="animate-enter mt-8 short:mt-5 short:py-3" style={delay(150)} />
 
           <div className="animate-enter mt-10 short:mt-5 flex flex-wrap items-center gap-4" style={delay(200)}>
             <ClickSpark sparkColor="#12B480" sparkSize={12} sparkRadius={24} sparkCount={10} duration={450}>
