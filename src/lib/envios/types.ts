@@ -23,8 +23,6 @@ export interface Shipment {
     /** Purchase date, YYYY-MM-DD. */
     date: string;
     delivery: Delivery;
-    /** What goes in the box besides the laptop. */
-    contents: string;
   };
   /** Optional personal line added to the thank-you letter. */
   note: string;
@@ -66,7 +64,6 @@ export function emptyShipment(): Shipment {
       laptop: "",
       date,
       delivery: "shalom",
-      contents: "Laptop + cargador original",
     },
     note: "",
   };

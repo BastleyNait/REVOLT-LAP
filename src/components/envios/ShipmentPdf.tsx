@@ -210,12 +210,18 @@ function LabelSheet({ shipment, sender, sheet }: { shipment: Shipment; sender: S
 
 function Field({ label, value, size = 15, style }: { label: string; value: string; size?: number; style?: Style }) {
   return (
-    <View style={[{ marginBottom: 14 }, style ?? {}]}>
-      <Text style={s.label}>{label}</Text>
-      <Text style={{ fontSize: size, fontWeight: 600, marginTop: 3, minHeight: size * 1.2 }}>{value || " "}</Text>
+    <View style={[{ marginBottom: 16 }, style ?? {}]}>
+      <Text style={[s.label, { fontSize: 10 }]}>{label}</Text>
+      <Text style={{ fontSize: size, fontWeight: 600, marginTop: 4, lineHeight: 1.15, minHeight: size * 1.15 }}>{value || " "}</Text>
     </View>
   );
 }
+
+/** Big text that steps down for long values, so the sheet always fits one page. */
+const fit = (text: string, size: number, perStep: number) => {
+  const steps = Math.max(0, Math.ceil((text.length - perStep) / 6));
+  return Math.max(size * 0.62, size - steps * size * 0.1);
+};
 
 function ShippingSheet({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
   const { customer, order } = shipment;
@@ -223,7 +229,7 @@ function ShippingSheet({ shipment, sender }: { shipment: Shipment; sender: Sende
   const qrText = `${sender.whatsappUrl}?text=${encodeURIComponent(`Hola REVOLT, tengo una consulta sobre mi pedido ${order.code}.`)}`;
 
   return (
-    <Page size="A4" style={[s.page, { padding: 40 }]}>
+    <Page size="A4" wrap={false} style={[s.page, { padding: 40 }]}>
       <View style={[s.row, { justifyContent: "space-between", alignItems: "flex-end" }]}>
         <Logo mark={34} word={118} />
         <View style={{ alignItems: "flex-end" }}>
@@ -233,65 +239,65 @@ function ShippingSheet({ shipment, sender }: { shipment: Shipment; sender: Sende
           </Text>
         </View>
       </View>
-      <View style={{ height: 1.2, backgroundColor: C.green, marginTop: 14, marginBottom: 22 }} />
+      <View style={{ height: 1.2, backgroundColor: C.green, marginTop: 14, marginBottom: 18 }} />
 
       {/* PARA */}
       <View style={[s.row, { alignItems: "center", gap: 8, marginBottom: 8 }]}>
-        <Text style={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: C.greenDark }}>PARA</Text>
-        <Text style={[s.label, { letterSpacing: 1.2 }]}>· Destinatario</Text>
+        <Text style={{ fontSize: 14, fontWeight: 700, letterSpacing: 3, color: C.greenDark }}>PARA</Text>
+        <Text style={[s.label, { fontSize: 10, letterSpacing: 1.2 }]}>· Destinatario</Text>
       </View>
-      <View style={{ borderWidth: 1.6, borderColor: C.ink, borderRadius: 14, padding: 22 }}>
-        <Field label="Nombre completo" value={customer.name} size={30} />
+      <View style={{ borderWidth: 1.8, borderColor: C.ink, borderRadius: 14, paddingVertical: 22, paddingHorizontal: 24 }}>
+        <Field label="Nombre completo" value={customer.name} size={fit(customer.name, 38, 28)} />
         <View style={[s.row, { gap: 24 }]}>
-          <Field label="DNI" value={customer.dni} size={20} style={{ flex: 1 }} />
-          <Field label="Celular" value={customer.phone} size={20} style={{ flex: 1 }} />
+          <Field label="DNI" value={customer.dni} size={28} style={{ flex: 1 }} />
+          <Field label="Celular" value={customer.phone} size={28} style={{ flex: 1 }} />
         </View>
         {shalom ? (
           <View style={[s.row, { gap: 24 }]}>
-            <Field label="Ciudad de destino" value={customer.city} size={18} style={{ flex: 1 }} />
-            <Field label="Agencia Shalom" value={customer.agency} size={18} style={{ flex: 1 }} />
+            <Field label="Ciudad de destino" value={customer.city} size={fit(customer.city, 24, 20)} style={{ flex: 1 }} />
+            <Field label="Agencia Shalom" value={customer.agency} size={fit(customer.agency, 24, 20)} style={{ flex: 1 }} />
           </View>
         ) : (
-          <Field label="Entrega" value={`En persona · ${customer.city || sender.city}`} size={18} />
+          <Field label="Entrega" value={`En persona · ${customer.city || sender.city}`} size={26} />
         )}
-        {customer.address ? <Field label="Dirección / referencia" value={customer.address} size={13} style={{ marginBottom: 0 }} /> : null}
+        {customer.address ? <Field label="Dirección / referencia" value={customer.address} size={fit(customer.address, 18, 50)} style={{ marginBottom: 0 }} /> : null}
       </View>
 
       {/* DE */}
-      <View style={[s.row, { alignItems: "center", gap: 8, marginTop: 22, marginBottom: 8 }]}>
-        <Text style={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: C.greenDark }}>DE</Text>
-        <Text style={[s.label, { letterSpacing: 1.2 }]}>· Remitente</Text>
+      <View style={[s.row, { alignItems: "center", gap: 8, marginTop: 20, marginBottom: 8 }]}>
+        <Text style={{ fontSize: 14, fontWeight: 700, letterSpacing: 3, color: C.greenDark }}>DE</Text>
+        <Text style={[s.label, { fontSize: 10, letterSpacing: 1.2 }]}>· Remitente</Text>
       </View>
-      <View style={[s.row, { borderWidth: 0.9, borderColor: C.line, borderRadius: 14, padding: 18, gap: 20 }]}>
-        <View style={{ flex: 1.2 }}>
-          <Text style={{ fontSize: 15, fontWeight: 700 }}>
+      <View style={[s.row, { borderWidth: 0.9, borderColor: C.line, borderRadius: 14, padding: 18, gap: 20, alignItems: "center" }]}>
+        <View style={{ flex: 1.3 }}>
+          <Text style={{ fontSize: 19, fontWeight: 700 }}>
             {sender.brand} · {sender.holder}
           </Text>
-          <Text style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>
+          <Text style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>
             {sender.city}, Perú{sender.ruc ? ` · RUC ${sender.ruc}` : ""}
           </Text>
         </View>
         <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <Text style={s.label}>WhatsApp</Text>
-          <Text style={{ fontSize: 15, fontWeight: 700, marginTop: 3 }}>{sender.phoneDisplay}</Text>
+          <Text style={[s.label, { fontSize: 10 }]}>WhatsApp</Text>
+          <Text style={{ fontSize: 20, fontWeight: 700, marginTop: 4 }}>{sender.phoneDisplay}</Text>
         </View>
       </View>
 
-      {/* Contents */}
-      <View style={[s.row, { marginTop: 22, gap: 14 }]}>
-        <View style={[s.row, { flex: 1, borderWidth: 0.9, borderColor: C.line, borderRadius: 14, padding: 16, gap: 12, alignItems: "center" }]}>
-          <Icon name="laptop" size={34} color={C.greenDark} stroke={2} />
-          <View style={{ flex: 1 }}>
-            <Text style={s.label}>Contenido</Text>
-            <Text style={{ fontSize: 12.5, fontWeight: 600, marginTop: 3 }}>{order.laptop}</Text>
-            <Text style={{ fontSize: 10, color: C.muted, marginTop: 2 }}>{order.contents}</Text>
-          </View>
+      {/* Handling notice — what's inside stays private */}
+      <View
+        style={[
+          s.row,
+          { marginTop: 20, borderWidth: 1.6, borderColor: C.ink, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 20, gap: 16, alignItems: "center", justifyContent: "center" },
+        ]}
+      >
+        <Icon name="fragile" size={36} stroke={2.2} />
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontSize: 26, fontWeight: 700, letterSpacing: 6 }}>FRÁGIL</Text>
+          <Text style={{ fontSize: 10, fontWeight: 600, color: C.greenDark, letterSpacing: 2, marginTop: 2 }}>
+            EQUIPO ELECTRÓNICO · MANIPULAR CON CUIDADO
+          </Text>
         </View>
-        <View style={{ width: 150, borderWidth: 1.4, borderColor: C.ink, borderRadius: 14, alignItems: "center", justifyContent: "center", padding: 10 }}>
-          <Icon name="fragile" size={28} stroke={2.2} />
-          <Text style={{ fontSize: 15, fontWeight: 700, letterSpacing: 3, marginTop: 4 }}>FRÁGIL</Text>
-          <Text style={{ fontSize: 7.5, color: C.muted, letterSpacing: 1, marginTop: 1 }}>EQUIPO ELECTRÓNICO</Text>
-        </View>
+        <Icon name="up" size={36} stroke={2.2} />
       </View>
 
       {/* Footer: QR + receiving tip */}
@@ -301,7 +307,7 @@ function ShippingSheet({ shipment, sender }: { shipment: Shipment; sender: Sende
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 12, fontWeight: 700 }}>¿Alguna consulta sobre tu envío?</Text>
           <Text style={{ fontSize: 10, color: C.muted, marginTop: 3, lineHeight: 1.45 }}>
-            Escanea el código y escríbenos por WhatsApp con tu número de pedido. Al recogerla, verifica que la caja llegue cerrada y
+            Escanea el código y escríbenos por WhatsApp con tu número de pedido. Al recoger el paquete, verifica que llegue cerrado y
             con las etiquetas REVOLT.
           </Text>
         </View>
