@@ -11,6 +11,6 @@ import type { ReactNode } from "react";
  */
 export function HideOnAdmin({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  if (pathname === "/admin" || pathname?.startsWith("/admin/")) return null;
+  if (/^\/(admin|envios)(\/|$)/.test(pathname ?? "")) return null;
   return <>{children}</>;
 }

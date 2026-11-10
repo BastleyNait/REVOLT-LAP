@@ -1,0 +1,17 @@
+{
+  "name": "REVOLT Envíos",
+  "short_name": "Envíos",
+  "description": "Etiquetas, guía de envío, carta de agradecimiento y garantía en un PDF.",
+  "lang": "es-PE",
+  "id": "/envios",
+  "start_url": "/envios",
+  "scope": "/envios",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#010201",
+  "theme_color": "#010201",
+  "icons": [
+    { "src": "/envios-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/envios-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

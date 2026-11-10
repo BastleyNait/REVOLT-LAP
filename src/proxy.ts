@@ -24,5 +24,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*"],
+  // /envios is the shipment tool (labels, letter, warranty): same password.
+  matcher: ["/admin", "/admin/:path*", "/envios", "/envios/:path*"],
 };
