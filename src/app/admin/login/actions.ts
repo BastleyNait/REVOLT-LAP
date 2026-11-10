@@ -6,7 +6,8 @@ import { env, isAdminAuthEnabled } from "@/lib/env";
 import { ADMIN_COOKIE, computeAdminToken } from "@/lib/auth/token";
 
 function sanitizeRedirect(target: string): string {
-  return target.startsWith("/admin") ? target : "/admin";
+  // Only our own private areas (never "//host" or an external URL).
+  return /^\/(admin|envios)(\/|$|\?)/.test(target) ? target : "/admin";
 }
 
 export async function loginAction(formData: FormData): Promise<void> {
