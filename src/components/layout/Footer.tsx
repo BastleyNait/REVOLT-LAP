@@ -27,7 +27,7 @@ export function Footer() {
           <nav aria-label="Pie de página" className="space-y-3">
             <h2 className="text-sm font-semibold text-on-surface">Navegación</h2>
             <ul>
-              {[{ label: "Inicio", href: "/" }, ...siteConfig.nav].map((item) => (
+              {[{ label: "Inicio", href: "/" }, ...siteConfig.nav, { label: "Opiniones", href: "/opiniones" }].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

@@ -1,7 +1,6 @@
 /**
- * Data for one shipment: what the form collects and the PDF (6 A4 pages:
- * 3 sheets of box labels, the shipping sheet, the thank-you letter and the
- * warranty certificate) prints.
+ * Data for one shipment: what the form collects and the PDF (5 A4 pages:
+ * 3 sheets of box labels, the shipping sheet and the thank-you letter) prints.
  */
 
 export type Delivery = "shalom" | "arequipa";
@@ -21,11 +20,8 @@ export interface Shipment {
   order: {
     code: string;
     laptop: string;
-    serial: string;
     /** Purchase date, YYYY-MM-DD. */
     date: string;
-    /** Receipt number (boleta), optional. */
-    receipt: string;
     delivery: Delivery;
     /** What goes in the box besides the laptop. */
     contents: string;
@@ -44,7 +40,7 @@ export interface Sender {
   city: string;
   /** Website host without protocol, e.g. "revolt-laptops.com". */
   web: string;
-  /** Where the "leave us a review" QR points (Google Business or the website). */
+  /** Fallback for the review QR when a one-time review link can't be created. */
   reviewUrl: string;
   warrantyMonths: number;
 }
@@ -68,9 +64,7 @@ export function emptyShipment(): Shipment {
     order: {
       code: newOrderCode(date),
       laptop: "",
-      serial: "",
       date,
-      receipt: "",
       delivery: "shalom",
       contents: "Laptop + cargador original",
     },
@@ -88,16 +82,6 @@ export function longDate(iso: string): string {
   return new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
     parseDate(iso),
   );
-}
-
-/** Purchase date + N months (warranty end), as a long date. */
-export function addMonthsLong(iso: string, months: number): string {
-  const date = parseDate(iso);
-  const day = date.getUTCDate();
-  date.setUTCMonth(date.getUTCMonth() + months);
-  // 31 Aug + 6 months must not roll over into March.
-  if (date.getUTCDate() < day) date.setUTCDate(0);
-  return longDate(date.toISOString().slice(0, 10));
 }
 
 export function firstName(full: string): string {
