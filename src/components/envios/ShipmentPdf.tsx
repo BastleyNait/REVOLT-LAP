@@ -1,16 +1,16 @@
 import { Document, Font, Page, Path, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import QRCode from "qrcode";
 import { LOGO_MARK, LOGO_WORD } from "@/lib/envios/logo";
-import { addMonthsLong, firstName, longDate, type Sender, type Shipment } from "@/lib/envios/types";
+import { firstName, longDate, type Sender, type Shipment } from "@/lib/envios/types";
 
 /**
- * The shipment PDF: 6 A4 pages designed for a home printer on plain white
+ * The shipment PDF: 5 A4 pages designed for a home printer on plain white
  * paper — line art, thin strokes and white backgrounds, no large ink fills.
  *
  *   1–3  Box labels, 2 per sheet (6 = one per side of the box)
  *   4    Shipping sheet (recipient / sender)
- *   5    Thank-you letter (goes inside the box)
- *   6    Warranty certificate
+ *   5    Thank-you letter (goes inside the box), with the buyer's own
+ *        one-time QR to leave a verified review
  */
 
 /** Style prop of a react-pdf View (without importing its internal types package). */
@@ -312,14 +312,14 @@ function ShippingSheet({ shipment, sender }: { shipment: Shipment; sender: Sende
 
 /* ───────────────────────────── 5 thank-you letter ───────────────────────────── */
 
-function Letter({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
+function Letter({ shipment, sender, reviewUrl }: { shipment: Shipment; sender: Sender; reviewUrl: string }) {
   const { customer, order } = shipment;
   const name = firstName(customer.name) || "amigo";
   const tips = [
     "Carga la batería al 100 % antes de un uso prolongado.",
     "Conéctate a Wi-Fi y deja que Windows termine sus actualizaciones.",
     "Usa siempre el cargador que viene en la caja.",
-    `Guarda tu certificado: tu laptop tiene ${sender.warrantyMonths} meses de garantía.`,
+    `Tu laptop tiene ${sender.warrantyMonths} meses de garantía: guarda tu boleta y escríbenos ante cualquier falla.`,
   ];
 
   return (
@@ -367,15 +367,15 @@ function Letter({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
       <View style={{ flex: 1 }} />
 
       <View style={[s.row, { gap: 18, alignItems: "center", borderWidth: 0.9, borderColor: C.line, borderRadius: 16, padding: 16 }]}>
-        <Qr value={sender.reviewUrl} size={74} />
+        <Qr value={reviewUrl} size={74} />
         <View style={{ flex: 1 }}>
           <View style={[s.row, { gap: 6, alignItems: "center" }]}>
             <Icon name="star" size={14} color={C.greenDark} stroke={2.4} />
             <Text style={{ fontSize: 13, fontWeight: 700 }}>¿Te gustó tu experiencia?</Text>
           </View>
           <Text style={{ fontSize: 10.5, color: C.muted, marginTop: 4, lineHeight: 1.45 }}>
-            Escanea y déjanos una reseña: nos ayuda muchísimo a que más personas compren con confianza. Y si tienes cualquier duda,
-            escríbenos al {sender.phoneDisplay}.
+            Escanea y cuéntanos qué te pareció: tu opinión aparecerá en nuestra web como compra verificada y ayuda a que más
+            personas compren con confianza. Este código es solo tuyo. ¿Dudas? Escríbenos al {sender.phoneDisplay}.
           </Text>
         </View>
       </View>
@@ -391,102 +391,9 @@ function Letter({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
   );
 }
 
-/* ───────────────────────────── 6 warranty ───────────────────────────── */
-
-function Warranty({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
-  const { customer, order } = shipment;
-  const rows: [string, string][] = [
-    ["Cliente", customer.name],
-    ["DNI", customer.dni],
-    ["Equipo", order.laptop],
-    ["N.º de serie", order.serial],
-    ["Fecha de compra", longDate(order.date)],
-    ["Válida hasta", addMonthsLong(order.date, sender.warrantyMonths)],
-    ["Comprobante", order.receipt ? `Boleta ${order.receipt}` : ""],
-    ["Pedido", order.code],
-  ];
-  const covers = ["Fallas de placa y componentes internos", "Pantalla, teclado y touchpad", "Puertos, memoria y almacenamiento", "Wi-Fi, Bluetooth, cámara y audio"];
-  const excludes = ["Golpes, caídas o presión", "Contacto con líquidos o humedad", "Daños por mal uso o variaciones eléctricas", "Equipos abiertos o reparados por terceros"];
-
-  return (
-    <Page size="A4" style={[s.page, { padding: 26 }]}>
-      <View style={{ flex: 1, borderWidth: 1.2, borderColor: C.green, borderRadius: 18, padding: 6 }}>
-        <View style={{ flex: 1, borderWidth: 0.5, borderColor: C.line, borderRadius: 13, paddingVertical: 34, paddingHorizontal: 40 }}>
-          <View style={{ alignItems: "center" }}>
-            <Mark size={46} />
-            <Text style={{ fontSize: 12, fontWeight: 600, letterSpacing: 5, marginTop: 14, color: C.muted }}>CERTIFICADO DE</Text>
-            <Text style={{ fontSize: 34, fontWeight: 700, letterSpacing: 3, marginTop: 2 }}>GARANTÍA</Text>
-            <View style={[s.row, { alignItems: "flex-end", marginTop: 6 }]}>
-              <Text style={{ fontSize: 46, fontWeight: 700, color: C.greenDark, lineHeight: 1 }}>{sender.warrantyMonths}</Text>
-              <Text style={{ fontSize: 16, fontWeight: 600, color: C.greenDark, marginLeft: 6, marginBottom: 5 }}>meses</Text>
-            </View>
-          </View>
-
-          <View style={{ marginTop: 22 }}>
-            {rows.map(([label, value]) => (
-              <View
-                key={label}
-                style={[s.row, { justifyContent: "space-between", alignItems: "flex-end", paddingVertical: 7, borderBottomWidth: 0.6, borderBottomColor: C.line, borderStyle: "dotted" }]}
-              >
-                <Text style={[s.label, { fontSize: 8.5 }]}>{label}</Text>
-                <Text style={{ fontSize: 12.5, fontWeight: 600, maxWidth: "70%", textAlign: "right" }}>{value || " "}</Text>
-              </View>
-            ))}
-          </View>
-
-          <View style={[s.row, { gap: 16, marginTop: 22 }]}>
-            {(
-              [
-                ["Cubre", covers, C.greenDark],
-                ["No cubre", excludes, C.muted],
-              ] as const
-            ).map(([title, items, color]) => (
-              <View key={title} style={{ flex: 1, borderWidth: 0.8, borderColor: C.line, borderRadius: 12, padding: 14 }}>
-                <Text style={[s.label, { color }]}>{title}</Text>
-                {items.map((item) => (
-                  <View key={item} style={[s.row, { gap: 6, marginTop: 6 }]}>
-                    <Text style={{ fontSize: 10, color, fontWeight: 700 }}>{title === "Cubre" ? "+" : "–"}</Text>
-                    <Text style={{ fontSize: 10, flex: 1, lineHeight: 1.35 }}>{item}</Text>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </View>
-
-          <View style={[s.row, { gap: 10, marginTop: 18, alignItems: "flex-start" }]}>
-            <Icon name="chat" size={18} color={C.greenDark} stroke={2.4} />
-            <Text style={{ flex: 1, fontSize: 10, lineHeight: 1.5, color: C.muted }}>
-              <Text style={{ color: C.ink, fontWeight: 700 }}>¿Cómo usarla? </Text>
-              Escríbenos por WhatsApp al {sender.phoneDisplay} con tu número de pedido y una foto o video de la falla. Revisamos el equipo y
-              te damos una solución. Conserva este certificado y tu boleta.
-            </Text>
-          </View>
-
-          <View style={{ flex: 1 }} />
-
-          <View style={[s.row, { justifyContent: "space-between", alignItems: "flex-end" }]}>
-            <View>
-              <Wordmark width={96} />
-              <Text style={{ fontSize: 8.5, color: C.muted, marginTop: 5 }}>
-                {sender.web}
-                {sender.ruc ? ` · RUC ${sender.ruc}` : ""}
-              </Text>
-            </View>
-            <View style={{ width: 190, alignItems: "center" }}>
-              <View style={{ width: "100%", borderTopWidth: 0.8, borderTopColor: C.ink }} />
-              <Text style={{ fontSize: 10, fontWeight: 600, marginTop: 5 }}>{sender.holder}</Text>
-              <Text style={{ fontSize: 8, color: C.muted }}>{sender.brand} · Firma y sello</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    </Page>
-  );
-}
-
 /* ───────────────────────────── document ───────────────────────────── */
 
-export function ShipmentPdf({ shipment, sender }: { shipment: Shipment; sender: Sender }) {
+export function ShipmentPdf({ shipment, sender, reviewUrl }: { shipment: Shipment; sender: Sender; reviewUrl: string }) {
   return (
     <Document
       title={`REVOLT · Envío ${shipment.order.code} · ${shipment.customer.name}`}
@@ -498,8 +405,7 @@ export function ShipmentPdf({ shipment, sender }: { shipment: Shipment; sender: 
         <LabelSheet key={sheet} shipment={shipment} sender={sender} sheet={sheet} />
       ))}
       <ShippingSheet shipment={shipment} sender={sender} />
-      <Letter shipment={shipment} sender={sender} />
-      <Warranty shipment={shipment} sender={sender} />
+      <Letter shipment={shipment} sender={sender} reviewUrl={reviewUrl} />
     </Document>
   );
 }

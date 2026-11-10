@@ -7,6 +7,8 @@ import { AboutTeaser } from "@/components/home/AboutTeaser";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
 import { Catalog } from "@/components/product/Catalog";
+import { ReviewsSection } from "@/components/reviews/ReviewsSection";
+import { getPublicReviews } from "@/lib/repositories/reviews";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const products = await getProducts();
+  const [products, reviews] = await Promise.all([getProducts(), getPublicReviews(6)]);
   const minPrice = products.length ? Math.min(...products.map((product) => product.price)) : null;
   // Featured laptops for the hero carousel; sold-out ones are skipped.
   const featured = products.filter((product) => product.isFeatured && availability(product) !== "sold-out").slice(0, 6);
@@ -62,6 +64,7 @@ export default async function HomePage() {
         </Catalog>
 
         <HowToBuy />
+        <ReviewsSection summary={reviews} />
         <AboutTeaser />
         <Faq />
         <FinalCta />

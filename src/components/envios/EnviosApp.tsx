@@ -16,9 +16,9 @@ import {
   Printer,
   RotateCcw,
   Share2,
-  ShieldCheck,
   Smartphone,
   Sparkles,
+  Star,
   Tag,
   Trash2,
   User,
@@ -76,9 +76,32 @@ function slug(text: string) {
 const PAGES = [
   { icon: Tag, title: "Etiquetas", detail: "3 hojas · 2 por hoja · una por cara de la caja", count: 3 },
   { icon: MapPin, title: "Guía de envío", detail: "Destinatario y remitente", count: 1 },
-  { icon: Gift, title: "Carta de agradecimiento", detail: "Va dentro de la caja", count: 1 },
-  { icon: ShieldCheck, title: "Certificado de garantía", detail: "Con número de serie y vigencia", count: 1 },
+  { icon: Gift, title: "Carta de agradecimiento", detail: "Con QR único para su opinión verificada", count: 1 },
 ];
+
+/**
+ * One-time review link for this order (the letter's QR). Same order code →
+ * same link, so reprinting is safe. On failure the QR falls back to the site.
+ */
+async function createReviewLink(s: Shipment): Promise<{ url: string | null; error?: string }> {
+  try {
+    const res = await fetch("/api/reviews/invite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderCode: s.order.code,
+        customerName: s.customer.name,
+        laptop: s.order.laptop,
+        city: s.order.delivery === "shalom" ? s.customer.city : s.customer.city || "Arequipa",
+      }),
+    });
+    const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+    if (res.ok && data.url) return { url: data.url };
+    return { url: null, error: data.error ?? `Error ${res.status}` };
+  } catch {
+    return { url: null, error: "Sin conexión" };
+  }
+}
 
 type BeforeInstallPromptEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
 
@@ -91,6 +114,7 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
   const [pdf, setPdf] = useState<{ url: string; file: File } | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [install, setInstall] = useState<BeforeInstallPromptEvent | null>(null);
+  const [reviewLink, setReviewLink] = useState<{ url: string | null; error?: string } | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Restore the draft and history; register the service worker (installable app).
@@ -136,7 +160,11 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
         import("./ShipmentPdf"),
       ]);
       registerPdfFonts(`${window.location.origin}/fonts`);
-      const blob = await render(<ShipmentPdf shipment={shipment} sender={sender} />).toBlob();
+      const reviewUrl = await createReviewLink(shipment);
+      setReviewLink(reviewUrl);
+      const blob = await render(
+        <ShipmentPdf shipment={shipment} sender={sender} reviewUrl={reviewUrl.url ?? sender.reviewUrl} />,
+      ).toBlob();
       const name = `REVOLT-${shipment.order.code}-${slug(shipment.customer.name) || "envio"}.pdf`;
       const file = new File([blob], name, { type: "application/pdf" });
       setPdf({ url: URL.createObjectURL(blob), file });
@@ -212,7 +240,7 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
             <h1 className="text-2xl font-extrabold leading-none tracking-tight md:text-3xl">
               REVOLT <span className="text-primary">Envíos</span>
             </h1>
-            <p className="mt-1 text-sm text-on-surface-variant">Etiquetas, guía, carta y garantía en un solo PDF</p>
+            <p className="mt-1 text-sm text-on-surface-variant">Etiquetas, guía de envío y carta en un solo PDF</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -342,9 +370,7 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
                   <option key={name} value={name} />
                 ))}
               </datalist>
-              <TextField label="N.º de serie" value={shipment.order.serial} onChange={setOrder("serial")} placeholder="Ej.: PF2KX9ZT" autoCapitalize="characters" />
               <TextField label="Fecha de compra" type="date" value={shipment.order.date} onChange={setOrder("date")} />
-              <TextField label="N.º de boleta" value={shipment.order.receipt} onChange={setOrder("receipt")} placeholder="Ej.: B001-000123" />
               <div>
                 <span className="mb-2 block text-sm font-semibold tracking-wide">Código de pedido</span>
                 <div className="flex gap-2">
@@ -398,7 +424,7 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
           <div className="glass rounded-[1.75rem] p-5 md:p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold">Tu PDF</h2>
-              <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">6 hojas A4</span>
+              <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">5 hojas A4</span>
             </div>
             <ol className="mt-4 space-y-2.5">
               {PAGES.map(({ icon: PageIcon, title, detail, count }) => (
@@ -496,6 +522,28 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
                 </a>
               </div>
             </div>
+            {reviewLink ? (
+              <div
+                className={cn(
+                  "flex items-start gap-2.5 border-b border-white/10 px-5 py-3 text-sm md:px-6",
+                  reviewLink.url ? "text-on-surface-variant" : "text-error",
+                )}
+              >
+                <Star className={cn("mt-0.5 h-4 w-4 shrink-0", reviewLink.url ? "text-primary" : "text-error")} />
+                {reviewLink.url ? (
+                  <span>
+                    QR de opinión verificada, solo para este pedido:{" "}
+                    <a href={reviewLink.url} target="_blank" rel="noreferrer" className="break-all font-semibold text-primary underline underline-offset-2">
+                      {reviewLink.url.replace(/^https?:\/\//, "")}
+                    </a>
+                  </span>
+                ) : (
+                  <span>
+                    No se pudo crear el QR de opinión verificada ({reviewLink.error}). El QR de la carta lleva a tu web.
+                  </span>
+                )}
+              </div>
+            ) : null}
             {/* Inline preview where the browser can show PDFs (desktop). */}
             <iframe title="Vista previa del PDF" src={`${pdf.url}#view=FitH`} className="hidden h-[80vh] w-full bg-white md:block" />
             <p className="p-5 text-sm text-on-surface-variant md:hidden">

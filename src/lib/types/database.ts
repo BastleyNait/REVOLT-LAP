@@ -33,6 +33,22 @@ export type ProductRow = {
   updated_at: string;
 };
 
+/** Verified review. Starts as an invite (no rating) when a shipment PDF is made. */
+export type ReviewRow = {
+  id: string;
+  token: string;
+  order_code: string;
+  customer_name: string;
+  laptop: string;
+  city: string;
+  rating: number | null;
+  comment: string | null;
+  author_name: string | null;
+  submitted_at: string | null;
+  is_visible: boolean;
+  created_at: string;
+};
+
 export type ProductInsert = Omit<ProductRow, "id" | "created_at" | "updated_at"> & {
   id?: string;
   created_at?: string;
@@ -42,6 +58,12 @@ export type ProductInsert = Omit<ProductRow, "id" | "created_at" | "updated_at">
 export type Database = {
   public: {
     Tables: {
+      reviews: {
+        Row: ReviewRow;
+        Insert: Partial<ReviewRow> & Pick<ReviewRow, "token" | "order_code" | "customer_name">;
+        Update: Partial<ReviewRow>;
+        Relationships: [];
+      };
       products: {
         Row: ProductRow;
         Insert: ProductInsert;
