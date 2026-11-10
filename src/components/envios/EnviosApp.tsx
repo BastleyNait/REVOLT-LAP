@@ -391,13 +391,6 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
                   </button>
                 </div>
               </div>
-              <TextField
-                className="sm:col-span-2"
-                label="Contenido de la caja"
-                value={shipment.order.contents}
-                onChange={setOrder("contents")}
-                placeholder="Ej.: Laptop + cargador original"
-              />
             </div>
           </Section>
 
