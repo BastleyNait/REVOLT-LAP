@@ -4,32 +4,13 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Check, Loader2, Star } from "lucide-react";
 import { submitReviewAction, type ReviewFormState } from "@/app/opinar/[token]/actions";
-import { submitOpenReviewAction } from "@/app/opinar/clientes/actions";
 import { buttonClasses } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 
 const LABELS = ["", "Mala", "Regular", "Buena", "Muy buena", "¡Excelente!"];
 
-/**
- * mode "invite": enlace único de la carta (token). mode "open": enlace general
- * para clientes anteriores; pide la laptop y la opinión queda por aprobar.
- */
-export function ReviewForm({
-  token = "",
-  mode = "invite",
-  defaultAuthor,
-  googleUrl,
-}: {
-  token?: string;
-  mode?: "invite" | "open";
-  defaultAuthor: string;
-  googleUrl: string;
-}) {
-  const open = mode === "open";
-  const [state, action, pending] = useActionState<ReviewFormState, FormData>(
-    open ? submitOpenReviewAction : submitReviewAction.bind(null, token),
-    { status: "idle" },
-  );
+export function ReviewForm({ token, defaultAuthor, googleUrl }: { token: string; defaultAuthor: string; googleUrl: string }) {
+  const [state, action, pending] = useActionState<ReviewFormState, FormData>(submitReviewAction.bind(null, token), { status: "idle" });
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
@@ -42,9 +23,7 @@ export function ReviewForm({
           <Check className="h-7 w-7" strokeWidth={3} />
         </span>
         <h2 className="mt-5 text-2xl font-extrabold">¡Gracias por tu opinión!</h2>
-        <p className="mt-2 text-on-surface-variant">
-          {open ? "La revisamos y la publicamos en nuestra web muy pronto." : "Ya aparece en nuestra web como compra verificada."}
-        </p>
+        <p className="mt-2 text-on-surface-variant">Ya aparece en nuestra web como compra verificada.</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           {googleUrl ? (
             <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses({ variant: "primary", size: "md", className: "min-h-12" })}>
@@ -94,19 +73,6 @@ export function ReviewForm({
         />
         <span className="mt-1 block text-right text-xs text-on-surface-variant">{comment.length}/600</span>
       </label>
-
-      {open ? (
-        <label className="block">
-          <span className="text-sm font-semibold tracking-wide">¿Qué laptop compraste?</span>
-          <input
-            name="laptop"
-            maxLength={160}
-            placeholder="Ej. Lenovo ThinkPad T14"
-            className="mt-2 min-h-12 w-full rounded-2xl border border-white/12 bg-black/35 px-4 text-base focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/30"
-          />
-        </label>
-      ) : null}
-      {open ? <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" /> : null}
 
       <label className="block">
         <span className="text-sm font-semibold tracking-wide">Nombre que se mostrará</span>

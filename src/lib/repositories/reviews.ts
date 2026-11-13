@@ -3,6 +3,8 @@ import { randomBytes } from "crypto";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseAdminConfigured } from "@/lib/env";
 import type { ReviewRow } from "@/lib/types/database";
+import { siteConfig } from "@/lib/config/site";
+import { headers } from "next/headers";
 
 /**
  * Verified reviews. A row starts as an invite when the shipment PDF is made
@@ -87,6 +89,33 @@ export async function upsertInvite(input: { orderCode: string; customerName: str
   return token;
 }
 
+/**
+ * Public link of an invite. In production it always uses the live domain:
+ * a localhost or preview origin in a customer's QR or WhatsApp would be a
+ * dead link.
+ */
+export function reviewLink(token: string, requestOrigin: string): string {
+  const origin = process.env.VERCEL_ENV === "production" ? siteConfig.url : requestOrigin;
+  return `${origin}/opinar/${token}`;
+}
+
+/**
+ * Order code for a purchase made before the shipment app (no PDF, no REV-
+ * code). The ANT- prefix never collides with /envios codes (REV-YYMMDD-NNNN),
+ * so a future shipment can never reuse one of these invites.
+ */
+/** Origin of the current request (server actions have no request object). */
+export async function requestOrigin(): Promise<string> {
+  const head = await headers();
+  const host = head.get("x-forwarded-host") ?? head.get("host") ?? "localhost:3000";
+  const proto = head.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  return `${proto}://${host}`;
+}
+
+export function pastPurchaseCode(): string {
+  return `ANT-${randomBytes(5).toString("hex").toUpperCase()}`;
+}
+
 export async function getInvite(token: string): Promise<ReviewRow | null> {
   if (!reviewsEnabled || !/^[A-Za-z0-9_-]{16,64}$/.test(token)) return null;
   const { data } = await getAdminClient().from("reviews").select("*").eq("token", token).maybeSingle();
@@ -114,35 +143,6 @@ export async function submitReview(
   if (data?.length) return "ok";
   const invite = await getInvite(token);
   return invite ? "used" : "not-found";
-}
-
-/**
- * Opiniones del enlace general para clientes anteriores (compras sin PDF ni
- * QR propio). Como cualquiera con el enlace puede usarlo, entran OCULTAS:
- * se publican cuando las apruebas en /admin/opiniones. El prefijo GEN- las
- * distingue y nunca choca con los códigos de /envios (REV-...).
- */
-export const OPEN_REVIEW_PREFIX = "GEN-";
-
-export async function submitOpenReview(review: {
-  rating: number;
-  comment: string;
-  author: string;
-  laptop: string;
-}): Promise<void> {
-  const { error } = await getAdminClient().from("reviews").insert({
-    token: randomBytes(16).toString("base64url"),
-    order_code: `${OPEN_REVIEW_PREFIX}${randomBytes(5).toString("hex").toUpperCase()}`,
-    customer_name: review.author,
-    author_name: review.author,
-    laptop: review.laptop,
-    city: "",
-    rating: review.rating,
-    comment: review.comment,
-    submitted_at: new Date().toISOString(),
-    is_visible: false,
-  });
-  if (error) throw error;
 }
 
 /** Published reviews for the storefront, newest first, plus the average. */

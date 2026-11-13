@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { isRequestAuthorized } from "@/lib/auth/admin";
-import { reviewsEnabled, upsertInvite } from "@/lib/repositories/reviews";
-import { siteConfig } from "@/lib/config/site";
+import { reviewLink, reviewsEnabled, upsertInvite } from "@/lib/repositories/reviews";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,9 +30,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const token = await upsertInvite(parsed.data);
-    // In production the request origin is the live domain the QR must point to.
-    const origin = process.env.VERCEL_ENV === "production" ? siteConfig.url : request.nextUrl.origin;
-    return NextResponse.json({ url: `${origin}/opinar/${token}` });
+    return NextResponse.json({ url: reviewLink(token, request.nextUrl.origin) });
   } catch (error) {
     console.error("review invite", error);
     return NextResponse.json(

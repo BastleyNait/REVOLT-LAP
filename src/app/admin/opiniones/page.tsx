@@ -1,9 +1,10 @@
 import { listReviewsForAdmin, reviewsEnabled } from "@/lib/repositories/reviews";
 import { Stars } from "@/components/reviews/Stars";
 import QRCode from "qrcode";
-import { siteConfig } from "@/lib/config/site";
+import { getAllProductsAdmin } from "@/lib/repositories/products";
+import { requestOrigin, reviewLink } from "@/lib/repositories/reviews";
+import { PastInviteForm } from "@/components/reviews/PastInviteForm";
 import { InviteShare } from "@/components/reviews/InviteShare";
-import { OPEN_REVIEW_PREFIX } from "@/lib/repositories/reviews";
 import { deleteReviewAction, toggleReviewAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -16,20 +17,33 @@ const date = (iso: string) =>
  * insults — honest negative reviews are what make the positive ones credible.
  */
 export default async function AdminReviewsPage() {
-  const rows = await listReviewsForAdmin();
+  const [rows, products, origin] = await Promise.all([
+    listReviewsForAdmin(),
+    getAllProductsAdmin().catch(() => []),
+    requestOrigin(),
+  ]);
+  const laptops = Array.from(new Set(products.map((product) => product.name)));
+  // Invitaciones sin usar: su enlace y QR siguen a mano para reenviarlos.
+  const links = new Map(
+    await Promise.all(
+      rows
+        .filter((row) => !row.submitted_at)
+        .map(async (row) => {
+          const url = reviewLink(row.token, origin);
+          const qr = await QRCode.toString(url, { type: "svg", errorCorrectionLevel: "M", margin: 1 });
+          return [row.id, { url, qr }] as const;
+        }),
+    ),
+  );
   const submitted = rows.filter((r) => r.submitted_at);
   const pending = rows.length - submitted.length;
-  // Enlace general para clientes anteriores (un solo enlace para todos).
-  const openUrl = `${siteConfig.url}/opinar/clientes`;
-  const openQr = await QRCode.toString(openUrl, { type: "svg", errorCorrectionLevel: "M", margin: 1 });
-  const toApprove = rows.filter((r) => r.order_code.startsWith(OPEN_REVIEW_PREFIX) && r.submitted_at && !r.is_visible).length;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-extrabold">Opiniones</h1>
         <p className="mt-1 text-on-surface-variant">
-          {submitted.length} publicadas o enviadas · {pending} invitaciones sin usar. Cada PDF de envío crea una invitación con QR único.
+          {submitted.length} publicadas o enviadas · {pending} invitaciones sin usar. Cada PDF de envío crea una invitación con QR único; para compras anteriores, genéralo aquí.
         </p>
       </div>
 
@@ -37,24 +51,7 @@ export default async function AdminReviewsPage() {
         <p className="rounded-2xl border border-error/40 bg-error/10 p-4 text-sm">Supabase no está configurado en este entorno.</p>
       ) : null}
 
-      <section className="glass flex flex-col gap-5 rounded-3xl p-5 sm:flex-row sm:items-center md:p-6">
-        <div
-          aria-label="Código QR del enlace para clientes anteriores"
-          className="h-36 w-36 shrink-0 rounded-xl bg-white p-2 [&>svg]:h-full [&>svg]:w-full"
-          dangerouslySetInnerHTML={{ __html: openQr }}
-        />
-        <div className="min-w-0 space-y-3">
-          <h2 className="text-xl font-extrabold">Enlace para clientes anteriores</h2>
-          <p className="text-sm text-on-surface-variant">
-            Un solo enlace para compartir con todos los que compraron antes de las cartas con QR. Sus opiniones llegan ocultas: las
-            publicas aquí abajo con «Publicar».{toApprove ? ` Tienes ${toApprove} por aprobar.` : ""}
-          </p>
-          <a href={openUrl} target="_blank" rel="noreferrer" className="block break-all text-sm font-semibold text-primary underline underline-offset-2">
-            {openUrl.replace(/^https?:\/\//, "")}
-          </a>
-          <InviteShare url={openUrl} customerName="" laptop="" />
-        </div>
-      </section>
+      {reviewsEnabled ? <PastInviteForm laptops={laptops} /> : null}
 
       <ul className="space-y-3">
         {rows.map((row) => (
@@ -77,7 +74,25 @@ export default async function AdminReviewsPage() {
                   {row.comment ? <p className="mt-2 leading-relaxed">“{row.comment}”</p> : null}
                 </>
               ) : (
-                <p className="mt-2 text-sm text-on-surface-variant">Invitación enviada el {date(row.created_at)} · aún no opina</p>
+                <>
+                  <p className="mt-2 text-sm text-on-surface-variant">Invitación creada el {date(row.created_at)} · aún no opina</p>
+                  {links.get(row.id) ? (
+                    <details className="mt-3">
+                      <summary className="cursor-pointer text-sm font-semibold text-primary">Ver enlace y QR para reenviar</summary>
+                      <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center">
+                        <div
+                          aria-label="Código QR del enlace de opinión"
+                          className="h-32 w-32 shrink-0 rounded-xl bg-white p-2 [&>svg]:h-full [&>svg]:w-full"
+                          dangerouslySetInnerHTML={{ __html: links.get(row.id)!.qr }}
+                        />
+                        <div className="min-w-0 space-y-3">
+                          <p className="break-all text-sm text-on-surface-variant">{links.get(row.id)!.url.replace(/^https?:\/\//, "")}</p>
+                          <InviteShare url={links.get(row.id)!.url} customerName={row.customer_name} laptop={row.laptop} />
+                        </div>
+                      </div>
+                    </details>
+                  ) : null}
+                </>
               )}
             </div>
             <div className="flex shrink-0 items-center gap-2">
@@ -86,7 +101,7 @@ export default async function AdminReviewsPage() {
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-bold ${row.is_visible ? "bg-primary/15 text-primary" : "bg-white/10 text-on-surface-variant"}`}
                   >
-                    {row.is_visible ? "Publicada" : row.order_code.startsWith(OPEN_REVIEW_PREFIX) ? "Por aprobar" : "Oculta"}
+                    {row.is_visible ? "Publicada" : "Oculta"}
                   </span>
                   <form action={toggleReviewAction}>
                     <input type="hidden" name="id" value={row.id} />
