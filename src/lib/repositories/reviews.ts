@@ -116,6 +116,35 @@ export async function submitReview(
   return invite ? "used" : "not-found";
 }
 
+/**
+ * Opiniones del enlace general para clientes anteriores (compras sin PDF ni
+ * QR propio). Como cualquiera con el enlace puede usarlo, entran OCULTAS:
+ * se publican cuando las apruebas en /admin/opiniones. El prefijo GEN- las
+ * distingue y nunca choca con los códigos de /envios (REV-...).
+ */
+export const OPEN_REVIEW_PREFIX = "GEN-";
+
+export async function submitOpenReview(review: {
+  rating: number;
+  comment: string;
+  author: string;
+  laptop: string;
+}): Promise<void> {
+  const { error } = await getAdminClient().from("reviews").insert({
+    token: randomBytes(16).toString("base64url"),
+    order_code: `${OPEN_REVIEW_PREFIX}${randomBytes(5).toString("hex").toUpperCase()}`,
+    customer_name: review.author,
+    author_name: review.author,
+    laptop: review.laptop,
+    city: "",
+    rating: review.rating,
+    comment: review.comment,
+    submitted_at: new Date().toISOString(),
+    is_visible: false,
+  });
+  if (error) throw error;
+}
+
 /** Published reviews for the storefront, newest first, plus the average. */
 export async function getPublicReviews(limit = 50): Promise<ReviewSummary> {
   if (!reviewsEnabled) return EMPTY;

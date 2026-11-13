@@ -1,5 +1,9 @@
 import { listReviewsForAdmin, reviewsEnabled } from "@/lib/repositories/reviews";
 import { Stars } from "@/components/reviews/Stars";
+import QRCode from "qrcode";
+import { siteConfig } from "@/lib/config/site";
+import { InviteShare } from "@/components/reviews/InviteShare";
+import { OPEN_REVIEW_PREFIX } from "@/lib/repositories/reviews";
 import { deleteReviewAction, toggleReviewAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +19,10 @@ export default async function AdminReviewsPage() {
   const rows = await listReviewsForAdmin();
   const submitted = rows.filter((r) => r.submitted_at);
   const pending = rows.length - submitted.length;
+  // Enlace general para clientes anteriores (un solo enlace para todos).
+  const openUrl = `${siteConfig.url}/opinar/clientes`;
+  const openQr = await QRCode.toString(openUrl, { type: "svg", errorCorrectionLevel: "M", margin: 1 });
+  const toApprove = rows.filter((r) => r.order_code.startsWith(OPEN_REVIEW_PREFIX) && r.submitted_at && !r.is_visible).length;
 
   return (
     <div className="space-y-6">
@@ -28,6 +36,25 @@ export default async function AdminReviewsPage() {
       {!reviewsEnabled ? (
         <p className="rounded-2xl border border-error/40 bg-error/10 p-4 text-sm">Supabase no está configurado en este entorno.</p>
       ) : null}
+
+      <section className="glass flex flex-col gap-5 rounded-3xl p-5 sm:flex-row sm:items-center md:p-6">
+        <div
+          aria-label="Código QR del enlace para clientes anteriores"
+          className="h-36 w-36 shrink-0 rounded-xl bg-white p-2 [&>svg]:h-full [&>svg]:w-full"
+          dangerouslySetInnerHTML={{ __html: openQr }}
+        />
+        <div className="min-w-0 space-y-3">
+          <h2 className="text-xl font-extrabold">Enlace para clientes anteriores</h2>
+          <p className="text-sm text-on-surface-variant">
+            Un solo enlace para compartir con todos los que compraron antes de las cartas con QR. Sus opiniones llegan ocultas: las
+            publicas aquí abajo con «Publicar».{toApprove ? ` Tienes ${toApprove} por aprobar.` : ""}
+          </p>
+          <a href={openUrl} target="_blank" rel="noreferrer" className="block break-all text-sm font-semibold text-primary underline underline-offset-2">
+            {openUrl.replace(/^https?:\/\//, "")}
+          </a>
+          <InviteShare url={openUrl} customerName="" laptop="" />
+        </div>
+      </section>
 
       <ul className="space-y-3">
         {rows.map((row) => (
@@ -59,7 +86,7 @@ export default async function AdminReviewsPage() {
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-bold ${row.is_visible ? "bg-primary/15 text-primary" : "bg-white/10 text-on-surface-variant"}`}
                   >
-                    {row.is_visible ? "Publicada" : "Oculta"}
+                    {row.is_visible ? "Publicada" : row.order_code.startsWith(OPEN_REVIEW_PREFIX) ? "Por aprobar" : "Oculta"}
                   </span>
                   <form action={toggleReviewAction}>
                     <input type="hidden" name="id" value={row.id} />
