@@ -30,7 +30,7 @@ export default async function ReviewPage({ params }: PageParams) {
       <div className="mx-auto max-w-2xl px-4 pb-20 pt-10 md:pt-16">
         {!invite ? (
           <Message icon="warning" title="Este enlace no es válido">
-            Revisa que hayas escaneado el código de tu carta. Si el problema sigue, escríbenos por WhatsApp al {siteConfig.whatsapp.display}.
+            Revisa que hayas abierto el enlace o escaneado el código que te enviamos. Si el problema sigue, escríbenos por WhatsApp al {siteConfig.whatsapp.display}.
           </Message>
         ) : invite.submitted_at ? (
           <Message icon="check" title={`¡Gracias, ${first}! Ya recibimos tu opinión`} googleUrl={siteConfig.business.googleBusinessUrl}>
