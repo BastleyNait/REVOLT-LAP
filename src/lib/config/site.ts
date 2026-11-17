@@ -165,6 +165,7 @@ export const siteConfig = {
   nav: [
     { label: "Laptops", href: "/#laptops" },
     { label: "Cómo comprar", href: "/como-comprar" },
+    { label: "Envíos", href: "/nuestros-envios" },
     { label: "Nosotros", href: "/nosotros" },
     { label: "Preguntas", href: "/#preguntas" },
   ] satisfies NavItem[],
@@ -200,6 +201,8 @@ export const siteConfig = {
       ] satisfies ProofItem[],
       /** Link under the CTAs to the purchase-procedure page. */
       safeLink: "¿Cómo pago sin riesgo?",
+      /** Button to /nuestros-envios (real shipments outside Arequipa). */
+      shipmentsLink: "Mira nuestros envíos reales",
       featuredLabel: "Destacadas",
       stats: [
         { icon: "package", label: "Stock disponible" },
