@@ -9,6 +9,7 @@ import { FinalCta } from "@/components/home/FinalCta";
 import { Catalog } from "@/components/product/Catalog";
 import { ReviewsSection } from "@/components/reviews/ReviewsSection";
 import { getPublicReviews } from "@/lib/repositories/reviews";
+import { getCouponPen } from "@/lib/repositories/settings";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd, itemListJsonLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/config/site";
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [products, reviews] = await Promise.all([getProducts(), getPublicReviews(6)]);
+  const [products, reviews, couponPen] = await Promise.all([getProducts(), getPublicReviews(6), getCouponPen()]);
   const minPrice = products.length ? Math.min(...products.map((product) => product.price)) : null;
   // Featured laptops for the hero carousel; sold-out ones are skipped.
   const featured = products.filter((product) => product.isFeatured && availability(product) !== "sold-out").slice(0, 6);
@@ -33,7 +34,7 @@ export default async function HomePage() {
     <main className="relative flex-1">
       <JsonLd data={[itemListJsonLd(products), faqJsonLd(siteConfig.home.faq)]} />
       <Hero minPrice={minPrice} featured={featured} />
-      <ReservationHomeToast inTransitCount={products.filter(isInTransit).length} />
+      <ReservationHomeToast inTransitCount={products.filter(isInTransit).length} couponPen={couponPen} />
 
       {/*
        * Hero → catálogo: la sección arranca en el mismo negro del hero y se

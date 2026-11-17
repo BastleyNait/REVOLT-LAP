@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ComponentProps, type ReactNode } from "react";
-import { RESERVATION_COUPON_PEN } from "@/lib/types/product";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { siteConfig } from "@/lib/config/site";
 import { Icon } from "@/components/ui/Icon";
@@ -13,11 +12,17 @@ import { cn } from "@/lib/utils/cn";
  * Libre: no se aplica hasta que se marca el check (o el toast lo activa), y el
  * botón de WhatsApp —el de la tarjeta y el de la barra móvil— cambia con él.
  */
-const ReservationContext = createContext<{ reserved: boolean; setReserved: (value: boolean) => void } | null>(null);
+const ReservationContext = createContext<{
+  reserved: boolean;
+  setReserved: (value: boolean) => void;
+  /** Coupon amount in soles (set in /admin/configuracion). */
+  couponPen: number;
+  coupon: string;
+} | null>(null);
 
-export function ReservationProvider({ children }: { children: ReactNode }) {
+export function ReservationProvider({ couponPen, children }: { couponPen: number; children: ReactNode }) {
   const [reserved, setReserved] = useState(false);
-  const value = useMemo(() => ({ reserved, setReserved }), [reserved]);
+  const value = useMemo(() => ({ reserved, setReserved, couponPen, coupon: formatPrice(couponPen, "PEN") }), [reserved, couponPen]);
   return <ReservationContext.Provider value={value}>{children}</ReservationContext.Provider>;
 }
 
@@ -27,23 +32,22 @@ function useReservation() {
   return context;
 }
 
-const coupon = formatPrice(RESERVATION_COUPON_PEN, "PEN");
 
 /**
  * Lo que se ve según el cupón: con él activo el precio grande baja y el precio
  * anterior pasa a ser el de lista (o el de hoy si no tenía uno). Es solo
  * presentación: el precio real del producto no cambia.
  */
-function pricing(price: number, originalPrice: number | null, currency: string, reserved: boolean) {
+function pricing(price: number, originalPrice: number | null, currency: string, reserved: boolean, couponPen: number) {
   const applies = reserved && currency === "PEN";
-  const shown = applies ? Math.max(price - RESERVATION_COUPON_PEN, 0) : price;
+  const shown = applies ? Math.max(price - couponPen, 0) : price;
   const listed = originalPrice && originalPrice > price ? originalPrice : null;
   const was = applies ? (listed ?? price) : listed;
   const saved = was ? was - shown : null;
   return { applies, shown, was, saved, percent: was ? discountPercent(shown, was) : null, listed };
 }
 
-/** El check de la ficha: "Reserva y llévate S/ 150 de cupón", con el precio final al marcarlo. */
+/** El check de la ficha: "Reserva y llévate S/ X de cupón", con el precio final al marcarlo. */
 export function ReservationCheck({
   price,
   originalPrice,
@@ -53,11 +57,11 @@ export function ReservationCheck({
   originalPrice: number | null;
   currency: string;
 }) {
-  const { reserved, setReserved } = useReservation();
-  const final = currency === "PEN" ? formatPrice(Math.max(price - RESERVATION_COUPON_PEN, 0), "PEN") : null;
+  const { reserved, setReserved, couponPen, coupon } = useReservation();
+  const final = currency === "PEN" ? formatPrice(Math.max(price - couponPen, 0), "PEN") : null;
   // Ahorro total con el cupón: el descuento que ya tenía la laptop + el cupón.
   const listed = originalPrice && originalPrice > price ? originalPrice : null;
-  const totalSaved = currency === "PEN" ? (listed ? listed - price : 0) + RESERVATION_COUPON_PEN : null;
+  const totalSaved = currency === "PEN" ? (listed ? listed - price : 0) + couponPen : null;
 
   return (
     <label
@@ -116,8 +120,8 @@ export function ReservationPrice({
   currency: string;
   usdRate: number;
 }) {
-  const { reserved } = useReservation();
-  const view = pricing(price, originalPrice, currency, reserved);
+  const { reserved, couponPen, coupon } = useReservation();
+  const view = pricing(price, originalPrice, currency, reserved, couponPen);
   const usd = formatUsdEquivalent(view.shown, currency, usdRate);
 
   return (
@@ -162,8 +166,8 @@ export function ReservationBarPrice({
   currency: string;
   usdRate: number;
 }) {
-  const { reserved } = useReservation();
-  const view = pricing(price, originalPrice, currency, reserved);
+  const { reserved, couponPen } = useReservation();
+  const view = pricing(price, originalPrice, currency, reserved, couponPen);
   const usd = formatUsdEquivalent(view.shown, currency, usdRate);
   return (
     <div className="min-w-0">
@@ -300,7 +304,7 @@ function useToastState(storageKey: string) {
 
 /** Aviso que aparece al entrar a una laptop en camino; "Activar mi cupón" marca el check. */
 export function ReservationToast({ productSlug }: { productSlug: string }) {
-  const { reserved, setReserved } = useReservation();
+  const { reserved, setReserved, coupon } = useReservation();
   const storageKey = `reserva-toast:${productSlug}`;
   const { open, dismiss } = useToastState(storageKey);
 
@@ -335,7 +339,8 @@ export function ReservationToast({ productSlug }: { productSlug: string }) {
  * El mismo aviso en la landing, sin ficha donde activarlo: el botón lleva a la
  * sección de laptops (#laptops). Se muestra solo si hay laptops en camino.
  */
-export function ReservationHomeToast({ inTransitCount }: { inTransitCount: number }) {
+export function ReservationHomeToast({ inTransitCount, couponPen }: { inTransitCount: number; couponPen: number }) {
+  const coupon = formatPrice(couponPen, "PEN");
   const storageKey = "reserva-toast:home";
   const { open, dismiss } = useToastState(storageKey);
 

@@ -16,11 +16,13 @@ export function WhatsappOrderButton({
   product,
   productUrl,
   usdRate,
+  couponPen,
   compact = false,
 }: {
   product: Product;
   productUrl: string;
   usdRate: number;
+  couponPen: number;
   compact?: boolean;
 }) {
   const href = buildWhatsappUrl(product, { productUrl, usdRate });
@@ -37,7 +39,7 @@ export function WhatsappOrderButton({
       {isInTransit(product) ? (
         <ReservationWhatsappLink
           href={href}
-          reserveHref={buildWhatsappUrl(product, { productUrl, reserve: true, usdRate })}
+          reserveHref={buildWhatsappUrl(product, { productUrl, reserve: true, usdRate, couponPen })}
           label={siteConfig.product.ctaLabel}
           reserveLabel={compact ? "Reservar con cupón" : "Reservar con mi cupón"}
           source={source}
