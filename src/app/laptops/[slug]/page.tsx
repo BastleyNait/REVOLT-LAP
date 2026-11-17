@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -31,6 +31,7 @@ import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { isAllowedImageHost } from "@/lib/config/image-hosts";
 import { getUsdRate } from "@/lib/services/exchange-rate";
+import { getCouponPen } from "@/lib/repositories/settings";
 import { landingBySlug, landingPath } from "@/lib/seo/landings";
 
 export const revalidate = 60;
@@ -101,7 +102,7 @@ export default async function ProductPage({ params }: PageParams) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const [related, usdRate] = await Promise.all([getRelatedProducts(product), getUsdRate()]);
+  const [related, usdRate, couponPen] = await Promise.all([getRelatedProducts(product), getUsdRate(), getCouponPen()]);
   const productUrl = absoluteUrl(productPath(product.slug));
   const discount = discountPercent(product.price, product.originalPrice);
   const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
@@ -135,7 +136,9 @@ export default async function ProductPage({ params }: PageParams) {
   // Cupón de reserva: solo en laptops en camino. El provider comparte el check
   // entre la tarjeta de compra, la barra móvil y el toast.
   const inTransit = isInTransit(product);
-  const Scope = inTransit ? ReservationProvider : Fragment;
+  const Scope = inTransit
+    ? ({ children }: { children: ReactNode }) => <ReservationProvider couponPen={couponPen}>{children}</ReservationProvider>
+    : Fragment;
 
   return (
     <main className="relative flex-1">
@@ -219,7 +222,7 @@ export default async function ProductPage({ params }: PageParams) {
               ) : null}
 
               <div className="mt-6">
-                <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} />
+                <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} couponPen={couponPen} />
                 <p className="mt-3 text-center text-sm leading-relaxed text-on-surface-variant">
                   {siteConfig.product.safeNote}{" "}
                   <Link
@@ -312,7 +315,7 @@ export default async function ProductPage({ params }: PageParams) {
             {usd ? <p className="mt-1 text-xs text-on-surface-variant">o {usd}</p> : null}
           </div>
           )}
-          <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} compact />
+          <WhatsappOrderButton product={product} productUrl={productUrl} usdRate={usdRate} couponPen={couponPen} compact />
         </div>
       </div>
       </Scope>

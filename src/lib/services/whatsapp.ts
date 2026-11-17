@@ -9,6 +9,8 @@ interface WhatsappOptions {
   productUrl?: string;
   /** Pedido de reserva de una laptop en camino con el cupón activado. */
   reserve?: boolean;
+  /** Reservation coupon in soles (live value from the admin). */
+  couponPen?: number;
   /** PEN per USD (live rate) for the dollar price in the message. */
   usdRate?: number;
 }
@@ -29,13 +31,14 @@ export function buildWhatsappUrl(
   const priceLabel = usd
     ? `${formatPrice(product.price, product.currency)} (o ${usd} pagando en dólares)`
     : formatPrice(product.price, product.currency);
+  const couponPen = options.couponPen ?? RESERVATION_COUPON_PEN;
   const lines = options.reserve
     ? [
-        `Hola REVOLT, quiero RESERVAR esta laptop que está en camino y aplicar mi cupón de ${formatPrice(RESERVATION_COUPON_PEN, "PEN")}:`,
+        `Hola REVOLT, quiero RESERVAR esta laptop que está en camino y aplicar mi cupón de ${formatPrice(couponPen, "PEN")}:`,
         `*${product.name}* — ${priceLabel}`,
         // El cupón es en soles: solo se muestra el precio final si el producto también lo está.
         ...(product.currency === "PEN"
-          ? [`Precio con cupón: ${formatPrice(Math.max(product.price - RESERVATION_COUPON_PEN, 0), "PEN")}`]
+          ? [`Precio con cupón: ${formatPrice(Math.max(product.price - couponPen, 0), "PEN")}`]
           : []),
       ]
     : [message, `*${product.name}* — ${priceLabel}`];

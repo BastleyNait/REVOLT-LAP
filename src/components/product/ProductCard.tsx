@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getUsdRate } from "@/lib/services/exchange-rate";
 import type { Product } from "@/lib/types/product";
-import { RESERVATION_COUPON_PEN, isInTransit, productCover } from "@/lib/types/product";
+import { isInTransit, productCover } from "@/lib/types/product";
+import { getCouponPen } from "@/lib/repositories/settings";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { discountPercent, formatPrice, formatUsdEquivalent } from "@/lib/utils/format";
 import { conditionLabel, localizeLabel, withCapacityUnit } from "@/lib/utils/localize";
@@ -21,7 +22,7 @@ import { ShareButton } from "./ShareButton";
  * Hover is a near-imperceptible lift (seen tens of times per visit).
  */
 export async function ProductCard({ product }: { product: Product }) {
-  const usdRate = await getUsdRate();
+  const [usdRate, couponPen] = await Promise.all([getUsdRate(), getCouponPen()]);
   const href = productPath(product.slug);
   const discount = discountPercent(product.price, product.originalPrice);
   const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
@@ -36,7 +37,7 @@ export async function ProductCard({ product }: { product: Product }) {
   ].filter(Boolean) as { icon: string; value: string; wide: boolean }[];
 
   // Laptops en camino: el cupón de reserva se anuncia junto al precio.
-  const couponChip = isInTransit(product) && product.currency === "PEN" ? formatPrice(RESERVATION_COUPON_PEN, "PEN") : null;
+  const couponChip = isInTransit(product) && product.currency === "PEN" ? formatPrice(couponPen, "PEN") : null;
 
   const cover = productCover(product);
 

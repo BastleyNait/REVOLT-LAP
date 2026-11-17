@@ -88,3 +88,14 @@ create table if not exists public.reviews (
 create index if not exists reviews_public_idx on public.reviews (submitted_at desc) where submitted_at is not null and is_visible;
 
 alter table public.reviews enable row level security;
+
+-- ----------------------------------------------------------------------------
+-- Configuración editable desde el admin (mismo contenido que supabase/settings.sql).
+-- ----------------------------------------------------------------------------
+create table if not exists public.settings (
+  key         text primary key,
+  value       jsonb not null,
+  updated_at  timestamptz not null default now()
+);
+
+alter table public.settings enable row level security;

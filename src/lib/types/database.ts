@@ -58,6 +58,12 @@ export type ProductInsert = Omit<ProductRow, "id" | "created_at" | "updated_at">
 export type Database = {
   public: {
     Tables: {
+      settings: {
+        Row: { key: string; value: unknown; updated_at: string };
+        Insert: { key: string; value: unknown; updated_at?: string };
+        Update: { value?: unknown; updated_at?: string };
+        Relationships: [];
+      };
       reviews: {
         Row: ReviewRow;
         Insert: Partial<ReviewRow> & Pick<ReviewRow, "token" | "order_code" | "customer_name">;
