@@ -119,6 +119,12 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
 
           <div className="animate-enter mt-8 short:mt-3 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
             <Link
+              href="/nuestros-envios"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/50 bg-primary/15 px-5 text-[0.9375rem] font-bold text-white shadow-[0_0_18px_rgb(var(--c-primary)/0.25)] backdrop-blur-md transition-[background-color,border-color] duration-150 hover:border-primary hover:bg-primary/25"
+            >
+              <Icon name="truck" className="text-lg text-primary" /> {hero.shipmentsLink}
+            </Link>
+            <Link
               href={siteConfig.home.purchasePage.path}
               className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
             >
