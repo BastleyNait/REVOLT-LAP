@@ -15,6 +15,8 @@ export interface ShipmentPhoto {
   alt: string;
   /** Show the whole photo (e.g. a wide ticket) instead of cropping it. */
   contain?: boolean;
+  /** Which part stays visible when the photo is cropped, e.g. "50% 25%" (CSS object-position). */
+  focus?: string;
 }
 
 export interface RealShipment {
@@ -68,9 +70,9 @@ export const realShipments: RealShipment[] = [
     customer: "Huber C.",
     transport: "terrestre",
     photos: [
-      { src: "/nuestros-envios/moquegua-etiquetas.jpg", alt: "Caja embalada con etiquetas FRÁGIL para el envío a Moquegua" },
-      { src: "/nuestros-envios/moquegua-auto.jpg", alt: "La caja con su guía de envío, camino a la agencia" },
-      { src: "/nuestros-envios/moquegua-agencia.jpg", alt: "La caja en la fila de la agencia Shalom, con los datos personales ocultos" },
+      { src: "/nuestros-envios/moquegua-guia.jpg", alt: "Guía de envío REVOLT a Moquegua, con los datos personales ocultos", focus: "50% 24%" },
+      { src: "/nuestros-envios/moquegua-agencia.jpg", alt: "La caja en la fila de la agencia Shalom" },
+      { src: "/nuestros-envios/moquegua-ticket.jpg", alt: "Ticket de Shalom: Mariscal Nieto, Moquegua, Calle Lima, envío terrestre", contain: true },
     ],
   },
 ];

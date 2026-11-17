@@ -137,7 +137,7 @@ export default async function RealShipmentsPage() {
                           rel="noreferrer"
                           className={`relative col-span-6 block overflow-hidden rounded-[1.4rem] ${rest.length ? "aspect-[16/10]" : "aspect-[4/3] lg:aspect-auto lg:min-h-[26rem]"}`}
                         >
-                          <Image src={cover.src} alt={cover.alt} fill sizes="(min-width: 1024px) 40rem, 100vw" className="object-cover" />
+                          <Image src={cover.src} alt={cover.alt} fill sizes="(min-width: 1024px) 40rem, 100vw" className="object-cover" style={cover.focus ? { objectPosition: cover.focus } : undefined} />
                         </a>
                       ) : null}
                       {rest.map((p) => (
@@ -148,7 +148,7 @@ export default async function RealShipmentsPage() {
                           rel="noreferrer"
                           className={`relative block aspect-[4/3] overflow-hidden rounded-[1.1rem] ${rest.length === 3 ? "col-span-2" : "col-span-3"} ${p.contain ? "bg-white" : ""}`}
                         >
-                          <Image src={p.src} alt={p.alt} fill sizes="(min-width: 1024px) 14rem, 33vw" className={p.contain ? "object-contain" : "object-cover"} />
+                          <Image src={p.src} alt={p.alt} fill sizes="(min-width: 1024px) 14rem, 33vw" className={p.contain ? "object-contain" : "object-cover"} style={p.focus ? { objectPosition: p.focus } : undefined} />
                         </a>
                       ))}
                     </div>
