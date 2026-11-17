@@ -9,11 +9,15 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { Icon } from "@/components/ui/Icon";
 import { StockStatus } from "@/components/product/StockStatus";
 import { CarouselTrack } from "./CarouselTrack";
+import { CouponTag } from "@/components/product/CouponTag";
+import { getCouponPen } from "@/lib/repositories/settings";
 import { getUsdRate } from "@/lib/services/exchange-rate";
 
-function FeaturedSlide({ product, eager, usdRate }: { product: Product; eager: boolean; usdRate: number }) {
+function FeaturedSlide({ product, eager, usdRate, couponPen }: { product: Product; eager: boolean; usdRate: number; couponPen: number }) {
   const discount = discountPercent(product.price, product.originalPrice);
   const usd = formatUsdEquivalent(product.price, product.currency, usdRate);
+  // En camino: el mismo cupón naranja que en las tarjetas del catálogo.
+  const couponChip = isInTransit(product) && product.currency === "PEN" ? formatPrice(couponPen, "PEN") : null;
   const specs = [
     product.processor && localizeLabel(product.processor),
     product.ram && withCapacityUnit(product.ram),
@@ -45,13 +49,16 @@ function FeaturedSlide({ product, eager, usdRate }: { product: Product; eager: b
           {product.name}
         </h3>
         {specs.length ? <p className="line-clamp-1 text-sm text-white/60">{specs.join(" · ")}</p> : null}
-        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-2 pt-1">
-          <div>
+        <div className="flex items-end justify-between gap-3 pt-1">
+          <div className="min-w-0">
             <p className="font-display text-2xl font-extrabold leading-none tracking-tight text-[#c8ffe9]">
               {formatPrice(product.price, product.currency)}
             </p>
             {usd ? <p className="mt-1 text-xs text-white/50">o {usd}</p> : null}
           </div>
+          {couponChip ? <CouponTag amount={couponChip} className="origin-bottom-right scale-90" /> : null}
+        </div>
+        <div className="pt-0.5">
           <StockStatus stock={product.stock} inTransit={isInTransit(product)} compact pill />
         </div>
       </div>
@@ -65,7 +72,7 @@ function FeaturedSlide({ product, eager, usdRate }: { product: Product; eager: b
  */
 export async function FeaturedCarousel({ products }: { products: Product[] }) {
   if (products.length === 0) return null;
-  const usdRate = await getUsdRate();
+  const [usdRate, couponPen] = await Promise.all([getUsdRate(), getCouponPen()]);
 
   return (
     <CarouselTrack
@@ -77,7 +84,7 @@ export async function FeaturedCarousel({ products }: { products: Product[] }) {
         </p>
       }
       slides={products.map((product, i) => (
-        <FeaturedSlide key={product.id} product={product} eager={i === 0} usdRate={usdRate} />
+        <FeaturedSlide key={product.id} product={product} eager={i === 0} usdRate={usdRate} couponPen={couponPen} />
       ))}
     />
   );
