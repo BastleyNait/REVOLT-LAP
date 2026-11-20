@@ -63,6 +63,9 @@ const RUC = process.env.NEXT_PUBLIC_RUC || "10710027078";
 /** Horas que tiene el cliente para pagar el saldo desde que recibe la foto de la guía. */
 const BALANCE_HOURS = 12;
 
+/** Créditos del sitio (pie de página). */
+export const DEVELOPER = { name: "BastleyNait", url: "https://github.com/BastleyNait" };
+
 export const siteConfig = {
   name: "REVOLT",
   legalName: "REVOLT Laptops",
@@ -132,6 +135,11 @@ export const siteConfig = {
      * Google enlaza la web con la ficha (sameAs). Vacío = no se muestra.
      */
     googleBusinessUrl: process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL || "",
+    /**
+     * Domicilio fiscal (el que figura en tu ficha RUC de SUNAT). Lo pide el
+     * Libro de Reclamaciones; vacío = se muestra solo la ciudad.
+     */
+    fiscalAddress: process.env.NEXT_PUBLIC_FISCAL_ADDRESS || "",
   },
   /** Garantía, comprobante y envío: se repiten en el hero, la ficha, el FAQ y los datos para Google. */
   warranty: {

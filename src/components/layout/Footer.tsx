@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { siteConfig } from "@/lib/config/site";
+import { DEVELOPER, siteConfig } from "@/lib/config/site";
+import { BookIcon } from "@/components/complaints/BookIcon";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { WhatsappIcon } from "@/components/ui/Icon";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
@@ -80,6 +81,16 @@ export function Footer() {
                 Ver reseñas en Google
               </a>
             ) : null}
+            <Link
+              href="/libro-de-reclamaciones"
+              className="mt-2 flex w-fit items-center gap-3 rounded-2xl bg-white/[0.04] py-2.5 pl-3 pr-4 transition-colors duration-150 hover:bg-white/[0.08]"
+            >
+              <BookIcon className="h-8 w-8 shrink-0 text-primary" />
+              <span className="leading-tight">
+                <span className="block text-sm font-bold text-on-surface">Libro de Reclamaciones</span>
+                <span className="block text-xs text-on-surface-variant">Registra tu reclamo o queja</span>
+              </span>
+            </Link>
             {socials.length ? (
               <ul className="flex flex-wrap gap-2 pt-1">
                 {socials.map((social) => (
@@ -104,9 +115,19 @@ export function Footer() {
             © {year} {siteConfig.legalName} · Tienda 100 % online · {business.city}, {business.countryName}
             {business.ruc ? ` · RUC ${business.ruc}` : ""} · Garantía de {siteConfig.warranty.months} meses · Boleta electrónica
           </p>
-          <Link href="/admin" rel="nofollow" className="inline-flex min-h-10 items-center transition-colors duration-150 hover:text-on-surface">
-            Administración
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <a
+              href={DEVELOPER.url}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex min-h-10 items-center gap-1.5 transition-colors duration-150 hover:text-on-surface"
+            >
+              Desarrollado por <span className="font-semibold text-primary">{DEVELOPER.name}</span>
+            </a>
+            <Link href="/admin" rel="nofollow" className="inline-flex min-h-10 items-center transition-colors duration-150 hover:text-on-surface">
+              Administración
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
