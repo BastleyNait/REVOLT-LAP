@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { siteConfig } from "@/lib/config/site";
@@ -13,6 +12,7 @@ import type { Product } from "@/lib/types/product";
 import { cn } from "@/lib/utils/cn";
 import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
+import { HeroBackground } from "./HeroBackground";
 import { FreeShippingCard } from "./FreeShippingCard";
 import { RealShipmentsButton } from "./RealShipmentsButton";
 
@@ -32,18 +32,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
       aria-labelledby="hero-title"
       className="relative z-[1] -mt-[4.75rem] flex min-h-[100svh] w-full items-center justify-center overflow-hidden md:-mt-20"
     >
-      <Image
-        src="/laptop_ultra_4k_hd_desktop_background-3840x2160.jpg"
-        alt=""
-        fill
-        loading="eager"
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(150deg,rgba(0,0,0,0.78)_0%,rgba(0,4,2,0.58)_55%,rgba(0,8,5,0.70)_100%)]"
-      />
+      <HeroBackground />
       {/* Bottom fade into the page background */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-64 bg-gradient-to-b from-transparent to-background" />
 
@@ -127,7 +116,9 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
         {/* Featured carousel: right column on desktop, below the CTAs on phones/tablets. */}
         {featured.length ? (
           <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[19rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[22rem] short:top-[calc(50%+2.5rem)] short:w-[17rem] short:xl:w-[18.5rem]">
-            <div className="animate-enter" style={delay(300)}>
+            <div className="animate-enter relative" style={delay(300)}>
+              {/* Same green glow as the background, so the carousel sits inside it. */}
+              <div aria-hidden className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-[radial-gradient(closest-side,rgb(18_180_128/0.22),transparent)]" />
               <FeaturedCarousel products={featured} />
             </div>
           </div>

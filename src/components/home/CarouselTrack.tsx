@@ -91,7 +91,7 @@ export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[];
       onFocus={() => (hovered.current = true)}
       onBlur={() => (hovered.current = false)}
       onTouchStart={markTouched}
-      className="fx-panel rounded-[2rem] border border-white/15 bg-black/25 p-4 shadow-[0_8px_32px_rgba(0,0,0,0.25)] backdrop-blur-xl"
+      className="fx-panel rounded-[2rem] border border-primary/25 bg-[#03110b]/75 p-4 shadow-[0_0_48px_rgb(var(--c-primary)/0.16),0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl"
     >
       <div className="mb-3 flex items-center justify-between gap-3 px-1">
         {heading}
