@@ -15,7 +15,18 @@ const IDLE_MS = 9000;
  * Autoplay is off for `prefers-reduced-motion`, and pauses on hover/focus, after
  * any touch, in background tabs and while the carousel is off-screen.
  */
-export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[]; label: string; heading: ReactNode }) {
+export function CarouselTrack({
+  slides,
+  label,
+  heading,
+  itemLabel = "la laptop",
+}: {
+  slides: ReactNode[];
+  label: string;
+  heading: ReactNode;
+  /** Used in the dots' labels: "Ir a {itemLabel} 2". */
+  itemLabel?: string;
+}) {
   const trackRef = useRef<HTMLUListElement>(null);
   const rootRef = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
@@ -91,9 +102,15 @@ export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[];
       onFocus={() => (hovered.current = true)}
       onBlur={() => (hovered.current = false)}
       onTouchStart={markTouched}
-      className="fx-panel rounded-[2rem] border border-white/15 bg-black/25 p-4 shadow-[0_8px_32px_rgba(0,0,0,0.25)] backdrop-blur-xl"
+      className="relative isolate p-3"
     >
-      <div className="mb-3 flex items-center justify-between gap-3 px-1">
+      {/* Panel without edges: a dark tint plus a green glow, both fading out on
+          every side (mask), so the carousel melts into the hero background. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-10 -z-10 [background:linear-gradient(160deg,rgb(18_180_128/0.1),transparent_55%),rgb(2_12_8/0.88)] [mask-image:linear-gradient(90deg,transparent,#000_14%,#000_86%,transparent),linear-gradient(180deg,transparent,#000_12%,#000_84%,transparent)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
+      />
+      <div className="mb-2 flex items-center justify-between gap-3 px-2 pt-1">
         {heading}
         {count > 1 ? (
           <div className="flex items-center gap-1">
@@ -101,7 +118,7 @@ export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[];
               type="button"
               aria-label="Anterior"
               onClick={() => step(-1)}
-              className="grid size-9 cursor-pointer place-items-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              className="grid size-9 cursor-pointer place-items-center rounded-full bg-white/[0.06] text-white/80 transition-[transform,background-color] duration-150 ease-out-strong hover:bg-white/[0.12] active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
             >
               <Icon name="chevron-left" />
             </button>
@@ -109,7 +126,7 @@ export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[];
               type="button"
               aria-label="Siguiente"
               onClick={() => step(1)}
-              className="grid size-9 cursor-pointer place-items-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              className="grid size-9 cursor-pointer place-items-center rounded-full bg-white/[0.06] text-white/80 transition-[transform,background-color] duration-150 ease-out-strong hover:bg-white/[0.12] active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
             >
               <Icon name="chevron-right" />
             </button>
@@ -141,7 +158,7 @@ export function CarouselTrack({ slides, label, heading }: { slides: ReactNode[];
             <button
               key={i}
               type="button"
-              aria-label={`Ir a la laptop ${i + 1}`}
+              aria-label={`Ir a ${itemLabel} ${i + 1}`}
               aria-current={i === index}
               onClick={() => {
                 markTouched();

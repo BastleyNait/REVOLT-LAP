@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { siteConfig } from "@/lib/config/site";
@@ -13,8 +12,9 @@ import type { Product } from "@/lib/types/product";
 import { cn } from "@/lib/utils/cn";
 import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
+import { HeroBackground } from "./HeroBackground";
 import { FreeShippingCard } from "./FreeShippingCard";
-import { RealShipmentsButton } from "./RealShipmentsButton";
+import { RealShipmentsSlider } from "./RealShipmentsSlider";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -32,22 +32,11 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
       aria-labelledby="hero-title"
       className="relative z-[1] -mt-[4.75rem] flex min-h-[100svh] w-full items-center justify-center overflow-hidden md:-mt-20"
     >
-      <Image
-        src="/laptop_ultra_4k_hd_desktop_background-3840x2160.jpg"
-        alt=""
-        fill
-        loading="eager"
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(150deg,rgba(0,0,0,0.78)_0%,rgba(0,4,2,0.58)_55%,rgba(0,8,5,0.70)_100%)]"
-      />
+      <HeroBackground />
       {/* Bottom fade into the page background */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-64 bg-gradient-to-b from-transparent to-background" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40 short:pb-8 short:pt-28">
+      <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40 short:pb-6 short:pt-24">
         <div className="flex flex-col items-start lg:max-w-[65%]">
 
           <div className="animate-enter mb-4 w-full max-w-[32.5rem] short:mb-2 short:max-w-[21rem]" style={delay(50)}>
@@ -110,8 +99,8 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
             <FreeShippingCard />
           </div>
 
-          <div className="animate-enter mt-8 short:mt-3 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
-            <RealShipmentsButton href="/nuestros-envios" label={hero.shipmentsLink} />
+          <div className="animate-enter mt-6 short:mt-2 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
+            <RealShipmentsSlider href="/nuestros-envios" label={hero.shipmentsLink} hint={hero.shipmentsHint} />
             <Link
               href={siteConfig.home.purchasePage.path}
               className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
@@ -126,8 +115,8 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
 
         {/* Featured carousel: right column on desktop, below the CTAs on phones/tablets. */}
         {featured.length ? (
-          <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[19rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[22rem] short:top-[calc(50%+2.5rem)] short:w-[17rem] short:xl:w-[18.5rem]">
-            <div className="animate-enter" style={delay(300)}>
+          <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[23rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[26.5rem] short:top-[calc(50%+2.5rem)] short:xl:w-[25rem]">
+            <div className="animate-enter relative" style={delay(300)}>
               <FeaturedCarousel products={featured} />
             </div>
           </div>
