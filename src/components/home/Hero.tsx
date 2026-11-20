@@ -13,7 +13,8 @@ import type { Product } from "@/lib/types/product";
 import { cn } from "@/lib/utils/cn";
 import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
-import { TrustBar } from "./TrustBar";
+import { FreeShippingCard } from "./FreeShippingCard";
+import { RealShipmentsButton } from "./RealShipmentsButton";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -88,10 +89,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
             ))}
           </dl>
 
-          {/* Frosted stats bar */}
-          <TrustBar className="animate-enter mt-8 short:mt-5 short:py-3" style={delay(150)} />
-
-          <div className="animate-enter mt-10 short:mt-5 flex flex-wrap items-center gap-4" style={delay(200)}>
+          <div className="animate-enter mt-9 short:mt-5 flex flex-wrap items-center gap-4" style={delay(200)}>
             <ClickSpark sparkColor="#12B480" sparkSize={12} sparkRadius={24} sparkCount={10} duration={450}>
               <Link
                 href="/#laptops"
@@ -104,26 +102,16 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
               <WhatsappLink
                 href={generalWhatsappUrl()}
                 source="hero"
-                className="fx-panel inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(0,0,0,0.1)] backdrop-blur-md transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#080d0b] px-8 py-3.5 text-sm font-bold text-white transition-[transform,background-color] duration-150 ease-out-strong hover:bg-[#121a16] active:scale-[0.97]"
               >
                 <WhatsappIcon className="text-lg" /> WhatsApp
               </WhatsappLink>
             </ClickSpark>
-            {hero.flash ? (
-              <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-bold text-accent shadow-[0_0_15px_rgb(var(--c-accent)/0.2)] backdrop-blur-md">
-                <Icon name="flame" className="text-xl" />
-                {hero.flash}
-              </span>
-            ) : null}
+            <FreeShippingCard />
           </div>
 
           <div className="animate-enter mt-8 short:mt-3 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
-            <Link
-              href="/nuestros-envios"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-[#0b0f0d] px-5 text-[0.9375rem] font-bold text-white transition-[background-color,border-color] duration-150 hover:border-white/35 hover:bg-[#121a16]"
-            >
-              <Icon name="truck" className="text-lg text-primary" /> {hero.shipmentsLink}
-            </Link>
+            <RealShipmentsButton href="/nuestros-envios" label={hero.shipmentsLink} />
             <Link
               href={siteConfig.home.purchasePage.path}
               className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
