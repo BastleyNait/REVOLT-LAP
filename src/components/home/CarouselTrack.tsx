@@ -108,7 +108,7 @@ export function CarouselTrack({
           every side (mask), so the carousel melts into the hero background. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-10 -z-10 [background:radial-gradient(80%_60%_at_70%_15%,rgb(18_180_128/0.16),transparent_70%),rgb(2_12_8/0.9)] [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
+        className="pointer-events-none absolute -inset-10 -z-10 [background:linear-gradient(160deg,rgb(18_180_128/0.1),transparent_55%),rgb(2_12_8/0.88)] [mask-image:linear-gradient(90deg,transparent,#000_14%,#000_86%,transparent),linear-gradient(180deg,transparent,#000_12%,#000_84%,transparent)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
       />
       <div className="mb-2 flex items-center justify-between gap-3 px-2 pt-1">
         {heading}

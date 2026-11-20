@@ -117,8 +117,6 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
         {featured.length ? (
           <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[23rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[26.5rem] short:top-[calc(50%+2.5rem)] short:xl:w-[25rem]">
             <div className="animate-enter relative" style={delay(300)}>
-              {/* Same green glow as the background, so the carousel sits inside it. */}
-              <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10 rounded-[3rem] bg-[radial-gradient(closest-side,rgb(18_180_128/0.2),transparent)]" />
               <FeaturedCarousel products={featured} />
             </div>
           </div>
