@@ -40,10 +40,10 @@ export function HeroBackground() {
         <path d={CIRCUIT_RINGS} fill="none" stroke="#12B480" strokeWidth={1.5} opacity={0.22} />
 
         {/* the bolt: wide soft halo + the shape itself */}
-        <g transform="translate(990,-60) scale(0.43)">
+        <g transform="translate(990,-60) scale(0.43)" opacity={0.38}>
           <path d={LOGO_MARK.d} fill="none" stroke="#12B480" strokeWidth={90} strokeOpacity={0.05} strokeLinejoin="round" />
           <path d={LOGO_MARK.d} fill="none" stroke="#12B480" strokeWidth={46} strokeOpacity={0.07} strokeLinejoin="round" />
-          <path d={LOGO_MARK.d} fill="url(#hb-bolt)" stroke="#2fe0a6" strokeWidth={7} strokeOpacity={0.5} strokeLinejoin="round" />
+          <path d={LOGO_MARK.d} fill="url(#hb-bolt)" stroke="#2fe0a6" strokeWidth={5} strokeOpacity={0.35} strokeLinejoin="round" />
         </g>
       </svg>
       {/* extra left-side darkening so the text always reads */}
