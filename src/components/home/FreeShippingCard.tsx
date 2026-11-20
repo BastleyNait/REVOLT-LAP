@@ -23,7 +23,7 @@ export function FreeShippingCard({ className }: { className?: string }) {
 
   return (
     <div
-      className={`flex items-center gap-3.5 rounded-2xl border border-primary/30 bg-[#06100c]/90 py-2 pl-3 pr-5 shadow-[0_0_28px_rgb(var(--c-primary)/0.14)] ${className ?? ""}`}
+      className={`flex items-center gap-3.5 rounded-2xl bg-[#06100c] py-2 pl-3 pr-5 ${className ?? ""}`}
     >
       <svg viewBox="0 0 940 1160" aria-hidden className="h-[5rem] w-auto shrink-0 short:h-[4rem]">
         <style>{`

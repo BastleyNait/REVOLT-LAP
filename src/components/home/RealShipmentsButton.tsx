@@ -4,8 +4,8 @@ import { Icon } from "@/components/ui/Icon";
 const PLANE = "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z";
 
 /**
- * "Mira nuestros envíos reales": a boarding-pass style button. A thin gradient
- * rim, a left stub with a plane flying along a dotted route (Arequipa → …) and
+ * "Mira nuestros envíos reales": a boarding-pass style button. No outline (it
+ * matches the other hero buttons): a left stub with a plane flying along a dotted route (Arequipa → …) and
  * a live dot. The plane only moves on hover/focus, and not at all with reduced
  * motion. Solid dark body: it never blends into the photo behind the hero.
  */
@@ -13,7 +13,7 @@ export function RealShipmentsButton({ href, label, className }: { href: string; 
   return (
     <Link
       href={href}
-      className={`group relative inline-flex rounded-full bg-[linear-gradient(110deg,rgb(18_180_128/0.9),rgb(255_255_255/0.35)_45%,rgb(18_180_128/0.5))] p-px transition-[box-shadow,transform] duration-200 ease-out-strong hover:shadow-[0_0_26px_rgb(var(--c-primary)/0.35)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${className ?? ""}`}
+      className={`group relative inline-flex rounded-full transition-[filter,transform] duration-200 ease-out-strong hover:brightness-125 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${className ?? ""}`}
     >
       <style>{`
         .rs-plane{transition:transform .9s cubic-bezier(.22,1,.36,1)}

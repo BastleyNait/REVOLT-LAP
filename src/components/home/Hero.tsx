@@ -102,7 +102,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
               <WhatsappLink
                 href={generalWhatsappUrl()}
                 source="hero"
-                className="fx-panel inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(0,0,0,0.1)] backdrop-blur-md transition-[transform,background-color,border-color] duration-150 ease-out-strong hover:border-white/30 hover:bg-white/10 active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#080d0b] px-8 py-3.5 text-sm font-bold text-white transition-[transform,background-color] duration-150 ease-out-strong hover:bg-[#121a16] active:scale-[0.97]"
               >
                 <WhatsappIcon className="text-lg" /> WhatsApp
               </WhatsappLink>
