@@ -204,6 +204,8 @@ export const siteConfig = {
       safeLink: "¿Cómo pago sin riesgo?",
       /** Button to /nuestros-envios (real shipments outside Arequipa). */
       shipmentsLink: "Mira nuestros envíos reales",
+      /** Tiny hint under the slide-to-go control. */
+      shipmentsHint: "Desliza",
       featuredLabel: "Destacadas",
       stats: [
         { icon: "package", label: "Stock disponible" },

@@ -14,7 +14,7 @@ import { HeroLogo } from "./HeroLogo";
 import { FeaturedCarousel } from "./FeaturedCarousel";
 import { HeroBackground } from "./HeroBackground";
 import { FreeShippingCard } from "./FreeShippingCard";
-import { RealShipmentsButton } from "./RealShipmentsButton";
+import { RealShipmentsSlider } from "./RealShipmentsSlider";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -36,7 +36,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
       {/* Bottom fade into the page background */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-64 bg-gradient-to-b from-transparent to-background" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40 short:pb-8 short:pt-28">
+      <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40 short:pb-6 short:pt-24">
         <div className="flex flex-col items-start lg:max-w-[65%]">
 
           <div className="animate-enter mb-4 w-full max-w-[32.5rem] short:mb-2 short:max-w-[21rem]" style={delay(50)}>
@@ -99,8 +99,8 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
             <FreeShippingCard />
           </div>
 
-          <div className="animate-enter mt-8 short:mt-3 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
-            <RealShipmentsButton href="/nuestros-envios" label={hero.shipmentsLink} />
+          <div className="animate-enter mt-6 short:mt-2 flex flex-wrap items-center gap-x-6 gap-y-3" style={delay(250)}>
+            <RealShipmentsSlider href="/nuestros-envios" label={hero.shipmentsLink} hint={hero.shipmentsHint} />
             <Link
               href={siteConfig.home.purchasePage.path}
               className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-white underline decoration-primary/60 underline-offset-4 transition-colors duration-150 hover:text-primary"
