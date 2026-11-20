@@ -189,7 +189,8 @@ export const siteConfig = {
       pitch:
         "Rendimiento real a precios insuperables. Cada equipo testeado y listo para trabajar, crear y jugar. Entrega en persona en Arequipa y envíos a todo el Perú.",
       ctaLabel: "Ver inventario",
-      flash: "Envío gratis · Equipos en stock y a pedido",
+      /** Free-shipping card of the hero (mini map of Peru + the promise). */
+      freeShipping: { title: "Envío gratis", sub: "a todo el Perú" },
       /**
        * Hechos comprobables debajo del texto del hero (garantía, comprobante…).
        * Mejor datos concretos que "100% confiable": quien desconfía no cree en
