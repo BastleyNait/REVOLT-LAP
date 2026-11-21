@@ -4,15 +4,13 @@ import { breadcrumbJsonLd } from "@/lib/seo/structured-data";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ComplaintForm } from "@/components/complaints/ComplaintForm";
 import { BookIcon } from "@/components/complaints/BookIcon";
+import { TodayDate } from "@/components/complaints/TodayDate";
 
 export const metadata: Metadata = {
   title: "Libro de Reclamaciones",
   description: `Libro de Reclamaciones virtual de ${siteConfig.legalName}. Registra tu reclamo o queja y recibe respuesta en un plazo no mayor a 15 días hábiles.`,
   alternates: { canonical: "/libro-de-reclamaciones" },
 };
-
-const today = () =>
-  new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Lima" }).format(new Date());
 
 /** Virtual Libro de Reclamaciones (Código de Protección y Defensa del Consumidor). */
 export default function ComplaintsBookPage() {
@@ -28,7 +26,7 @@ export default function ComplaintsBookPage() {
           </span>
           <div>
             <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">Libro de Reclamaciones</h1>
-            <p className="mt-2 text-on-surface-variant">Hoja de reclamación virtual · {today()}</p>
+            <p className="mt-2 text-on-surface-variant">Hoja de reclamación virtual · <TodayDate /></p>
           </div>
         </header>
 
