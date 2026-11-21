@@ -18,7 +18,10 @@ import { Icon } from "@/components/ui/Icon";
 import { ReservationHomeToast } from "@/components/product/ReservationOffer";
 import { availability, isInTransit } from "@/lib/types/product";
 
-export const revalidate = 60;
+// Regenerated on demand when something changes (admin saves, new reviews: see
+// revalidatePath calls); this is only a daily safety net. A 60 s window made
+// every visited page rewrite its cache every minute (Vercel "ISR Writes").
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },

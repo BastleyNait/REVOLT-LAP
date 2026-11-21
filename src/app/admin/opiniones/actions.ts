@@ -6,8 +6,8 @@ import { deleteReview, setReviewVisibility } from "@/lib/repositories/reviews";
 
 async function refresh() {
   revalidatePath("/admin/opiniones");
-  revalidatePath("/");
-  revalidatePath("/opiniones");
+  // Reviews show on the home, /opiniones and /nuestros-envios.
+  revalidatePath("/", "layout");
 }
 
 export async function toggleReviewAction(formData: FormData) {

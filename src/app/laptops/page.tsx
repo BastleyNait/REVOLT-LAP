@@ -8,7 +8,10 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Icon } from "@/components/ui/Icon";
 
-export const revalidate = 60;
+// Regenerated on demand when something changes (admin saves, new reviews: see
+// revalidatePath calls); this is only a daily safety net. A 60 s window made
+// every visited page rewrite its cache every minute (Vercel "ISR Writes").
+export const revalidate = 86400;
 
 const title = "Laptops en Perú: Baratas, Reacondicionadas y Seminuevas | REVOLT";
 const description =

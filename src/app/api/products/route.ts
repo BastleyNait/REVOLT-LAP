@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createProduct, getAllProductsAdmin, getProducts } from "@/lib/repositories/products";
 import { productInputFromFormData, productInputSchema } from "@/lib/validators/product";
 import { isRequestAuthorized } from "@/lib/auth/admin";
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const product = await createProduct(parsed.data);
+    revalidatePath("/", "layout");
     return NextResponse.json({ data: product }, { status: 201 });
   } catch (error) {
     return serverError(error);

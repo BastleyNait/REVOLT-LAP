@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { deleteProduct, getProductById, updateProduct } from "@/lib/repositories/products";
 import { productInputFromFormData, productInputSchema } from "@/lib/validators/product";
 import { isRequestAuthorized } from "@/lib/auth/admin";
@@ -54,6 +55,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
 
   try {
     const product = await updateProduct(id, parsed.data);
+    revalidatePath("/", "layout");
     return NextResponse.json({ data: product });
   } catch (error) {
     return serverError(error);
@@ -67,6 +69,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
   try {
     const product = await getProductById(id);
     await deleteProduct(id);
+    revalidatePath("/", "layout");
 
     // Clean up associated R2 images
     if (product?.images?.length) {

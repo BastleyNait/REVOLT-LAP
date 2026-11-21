@@ -53,10 +53,16 @@ function extractFormValues(formData: FormData): Record<string, any> {
   };
 }
 
+/**
+ * A product change touches the home, the catalogue, every landing, its own
+ * page, the sitemap and the feed: invalidate the whole site at once. Pages
+ * regenerate lazily on their next visit, so this costs one write per page
+ * actually visited afterwards, not one per page.
+ */
 function revalidateStorefront(slug?: string) {
-  revalidatePath("/");
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
   revalidatePath("/sitemap.xml");
+  revalidatePath("/feed/google-merchant.xml");
   if (slug) revalidatePath(`/laptops/${slug}`);
 }
 

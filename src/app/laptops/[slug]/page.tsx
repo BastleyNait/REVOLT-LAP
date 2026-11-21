@@ -34,7 +34,10 @@ import { getUsdRate } from "@/lib/services/exchange-rate";
 import { getCouponPen } from "@/lib/repositories/settings";
 import { landingBySlug, landingPath } from "@/lib/seo/landings";
 
-export const revalidate = 60;
+// Regenerated on demand when something changes (admin saves, new reviews: see
+// revalidatePath calls); this is only a daily safety net. A 60 s window made
+// every visited page rewrite its cache every minute (Vercel "ISR Writes").
+export const revalidate = 86400;
 
 type PageParams = { params: Promise<{ slug: string }> };
 

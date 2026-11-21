@@ -16,8 +16,13 @@ import { Icon, WhatsappIcon } from "@/components/ui/Icon";
 import { buttonClasses } from "@/components/ui/Button";
 import { WhatsappLink } from "@/components/analytics/WhatsappLink";
 
-export const revalidate = 60;
-export const dynamicParams = false;
+// Regenerated on demand when something changes (admin saves, new reviews: see
+// revalidatePath calls); this is only a daily safety net. A 60 s window made
+// every visited page rewrite its cache every minute (Vercel "ISR Writes").
+export const revalidate = 86400;
+// true (not false): with false, on-demand revalidation (revalidatePath) makes these
+// pages 404 (NoFallbackError). Unknown slugs still 404 via notFound() in load().
+export const dynamicParams = true;
 
 type PageParams = { params: Promise<{ landing: string }> };
 
