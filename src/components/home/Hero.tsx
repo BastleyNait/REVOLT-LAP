@@ -37,7 +37,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-64 bg-gradient-to-b from-transparent to-background" />
 
       <div className="relative z-10 mx-auto w-full max-w-[75rem] px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-40 short:pb-6 short:pt-24 wide:max-w-[min(92vw,120rem)]">
-        <div className="flex flex-col items-start lg:max-w-[65%] wide:max-w-[52%]">
+        <div className="flex flex-col items-start lg:max-w-[65%] wide:max-w-[58%]">
 
           <div className="animate-enter mb-4 w-full max-w-[32.5rem] short:mb-2 short:max-w-[21rem] wide:max-w-[38rem]" style={delay(50)}>
             <HeroLogo />
@@ -115,7 +115,7 @@ export function Hero({ minPrice, featured }: { minPrice: number | null; featured
 
         {/* Featured carousel: right column on desktop, below the CTAs on phones/tablets. */}
         {featured.length ? (
-          <div className="mt-12 w-full max-w-[40rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[23rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[26.5rem] short:top-[calc(50%+2.5rem)] short:xl:w-[25rem] wide:top-[calc(50%+1.5rem)] wide:w-[42%]">
+          <div className="mt-12 w-full max-w-[26rem] lg:absolute lg:right-8 lg:top-1/2 lg:mt-0 lg:w-[23rem] lg:max-w-none lg:-translate-y-1/2 xl:w-[26.5rem] short:top-[calc(50%+2.5rem)] short:xl:w-[23rem] wide:top-[calc(50%+1.5rem)] wide:w-[30%]">
             <div className="animate-enter relative" style={delay(300)}>
               <FeaturedShowcase products={featured} />
             </div>

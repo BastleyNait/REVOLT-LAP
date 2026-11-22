@@ -214,7 +214,7 @@ export const siteConfig = {
       shipmentsLink: "Mira nuestros envíos reales",
       /** Tiny hint under the slide-to-go control. */
       shipmentsHint: "Desliza",
-      featuredLabel: "Destacadas",
+      featuredLabel: "Destacada",
       stats: [
         { icon: "package", label: "Stock disponible" },
         { icon: "truck", label: "Envío rápido" },
