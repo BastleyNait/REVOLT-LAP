@@ -34,7 +34,7 @@ export async function submitReviewAction(token: string, _prev: ReviewFormState, 
     return { status: "error", message: "No pudimos guardar tu opinión. Inténtalo de nuevo en unos minutos." };
   }
 
-  revalidatePath("/");
-  revalidatePath("/opiniones");
+  // Reviews show on the home, /opiniones and /nuestros-envios.
+  revalidatePath("/", "layout");
   return { status: "ok" };
 }

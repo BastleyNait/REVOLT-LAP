@@ -8,7 +8,10 @@ import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { ReviewCards, ReviewsSummary } from "@/components/reviews/ReviewsSection";
 
-export const revalidate = 60;
+// Regenerated on demand when something changes (admin saves, new reviews: see
+// revalidatePath calls); this is only a daily safety net. A 60 s window made
+// every visited page rewrite its cache every minute (Vercel "ISR Writes").
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "Opiniones de clientes",

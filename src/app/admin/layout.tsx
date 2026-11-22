@@ -27,6 +27,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <p className="text-sm text-on-surface-variant">Panel de inventario</p>
           </div>
           <div className="flex flex-wrap gap-2">
+            <Link href="/admin/reclamos" className={buttonClasses({ variant: "glass", size: "sm" })}>
+              <Icon name="warning" className="text-lg" /> Reclamos
+            </Link>
             <Link href="/admin/configuracion" className={buttonClasses({ variant: "glass", size: "sm" })}>
               <Icon name="settings" className="text-lg" /> Configuración
             </Link>

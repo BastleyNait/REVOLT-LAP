@@ -33,6 +33,31 @@ export type ProductRow = {
   updated_at: string;
 };
 
+/** One sheet of the virtual Libro de Reclamaciones. */
+export type ComplaintRow = {
+  id: string;
+  number: number;
+  created_at: string;
+  kind: "reclamo" | "queja";
+  full_name: string;
+  doc_type: string;
+  doc_number: string;
+  address: string;
+  phone: string;
+  email: string;
+  is_minor: boolean;
+  guardian_name: string | null;
+  item_type: "producto" | "servicio";
+  item_description: string;
+  amount: number | null;
+  order_code: string | null;
+  detail: string;
+  request: string;
+  status: "pendiente" | "respondido";
+  response: string | null;
+  responded_at: string | null;
+};
+
 /** Verified review. Starts as an invite (no rating) when a shipment PDF is made. */
 export type ReviewRow = {
   id: string;
@@ -58,6 +83,12 @@ export type ProductInsert = Omit<ProductRow, "id" | "created_at" | "updated_at">
 export type Database = {
   public: {
     Tables: {
+      complaints: {
+        Row: ComplaintRow;
+        Insert: Omit<ComplaintRow, "id" | "number" | "created_at" | "status" | "response" | "responded_at">;
+        Update: Partial<Pick<ComplaintRow, "status" | "response" | "responded_at">>;
+        Relationships: [];
+      };
       settings: {
         Row: { key: string; value: unknown; updated_at: string };
         Insert: { key: string; value: unknown; updated_at?: string };

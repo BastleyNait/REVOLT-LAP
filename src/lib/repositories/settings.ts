@@ -35,7 +35,8 @@ async function readCoupon(): Promise<{ value: number; source: "db" | "default"; 
 /** Reservation coupon in soles (cached; refreshed when the admin saves). */
 export const getCouponPen = unstable_cache(async () => (await readCoupon()).value, ["reservation-coupon-pen"], {
   tags: [SETTINGS_TAG],
-  revalidate: 300,
+  // Refreshed by tag when the admin saves; this is only a safety net.
+  revalidate: 86400,
 });
 
 /** Uncached, with where the value comes from (for the admin page). */
