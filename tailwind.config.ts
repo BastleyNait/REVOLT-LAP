@@ -26,6 +26,8 @@ const config: Config = {
         // the hero compacts so it fits on one screen. Declared after the
         // default breakpoints, so it overrides `lg:` utilities.
         short: { raw: "(min-width: 1024px) and (max-height: 860px)" },
+        // Big screens (2K and up): the hero and the navbar use most of the width.
+        wide: "1600px",
       },
       colors: {
         // Core surfaces

@@ -45,7 +45,7 @@ export function Navbar() {
         greenOffset={10}
         blueOffset={-21}
         mixBlendMode="screen"
-        className="mx-auto max-w-[75rem] shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
+        className="mx-auto max-w-[75rem] shadow-[0_8px_32px_rgba(0,0,0,0.25)] wide:max-w-[min(92vw,120rem)]"
         contentClassName="flex w-full items-center justify-between gap-3 px-3 py-2 md:px-5"
       >
         <Link href="/" aria-label={`${siteConfig.name}, ir al inicio`} className="flex shrink-0 items-center rounded-full px-1 py-1">

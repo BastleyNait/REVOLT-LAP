@@ -14,7 +14,7 @@ export function HeroBackground() {
       <svg
         viewBox="0 0 1920 1080"
         preserveAspectRatio="xMaxYMid slice"
-        className="absolute inset-0 h-full w-full max-lg:opacity-45"
+        className="absolute inset-0 h-full w-full opacity-45 lg:opacity-100"
         style={{ maskImage: "linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.35) 32%, #000 62%)", WebkitMaskImage: "linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.35) 32%, #000 62%)" }}
       >
         <defs>
