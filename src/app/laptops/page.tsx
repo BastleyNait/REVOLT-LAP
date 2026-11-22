@@ -38,7 +38,7 @@ export default async function LaptopsPage() {
           itemListJsonLd(products),
         ]}
       />
-      <div className="mx-auto max-w-[75rem] space-y-14 px-4 pb-20 pt-8 md:px-8 md:pb-28 md:pt-12">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-14 px-4 pb-20 pt-8 md:px-8 md:pb-28 md:pt-12">
         <header className="space-y-5">
           <h1 className="text-4xl font-extrabold leading-[1.05] md:text-6xl">Laptops en Perú</h1>
           <p className="max-w-3xl text-lg leading-relaxed text-on-surface-variant">

@@ -48,7 +48,7 @@ export default async function HomePage() {
         <div className="absolute left-1/2 top-0 h-36 w-[70vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgb(0_106_78/0.28)_0%,rgb(0_60_44/0.12)_50%,transparent_75%)]" />
       </div>
 
-      <div className="relative z-[3] mx-auto max-w-[75rem] space-y-24 px-4 pb-20 pt-6 md:space-y-32 md:px-8 md:pb-28">
+      <div className="relative z-[3] mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-24 px-4 pb-20 pt-6 md:space-y-32 md:px-8 md:pb-28">
         <Catalog products={products}>
           <nav aria-labelledby="busca-por-tipo" className="space-y-3 pt-2">
             <h3 id="busca-por-tipo" className="text-sm font-semibold text-on-surface-variant">Busca por tipo</h3>

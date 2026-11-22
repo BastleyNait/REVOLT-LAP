@@ -14,7 +14,7 @@ export function Footer() {
 
   return (
     <footer className="mt-auto w-full px-4 pb-6 md:px-8">
-      <div className="glass mx-auto max-w-[75rem] rounded-[2rem] px-6 py-10 md:px-10">
+      <div className="glass mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] rounded-[2rem] px-6 py-10 md:px-10">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div className="space-y-4">
             <Link href="/" aria-label={`${siteConfig.name}, ir al inicio`} className="inline-block">

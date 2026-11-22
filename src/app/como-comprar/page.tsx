@@ -55,7 +55,7 @@ export default function PurchasePage() {
         ]}
       />
 
-      <div className="mx-auto max-w-[75rem] space-y-16 px-4 pb-20 pt-12 md:space-y-20 md:px-8 md:pb-28 md:pt-20">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-16 px-4 pb-20 pt-12 md:space-y-20 md:px-8 md:pb-28 md:pt-20">
         <header className="max-w-3xl">
           <p className="flex items-center gap-2 text-sm font-semibold text-on-surface-variant">
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-primary" />

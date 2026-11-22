@@ -91,7 +91,7 @@ export default async function LandingPage({ params }: PageParams) {
         ]}
       />
 
-      <div className="mx-auto max-w-[75rem] space-y-20 px-4 pb-20 pt-8 md:space-y-28 md:px-8 md:pb-28 md:pt-12">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-20 px-4 pb-20 pt-8 md:space-y-28 md:px-8 md:pb-28 md:pt-12">
         <header className="relative">
           {/* Soft green glow behind the title, echoing the home hero. */}
           <div

@@ -25,7 +25,7 @@ export function ReviewsSummary({ summary }: { summary: ReviewSummary }) {
 export function ReviewCards({ summary, limit }: { summary: ReviewSummary; limit?: number }) {
   const items = limit ? summary.items.slice(0, limit) : summary.items;
   return (
-    <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 wide:grid-cols-4">
       {items.map((review) => (
         <li key={review.id} className="glass flex flex-col rounded-3xl p-6">
           <Stars value={review.rating} size="sm" />

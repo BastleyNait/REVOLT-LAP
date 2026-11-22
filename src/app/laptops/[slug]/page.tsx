@@ -149,7 +149,7 @@ export default async function ProductPage({ params }: PageParams) {
       <Scope>
       {inTransit ? <ReservationToast productSlug={product.slug} /> : null}
 
-      <div className="mx-auto max-w-[75rem] px-4 pb-16 pt-6 md:px-8 md:pb-24 md:pt-10">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] px-4 pb-16 pt-6 md:px-8 md:pb-24 md:pt-10">
         <nav aria-label="Ruta de navegación" className="mb-6 text-sm text-on-surface-variant">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>

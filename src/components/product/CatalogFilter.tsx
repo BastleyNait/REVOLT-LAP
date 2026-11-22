@@ -69,7 +69,7 @@ export function CatalogFilter({ items }: { items: CatalogItem[] }) {
       </div>
 
       {visible.length ? (
-        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 wide:grid-cols-4">
           {visible.map((item) => (
             <li key={item.id} className="h-full">
               {item.card}

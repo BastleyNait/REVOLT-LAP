@@ -231,7 +231,7 @@ export function EnviosApp({ sender, laptops }: { sender: Sender; laptops: string
   const shalom = shipment.order.delivery === "shalom";
 
   return (
-    <div className="mx-auto max-w-[75rem] px-4 pb-36 pt-6 md:px-8 md:pb-16 md:pt-10">
+    <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] px-4 pb-36 pt-6 md:px-8 md:pb-16 md:pt-10">
       {/* Header */}
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
