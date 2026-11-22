@@ -5,6 +5,10 @@ import { siteConfig } from "@/lib/config/site";
 import { InviteShare } from "@/components/reviews/InviteShare";
 import { OPEN_REVIEW_PREFIX } from "@/lib/repositories/reviews";
 import { deleteReviewAction, toggleReviewAction } from "./actions";
+import { LocalInviteForm, type LaptopOption } from "@/components/reviews/LocalInviteForm";
+import { getAllProductsAdmin } from "@/lib/repositories/products";
+import { availability } from "@/lib/types/product";
+import { formatPrice } from "@/lib/utils/format";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +20,12 @@ const date = (iso: string) =>
  * insults — honest negative reviews are what make the positive ones credible.
  */
 export default async function AdminReviewsPage() {
-  const rows = await listReviewsForAdmin();
+  const [rows, products] = await Promise.all([listReviewsForAdmin(), getAllProductsAdmin().catch(() => [])]);
+  // Sold-out first (they are the ones just sold), then the rest; newest first inside each group.
+  const label = { "sold-out": "agotada", "in-stock": "en stock", incoming: "en camino" } as const;
+  const laptops: LaptopOption[] = [...products]
+    .sort((a, b) => Number(availability(b) === "sold-out") - Number(availability(a) === "sold-out"))
+    .map((p) => ({ name: p.name, detail: `${formatPrice(p.price, p.currency)} · ${label[availability(p)]}` }));
   const submitted = rows.filter((r) => r.submitted_at);
   const pending = rows.length - submitted.length;
   // Enlace general para clientes anteriores (un solo enlace para todos).
@@ -36,6 +45,17 @@ export default async function AdminReviewsPage() {
       {!reviewsEnabled ? (
         <p className="rounded-2xl border border-error/40 bg-error/10 p-4 text-sm">Supabase no está configurado en este entorno.</p>
       ) : null}
+
+      <section className="glass space-y-4 rounded-3xl p-5 md:p-6">
+        <div>
+          <h2 className="text-xl font-extrabold">Opinión de una venta en persona</h2>
+          <p className="mt-1 text-sm text-on-surface-variant">
+            Para las entregas en Arequipa (sin PDF de envío): elige la laptop, escribe el nombre del cliente y se crea su enlace único con QR.
+            Su opinión sale publicada como compra verificada.
+          </p>
+        </div>
+        <LocalInviteForm laptops={laptops} />
+      </section>
 
       <section className="glass flex flex-col gap-5 rounded-3xl p-5 sm:flex-row sm:items-center md:p-6">
         <div
