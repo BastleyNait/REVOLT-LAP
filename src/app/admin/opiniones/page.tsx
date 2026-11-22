@@ -6,6 +6,7 @@ import { InviteShare } from "@/components/reviews/InviteShare";
 import { OPEN_REVIEW_PREFIX } from "@/lib/repositories/reviews";
 import { deleteReviewAction, toggleReviewAction } from "./actions";
 import { LocalInviteForm, type LaptopOption } from "@/components/reviews/LocalInviteForm";
+import { PendingInviteLink } from "@/components/reviews/PendingInviteLink";
 import { getAllProductsAdmin } from "@/lib/repositories/products";
 import { availability } from "@/lib/types/product";
 import { formatPrice } from "@/lib/utils/format";
@@ -21,11 +22,20 @@ const date = (iso: string) =>
  */
 export default async function AdminReviewsPage() {
   const [rows, products] = await Promise.all([listReviewsForAdmin(), getAllProductsAdmin().catch(() => [])]);
+  // QR of every unused personal invite, so a link can be sent again later.
+  const pendingQr: Record<string, string> = {};
+  await Promise.all(
+    rows
+      .filter((r) => !r.submitted_at && !r.order_code.startsWith(OPEN_REVIEW_PREFIX))
+      .map(async (r) => {
+        pendingQr[r.id] = await QRCode.toString(`${siteConfig.url}/opinar/${r.token}`, { type: "svg", errorCorrectionLevel: "M", margin: 1 });
+      }),
+  );
   // Sold-out first (they are the ones just sold), then the rest; newest first inside each group.
   const label = { "sold-out": "agotada", "in-stock": "en stock", incoming: "en camino" } as const;
   const laptops: LaptopOption[] = [...products]
     .sort((a, b) => Number(availability(b) === "sold-out") - Number(availability(a) === "sold-out"))
-    .map((p) => ({ name: p.name, detail: `${formatPrice(p.price, p.currency)} · ${label[availability(p)]}` }));
+    .map((p) => ({ id: p.id, name: p.name, soldOut: availability(p) === "sold-out", detail: `${formatPrice(p.price, p.currency)} · ${label[availability(p)]}` }));
   const submitted = rows.filter((r) => r.submitted_at);
   const pending = rows.length - submitted.length;
   // Enlace general para clientes anteriores (un solo enlace para todos).
@@ -97,7 +107,17 @@ export default async function AdminReviewsPage() {
                   {row.comment ? <p className="mt-2 leading-relaxed">“{row.comment}”</p> : null}
                 </>
               ) : (
-                <p className="mt-2 text-sm text-on-surface-variant">Invitación enviada el {date(row.created_at)} · aún no opina</p>
+                <>
+                  <p className="mt-2 text-sm text-on-surface-variant">Enlace creado el {date(row.created_at)} · aún no opina</p>
+                  {pendingQr[row.id] ? (
+                    <PendingInviteLink
+                      url={`${siteConfig.url}/opinar/${row.token}`}
+                      qrSvg={pendingQr[row.id]}
+                      customerName={row.customer_name}
+                      laptop={row.laptop}
+                    />
+                  ) : null}
+                </>
               )}
             </div>
             <div className="flex shrink-0 items-center gap-2">

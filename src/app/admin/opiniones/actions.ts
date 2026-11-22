@@ -6,6 +6,8 @@ import { randomBytes } from "crypto";
 import QRCode from "qrcode";
 import { siteConfig } from "@/lib/config/site";
 import { deleteReview, setReviewVisibility, upsertInvite } from "@/lib/repositories/reviews";
+import { getProductById, markProductSoldOut } from "@/lib/repositories/products";
+import { availability } from "@/lib/types/product";
 
 async function refresh() {
   revalidatePath("/admin/opiniones");
@@ -32,6 +34,7 @@ export interface LocalInviteState {
   qrSvg?: string;
   customerName?: string;
   laptop?: string;
+  markedSoldOut?: boolean;
 }
 
 /**
@@ -44,7 +47,8 @@ export async function createLocalInviteAction(_prev: LocalInviteState, formData:
   const customerName = String(formData.get("customerName") ?? "").trim().slice(0, 120);
   const picked = String(formData.get("laptop") ?? "");
   const other = String(formData.get("laptopOther") ?? "").trim();
-  const laptop = (picked === "__other__" ? other : picked).slice(0, 160);
+  const product = picked && picked !== "__other__" ? await getProductById(picked) : null;
+  const laptop = (picked === "__other__" ? other : (product?.name ?? "")).slice(0, 160);
   const city = String(formData.get("city") ?? "").trim().slice(0, 120) || "Arequipa";
   if (customerName.length < 2) return { status: "error", message: "Escribe el nombre del cliente" };
   if (!laptop) return { status: "error", message: "Elige la laptop vendida" };
@@ -55,8 +59,15 @@ export async function createLocalInviteAction(_prev: LocalInviteState, formData:
     const token = await upsertInvite({ orderCode, customerName, laptop, city });
     const url = `${siteConfig.url}/opinar/${token}`;
     const qrSvg = await QRCode.toString(url, { type: "svg", errorCorrectionLevel: "M", margin: 1 });
+    // Sold in person: the laptop stays listed, but as sold out (stock 0, no longer "en camino").
+    let markedSoldOut = false;
+    if (product && availability(product) !== "sold-out") {
+      await markProductSoldOut(product.id);
+      markedSoldOut = true;
+      revalidatePath("/", "layout");
+    }
     revalidatePath("/admin/opiniones");
-    return { status: "ok", url, qrSvg, customerName, laptop };
+    return { status: "ok", url, qrSvg, customerName, laptop, markedSoldOut };
   } catch (error) {
     console.error("local invite", error);
     return { status: "error", message: "No se pudo crear el enlace. Inténtalo de nuevo." };

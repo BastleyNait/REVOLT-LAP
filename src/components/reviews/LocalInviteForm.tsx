@@ -9,7 +9,9 @@ const field =
   "w-full min-h-12 rounded-xl border border-outline-variant bg-surface-container-lowest/70 px-4 text-base focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 export interface LaptopOption {
+  id: string;
   name: string;
+  soldOut: boolean;
   detail: string;
 }
 
@@ -29,6 +31,8 @@ export function LocalInviteForm({ laptops }: { laptops: LaptopOption[] }) {
         />
         <div className="min-w-0 space-y-3">
           <p className="text-sm font-semibold text-primary">Enlace listo · solo para {state.customerName}</p>
+          {state.markedSoldOut ? <p className="text-sm text-on-surface-variant">La laptop quedó como agotada en la tienda.</p> : null}
+          <p className="text-xs text-on-surface-variant">Si cierras esta pantalla, el enlace sigue en la lista de abajo.</p>
           <p className="text-sm text-on-surface-variant">
             {state.laptop}. Si está contigo, que escanee el QR; si no, mándaselo por WhatsApp. Sirve una sola vez.
           </p>
@@ -66,13 +70,18 @@ export function LocalInviteForm({ laptops }: { laptops: LaptopOption[] }) {
             Elige del catálogo…
           </option>
           {laptops.map((l, i) => (
-            <option key={`${l.name}-${i}`} value={l.name}>
+            <option key={`${l.id}-${i}`} value={l.id}>
               {l.name} — {l.detail}
             </option>
           ))}
           <option value="__other__">Otra (no está en el catálogo)</option>
         </select>
       </label>
+      {picked && picked !== "__other__" && !laptops.find((l) => l.id === picked)?.soldOut ? (
+        <p className="rounded-xl bg-deal/10 px-3 py-2 text-sm text-deal sm:col-span-2">
+          Al crear el enlace, esta laptop pasará a <strong>agotada</strong> en la tienda (stock 0). Seguirá visible.
+        </p>
+      ) : null}
       {picked === "__other__" ? (
         <label className="block sm:col-span-2">
           <span className="mb-2 block text-sm font-semibold">Nombre de la laptop *</span>

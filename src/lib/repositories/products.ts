@@ -1,3 +1,4 @@
+import { IN_TRANSIT_BADGE } from "@/lib/types/product";
 import { cache } from "react";
 import type { Product } from "@/lib/types/product";
 import type { ProductInsert, ProductRow } from "@/lib/types/database";
@@ -187,4 +188,17 @@ export async function deleteProduct(id: string): Promise<void> {
 /** Whether storefront reads are hitting Supabase (vs. fallback demo data). */
 export function isUsingLiveData(): boolean {
   return isSupabaseConfigured;
+}
+
+/**
+ * Mark a product as sold out (stock 0) without hiding it, and drop the
+ * "en camino" badge so the storefront shows it as Agotada.
+ */
+export async function markProductSoldOut(id: string): Promise<void> {
+  const supabase = getAdminClient();
+  const { data, error: readError } = await supabase.from(TABLE).select("badges").eq("id", id).maybeSingle();
+  if (readError) throw readError;
+  const badges = ((data?.badges as string[] | null) ?? []).filter((b) => b.trim().toUpperCase() !== IN_TRANSIT_BADGE);
+  const { error } = await supabase.from(TABLE).update({ stock: 0, badges }).eq("id", id);
+  if (error) throw error;
 }
