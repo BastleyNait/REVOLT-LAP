@@ -52,7 +52,7 @@ function resolveBaseUrl(): string {
   return explicit ?? "http://localhost:3000";
 }
 
-const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987545926").replace(/\D/g, "");
+const whatsappPhone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "51987505764").replace(/\D/g, "");
 
 /** Adelanto para separar una laptop (soles). Cámbialo acá y se actualiza en toda la página. */
 const DEPOSIT_PEN = 50;
@@ -162,7 +162,7 @@ export const siteConfig = {
     methods: "Yape, transferencia o depósito BCP",
   },
   whatsapp: {
-    /** E.164 number without the leading "+" (digits only), e.g. 51987545926. */
+    /** E.164 number without the leading "+" (digits only), e.g. 51987505764. */
     phone: whatsappPhone,
     display: whatsappPhone.startsWith("51")
       ? `+51 ${whatsappPhone.slice(2).replace(/(\d{3})(\d{3})(\d+)/, "$1 $2 $3")}`
