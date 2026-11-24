@@ -15,7 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <main className="admin-plain flex-1">
       <WarmEditor />
-      <div className="mx-auto max-w-[75rem] px-4 py-10 md:px-8">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] px-4 py-10 md:px-8">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/60 pb-6">
           <div>
             <Link

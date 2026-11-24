@@ -25,7 +25,7 @@ export default async function ReviewsPage() {
   return (
     <main className="relative flex-1">
       <JsonLd data={breadcrumbJsonLd([{ name: "Inicio", path: "/" }, { name: "Opiniones", path: "/opiniones" }])} />
-      <div className="mx-auto max-w-[75rem] space-y-12 px-4 pb-20 pt-12 md:px-8 md:pb-28 md:pt-20">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-12 px-4 pb-20 pt-12 md:px-8 md:pb-28 md:pt-20">
         <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
             <p className="flex items-center gap-2 text-sm font-semibold text-primary">

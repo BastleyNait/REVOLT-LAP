@@ -57,7 +57,7 @@ export default async function RealShipmentsPage() {
     <main className="relative flex-1">
       <JsonLd data={breadcrumbJsonLd([{ name: "Inicio", path: "/" }, { name: "Nuestros envíos", path: PATH }])} />
 
-      <div className="mx-auto max-w-[75rem] space-y-20 px-4 pb-20 pt-8 md:space-y-24 md:px-8 md:pb-28 md:pt-12">
+      <div className="mx-auto max-w-[75rem] wide:max-w-[min(92vw,120rem)] space-y-20 px-4 pb-20 pt-8 md:space-y-24 md:px-8 md:pb-28 md:pt-12">
         {/* Header + map */}
         <section className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           <div
