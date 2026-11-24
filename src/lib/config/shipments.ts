@@ -1,5 +1,6 @@
 /**
- * Envíos reales fuera de Arequipa (página /nuestros-envios y el botón del hero).
+ * Envíos reales (página /nuestros-envios y el botón del hero): a otras ciudades
+ * por Shalom y entregas en persona dentro de Arequipa (transport: "local").
  *
  * Para agregar un envío: pon sus fotos YA TAPADAS (sin apellidos, DNI,
  * celular, dirección, código de pedido ni QR) en /public/nuestros-envios/ y
@@ -8,7 +9,7 @@
  * publicada (p. ej. "Daniela A.") para que se muestre junto a su envío.
  */
 
-export type Transport = "aereo" | "terrestre";
+export type Transport = "aereo" | "terrestre" | "local";
 
 export interface ShipmentPhoto {
   src: string;
@@ -46,6 +47,18 @@ export const SHIPPING_ORIGIN = {
 
 export const realShipments: RealShipment[] = [
   {
+    id: "arequipa-2026-11",
+    city: "Arequipa",
+    region: "José Luis Bustamante y Rivero",
+    coords: SHIPPING_ORIGIN.coords,
+    date: "2026-11-21",
+    customer: "Claudia R.",
+    transport: "local",
+    photos: [
+      { src: "/nuestros-envios/arequipa-entrega.jpg", alt: "Caja con la guía REVOLT entregada a domicilio en Arequipa, con los datos personales ocultos", focus: "50% 60%" },
+    ],
+  },
+  {
     id: "chiclayo-2026-11",
     city: "Chiclayo",
     region: "Lambayeque",
@@ -80,7 +93,11 @@ export const realShipments: RealShipment[] = [
 export const TRANSPORT_LABEL: Record<Transport, string> = {
   aereo: "Envío aéreo",
   terrestre: "Envío terrestre",
+  local: "Entrega a domicilio",
 };
+
+/** Delivered inside the origin city (no Shalom trip, no arc on the map). */
+export const isLocalDelivery = (s: RealShipment) => s.city === SHIPPING_ORIGIN.city;
 
 /** Distinct destination cities. */
 export const shippedCities = Array.from(new Set(realShipments.map((s) => s.city)));

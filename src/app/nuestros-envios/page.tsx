@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { siteConfig } from "@/lib/config/site";
-import { realShipments, shippedCities, SHIPPING_ORIGIN, TRANSPORT_LABEL, type RealShipment } from "@/lib/config/shipments";
+import { isLocalDelivery, realShipments, shippedCities, SHIPPING_ORIGIN, TRANSPORT_LABEL, type RealShipment } from "@/lib/config/shipments";
 import { getPublicReviews, type PublicReview } from "@/lib/repositories/reviews";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { breadcrumbJsonLd } from "@/lib/seo/structured-data";
@@ -25,7 +25,7 @@ const PATH = "/nuestros-envios";
 export const metadata: Metadata = {
   title: "Envíos reales de laptops a todo el Perú",
   description:
-    "Fotos reales de nuestros envíos desde Arequipa a otras ciudades del Perú, con la opinión de quien recibió su laptop. Embalaje seguro y envío por Shalom.",
+    "Fotos reales de nuestros envíos desde Arequipa a otras ciudades del Perú y de nuestras entregas en Arequipa, con la opinión de quien recibió su laptop. Embalaje seguro y envío por Shalom.",
   alternates: { canonical: PATH },
   openGraph: {
     type: "website",
@@ -76,11 +76,11 @@ export default async function RealShipmentsPage() {
               <Icon name="truck" className="text-base" /> Envíos reales
             </p>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
-              Laptops que ya viajaron <span className="text-primary">fuera de {SHIPPING_ORIGIN.city}</span>
+              Laptops que ya llegaron <span className="text-primary">a sus dueños</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-on-surface-variant md:text-xl">
-              Fotos reales de cada envío —con los datos personales ocultos— y la opinión de quien recibió su laptop. Así trabajamos con
-              cada cliente, esté donde esté.
+              Fotos reales de cada envío y entrega —con los datos personales ocultos— y la opinión de quien recibió su laptop. Así
+              trabajamos con cada cliente, en {SHIPPING_ORIGIN.city} o en cualquier ciudad del Perú.
             </p>
 
             <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-5">
@@ -127,6 +127,7 @@ export default async function RealShipmentsPage() {
           <ul className="space-y-8">
             {shipments.map((s) => {
               const review = reviewFor(s, reviews.items);
+              const local = isLocalDelivery(s);
               const [cover, ...rest] = s.photos;
               return (
                 <li key={s.id} className="glass overflow-hidden rounded-[2rem]">
@@ -160,7 +161,11 @@ export default async function RealShipmentsPage() {
                     <div className="flex flex-col p-6 md:p-9">
                       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-on-surface-variant">{monthYear(s.date)}</p>
                       <h3 className="mt-2 text-3xl font-extrabold md:text-4xl">
-                        {SHIPPING_ORIGIN.city} <span className="text-primary">→ {s.city}</span>
+                        {local ? (
+                          <>Entrega en <span className="text-primary">{s.city}</span></>
+                        ) : (
+                          <>{SHIPPING_ORIGIN.city} <span className="text-primary">→ {s.city}</span></>
+                        )}
                       </h3>
                       <p className="mt-1 text-on-surface-variant">{s.region} · Para {s.customer}</p>
 
@@ -173,7 +178,9 @@ export default async function RealShipmentsPage() {
                         {s.freeShipping ? (
                           <li className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">Envío gratis</li>
                         ) : null}
-                        <li className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm font-semibold">Recojo en agencia Shalom</li>
+                        {local ? null : (
+                          <li className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm font-semibold">Recojo en agencia Shalom</li>
+                        )}
                         <li className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm font-semibold">Datos personales ocultos</li>
                       </ul>
 
@@ -190,7 +197,11 @@ export default async function RealShipmentsPage() {
                           </figcaption>
                         </figure>
                       ) : (
-                        <p className="mt-7 text-on-surface-variant">Su laptop salió de {SHIPPING_ORIGIN.city} embalada y con guía de envío a su nombre.</p>
+                        <p className="mt-7 text-on-surface-variant">
+                          {local
+                            ? "Se la llevamos embalada y con guía a su nombre hasta su domicilio."
+                            : `Su laptop salió de ${SHIPPING_ORIGIN.city} embalada y con guía de envío a su nombre.`}
+                        </p>
                       )}
                     </div>
                   </div>
