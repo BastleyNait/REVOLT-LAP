@@ -10,7 +10,7 @@ export function ShipmentsMap({ shipments, className }: { shipments: RealShipment
   const [ox, oy] = projectPeru(SHIPPING_ORIGIN.coords);
   // One marker per city, even with several shipments to it.
   const cities = new Map<string, RealShipment>();
-  for (const s of shipments) if (!cities.has(s.city)) cities.set(s.city, s);
+  for (const s of shipments) if (s.city !== SHIPPING_ORIGIN.city && !cities.has(s.city)) cities.set(s.city, s);
 
   return (
     <svg
