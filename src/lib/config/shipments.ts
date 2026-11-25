@@ -40,6 +40,12 @@ export interface RealShipment {
   video?: { src: string; poster: string };
 }
 
+/**
+ * Laptops entregadas en total (con o sin fotos aquí). Súbelo con cada venta:
+ * se muestra como "10+" en /nuestros-envios.
+ */
+export const DELIVERED_TOTAL = 10;
+
 export const SHIPPING_ORIGIN = {
   city: "Arequipa",
   coords: [-71.5375, -16.409] as const,

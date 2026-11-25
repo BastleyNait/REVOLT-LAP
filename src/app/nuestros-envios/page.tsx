@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { siteConfig } from "@/lib/config/site";
-import { isLocalDelivery, realShipments, shippedCities, SHIPPING_ORIGIN, TRANSPORT_LABEL, type RealShipment } from "@/lib/config/shipments";
+import { DELIVERED_TOTAL, isLocalDelivery, realShipments, shippedCities, SHIPPING_ORIGIN, TRANSPORT_LABEL, type RealShipment } from "@/lib/config/shipments";
 import { getPublicReviews, type PublicReview } from "@/lib/repositories/reviews";
 import { generalWhatsappUrl } from "@/lib/services/whatsapp";
 import { breadcrumbJsonLd } from "@/lib/seo/structured-data";
@@ -79,18 +79,18 @@ export default async function RealShipmentsPage() {
               Laptops que ya llegaron <span className="text-primary">a sus dueños</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-on-surface-variant md:text-xl">
-              Fotos reales de cada envío y entrega —con los datos personales ocultos— y la opinión de quien recibió su laptop. Así
-              trabajamos con cada cliente, en {SHIPPING_ORIGIN.city} o en cualquier ciudad del Perú.
+              Algunos de nuestros envíos y entregas, con fotos reales —y los datos personales ocultos— y la opinión de quien recibió
+              su laptop. Así trabajamos con cada cliente, en {SHIPPING_ORIGIN.city} o en cualquier ciudad del Perú.
             </p>
 
             <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-5">
               <div>
-                <dt className="text-sm font-semibold text-on-surface-variant">Ciudades</dt>
-                <dd className="font-display text-4xl font-extrabold text-primary">{cities}</dd>
+                <dt className="text-sm font-semibold text-on-surface-variant">Laptops entregadas</dt>
+                <dd className="font-display text-4xl font-extrabold text-primary">{DELIVERED_TOTAL}+</dd>
               </div>
               <div>
-                <dt className="text-sm font-semibold text-on-surface-variant">Envíos con fotos</dt>
-                <dd className="font-display text-4xl font-extrabold text-primary">{realShipments.length}</dd>
+                <dt className="text-sm font-semibold text-on-surface-variant">Ciudades</dt>
+                <dd className="font-display text-4xl font-extrabold text-primary">{cities}</dd>
               </div>
               {reviews.count ? (
                 <div>
@@ -122,8 +122,9 @@ export default async function RealShipmentsPage() {
         {/* One story per shipment */}
         <section aria-labelledby="envios-title" className="space-y-8">
           <h2 id="envios-title" className="text-3xl font-extrabold leading-[1.1] md:text-[2.6rem]">
-            Cada envío, paso a paso
+            Algunos de nuestros envíos
           </h2>
+          <p className="-mt-4 max-w-2xl text-lg text-on-surface-variant">Una muestra de las laptops que ya entregamos, paso a paso.</p>
           <ul className="space-y-8">
             {shipments.map((s) => {
               const review = reviewFor(s, reviews.items);
