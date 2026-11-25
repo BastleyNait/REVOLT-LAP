@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { Check, Loader2, Star } from "lucide-react";
+import { Check, ChevronDown, Loader2, Star } from "lucide-react";
 import { submitReviewAction, type ReviewFormState } from "@/app/opinar/[token]/actions";
 import { submitOpenReviewAction } from "@/app/opinar/clientes/actions";
+import { reviewTerms } from "@/lib/config/review-terms";
 import { buttonClasses } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 
@@ -33,6 +34,7 @@ export function ReviewForm({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
+  const [accepted, setAccepted] = useState(false);
   const shown = hover || rating;
 
   if (state.status === "ok") {
@@ -116,17 +118,50 @@ export function ReviewForm({
           maxLength={40}
           className="mt-2 min-h-12 w-full rounded-2xl border border-white/12 bg-black/35 px-4 text-base focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
+        <span className="mt-1.5 block text-xs text-on-surface-variant">Por tu privacidad, usa tu primer nombre y la inicial de tu apellido.</span>
       </label>
+
+      <div className="rounded-2xl border border-white/12 bg-black/25 p-4">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            name="accept"
+            required
+            checked={accepted}
+            onChange={(e) => setAccepted(e.target.checked)}
+            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#12B480]"
+          />
+          <span className="text-sm leading-relaxed">
+            Acepto los <strong className="font-semibold">términos de publicación</strong>: mi opinión y mi nombre pueden mostrarse en la web y en
+            materiales promocionales de la tienda, sin datos personales.
+          </span>
+        </label>
+        <details className="group mt-3 pl-8">
+          <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
+            Leer términos <ChevronDown className="h-4 w-4 transition-transform duration-150 group-open:rotate-180" aria-hidden />
+          </summary>
+          <div className="mt-2 space-y-3 text-sm leading-relaxed text-on-surface-variant">
+            <p className="font-semibold text-on-background">{reviewTerms.title}</p>
+            <ol className="list-decimal space-y-2 pl-4">
+              {reviewTerms.items.map((item) => (
+                <li key={item.title}>
+                  <span className="font-semibold text-on-background">{item.title}.</span> {item.body}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </details>
+      </div>
 
       {state.status === "error" ? <p className="rounded-2xl border border-error/40 bg-error/10 p-3 text-sm font-semibold text-error">{state.message}</p> : null}
 
       <button
         type="submit"
-        disabled={pending || !rating}
+        disabled={pending || !rating || !accepted}
         className={buttonClasses({ variant: "primary", size: "lg", className: "min-h-14 w-full disabled:opacity-50" })}
       >
         {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : null}
-        {pending ? "Enviando…" : rating ? "Publicar mi opinión" : "Elige tus estrellas"}
+        {pending ? "Enviando…" : !rating ? "Elige tus estrellas" : !accepted ? "Acepta los términos" : "Publicar mi opinión"}
       </button>
     </form>
   );
