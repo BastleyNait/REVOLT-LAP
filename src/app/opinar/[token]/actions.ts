@@ -18,6 +18,8 @@ const schema = z.object({
 });
 
 export async function submitReviewAction(token: string, _prev: ReviewFormState, formData: FormData): Promise<ReviewFormState> {
+  if (formData.get("accept") !== "on") return { status: "error", message: "Acepta los términos y condiciones para enviar tu opinión." };
+
   const parsed = schema.safeParse({
     rating: formData.get("rating"),
     comment: String(formData.get("comment") ?? ""),
