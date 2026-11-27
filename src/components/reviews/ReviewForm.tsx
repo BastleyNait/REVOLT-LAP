@@ -131,10 +131,7 @@ export function ReviewForm({
             onChange={(e) => setAccepted(e.target.checked)}
             className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#12B480]"
           />
-          <span className="text-sm leading-relaxed">
-            Acepto los <strong className="font-semibold">términos de publicación</strong>: mi opinión y mi nombre pueden mostrarse en la web y en
-            materiales promocionales de la tienda, sin datos personales.
-          </span>
+          <span className="text-sm font-semibold leading-relaxed">Acepto los términos y condiciones</span>
         </label>
         <details className="group mt-3 pl-8">
           <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
@@ -161,7 +158,7 @@ export function ReviewForm({
         className={buttonClasses({ variant: "primary", size: "lg", className: "min-h-14 w-full disabled:opacity-50" })}
       >
         {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : null}
-        {pending ? "Enviando…" : !rating ? "Elige tus estrellas" : !accepted ? "Acepta los términos" : "Publicar mi opinión"}
+        {pending ? "Enviando…" : !rating ? "Elige tus estrellas" : !accepted ? "Acepta los términos y condiciones" : "Publicar mi opinión"}
       </button>
     </form>
   );

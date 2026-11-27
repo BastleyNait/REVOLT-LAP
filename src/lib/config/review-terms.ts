@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/config/site";
 export const REVIEW_TERMS_VERSION = "2026-11";
 
 export const reviewTerms = {
-  title: "Términos de publicación de opiniones",
+  title: "Términos y condiciones de las opiniones",
   items: [
     {
       title: "Qué publicamos",
